@@ -3,6 +3,7 @@
 *.swo
 *.gdb_history
 *.old
+*.sub
 
 
 # LSP
@@ -11,6 +12,9 @@ compile_commands.json
 
 # JetBrains IDEs
 .idea/
+
+#vs codium
+.vscode/
 
 # Sublime Text
 .sublime-project.sublime-workspace
