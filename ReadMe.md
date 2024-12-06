@@ -1,4 +1,6 @@
-# boboware
+# timo-firmware
+
+
 <h2 align="center">Build it yourself:</h2>
 
 ```bash
