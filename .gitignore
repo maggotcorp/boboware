@@ -3,7 +3,8 @@
 *.swo
 *.gdb_history
 *.old
-
+*.sub
+.vscode/
 
 # LSP
 .cache
