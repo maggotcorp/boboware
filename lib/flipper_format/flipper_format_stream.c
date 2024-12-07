@@ -1,6 +1,5 @@
 #include <inttypes.h>
 #include <toolbox/hex.h>
-#include <toolbox/strint.h>
 #include <core/check.h>
 #include "flipper_format_stream.h"
 #include "flipper_format_stream_i.h"
@@ -397,16 +396,14 @@ bool flipper_format_stream_read_value_line(
 #endif
                     case FlipperStreamValueInt32: {
                         int32_t* data = _data;
-                        if(strint_to_int32(furi_string_get_cstr(value), NULL, &data[i], 10) ==
-                           StrintParseNoError) {
-                            scan_values = 1;
-                        }
+                        scan_values = sscanf(furi_string_get_cstr(value), "%" PRIi32, &data[i]);
                     }; break;
                     case FlipperStreamValueUint32: {
                         uint32_t* data = _data;
-                        if(strint_to_uint32(furi_string_get_cstr(value), NULL, &data[i], 10) ==
-                           StrintParseNoError) {
-                            scan_values = 1;
+                        // Minus sign is allowed in scanf() for unsigned numbers, resulting in unintentionally huge values with no error reported
+                        if(!furi_string_start_with(value, "-")) {
+                            scan_values =
+                                sscanf(furi_string_get_cstr(value), "%" PRIu32, &data[i]);
                         }
                     }; break;
                     case FlipperStreamValueHexUint64: {

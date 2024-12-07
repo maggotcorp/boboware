@@ -16,7 +16,7 @@ typedef enum {
     UpdateTaskStageProgress = 0,
 
     UpdateTaskStageReadManifest,
-    UpdateTaskStageIntBackup,
+    UpdateTaskStageLfsBackup,
 
     UpdateTaskStageRadioImageValidate,
     UpdateTaskStageRadioErase,
@@ -30,7 +30,7 @@ typedef enum {
     UpdateTaskStageFlashWrite,
     UpdateTaskStageFlashValidate,
 
-    UpdateTaskStageIntRestore,
+    UpdateTaskStageLfsRestore,
     UpdateTaskStageResourcesFileCleanup,
     UpdateTaskStageResourcesDirCleanup,
     UpdateTaskStageResourcesFileUnpack,

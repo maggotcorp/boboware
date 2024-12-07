@@ -333,15 +333,8 @@ static void power_storage_callback(const void* message, void* context) {
 static void power_auto_shutdown_timer_callback(void* context) {
     furi_assert(context);
     Power* power = context;
-
-    // Suppress shutdown on idle while charging to avoid the battery from not charging fully. Then restart timer back to original timeout.
-    if(power->state != PowerStateNotCharging) {
-        FURI_LOG_D(TAG, "Plugged in, reset idle timer");
-        power_auto_shutdown_arm(power);
-    } else {
-        power_auto_shutdown_inhibit(power);
-        power_off(power);
-    }
+    power_auto_shutdown_inhibit(power);
+    power_off(power);
 }
 
 static void power_apply_settings(Power* power) {
@@ -499,7 +492,7 @@ static void power_handle_reboot(PowerBootMode mode) {
     furi_hal_power_reset();
 }
 
-static void power_message_callback(FuriEventLoopObject* object, void* context) {
+static bool power_message_callback(FuriEventLoopObject* object, void* context) {
     furi_assert(context);
     Power* power = context;
 
@@ -545,6 +538,8 @@ static void power_message_callback(FuriEventLoopObject* object, void* context) {
     if(msg.lock) {
         api_lock_unlock(msg.lock);
     }
+
+    return true;
 }
 
 static void power_tick_callback(void* context) {

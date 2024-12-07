@@ -13,10 +13,9 @@ App(
         "!plugins",
         "!nfc_cli.c",
     ],
-    fap_libs=["assets", "mbedtls"],
+    fap_libs=["mbedtls"],
     fap_icon="icon.png",
     fap_category="NFC",
-    flags=["UnloadAssetPacks"],
 )
 
 # Parser plugins
@@ -28,15 +27,6 @@ App(
     targets=["f7"],
     requires=["nfc"],
     sources=["plugins/supported_cards/all_in_one.c"],
-)
-
-App(
-    appid="smartrider_parser",
-    apptype=FlipperAppType.PLUGIN,
-    entry_point="smartrider_plugin_ep",
-    targets=["f7"],
-    requires=["nfc"],
-    sources=["plugins/supported_cards/smartrider.c"],
 )
 
 App(
@@ -256,29 +246,8 @@ App(
 )
 
 App(
-    appid="ndef_ul_parser",
+    appid="ndef_parser",
     apptype=FlipperAppType.PLUGIN,
-    cdefines=[("NDEF_PROTO", "NDEF_PROTO_UL")],
-    entry_point="ndef_plugin_ep",
-    targets=["f7"],
-    requires=["nfc"],
-    sources=["plugins/supported_cards/ndef.c"],
-)
-
-App(
-    appid="ndef_mfc_parser",
-    apptype=FlipperAppType.PLUGIN,
-    cdefines=[("NDEF_PROTO", "NDEF_PROTO_MFC")],
-    entry_point="ndef_plugin_ep",
-    targets=["f7"],
-    requires=["nfc"],
-    sources=["plugins/supported_cards/ndef.c"],
-)
-
-App(
-    appid="ndef_slix_parser",
-    apptype=FlipperAppType.PLUGIN,
-    cdefines=[("NDEF_PROTO", "NDEF_PROTO_SLIX")],
     entry_point="ndef_plugin_ep",
     targets=["f7"],
     requires=["nfc"],
@@ -301,24 +270,6 @@ App(
     targets=["f7"],
     requires=["nfc"],
     sources=["plugins/supported_cards/skylanders.c"],
-)
-
-App(
-    appid="hworld_parser",
-    apptype=FlipperAppType.PLUGIN,
-    entry_point="hworld_plugin_ep",
-    targets=["f7"],
-    requires=["nfc"],
-    sources=["plugins/supported_cards/hworld.c"],
-)
-
-App(
-    appid="trt_parser",
-    apptype=FlipperAppType.PLUGIN,
-    entry_point="trt_plugin_ep",
-    targets=["f7"],
-    requires=["nfc"],
-    sources=["plugins/supported_cards/trt.c"],
 )
 
 App(
@@ -353,6 +304,6 @@ App(
     targets=["f7"],
     apptype=FlipperAppType.STARTUP,
     entry_point="nfc_on_system_start",
-    sources=["nfc_cli.c"],
+    sources=["nfc_start.c"],
     order=30,
 )

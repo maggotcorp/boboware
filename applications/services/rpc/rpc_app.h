@@ -13,7 +13,6 @@
 #pragma once
 
 #include "rpc.h"
-#include "rpc_app_error_codes.h"
 
 #ifdef __cplusplus
 extern "C" {

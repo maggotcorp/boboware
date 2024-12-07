@@ -99,8 +99,7 @@ class SdkCache:
             return ApiEntryState.DISABLED
         elif entry in self.new_entries:
             if isinstance(entry, SdkVersion):
-                # return ApiEntryState.VERSION_PENDING
-                return ApiEntryState.APPROVED
+                return ApiEntryState.VERSION_PENDING
             return ApiEntryState.PENDING
         else:
             return ApiEntryState.APPROVED
@@ -119,10 +118,10 @@ class SdkCache:
         if self._load_version_only:
             raise Exception("Only SDK version was loaded, cannot save")
 
-        # if self.version_action == VersionBump.MINOR:
-        #     self.version = SdkVersion(self.version.major, self.version.minor + 1)
-        # elif self.version_action == VersionBump.MAJOR:
-        #     self.version = SdkVersion(self.version.major + 1, 0)
+        if self.version_action == VersionBump.MINOR:
+            self.version = SdkVersion(self.version.major, self.version.minor + 1)
+        elif self.version_action == VersionBump.MAJOR:
+            self.version = SdkVersion(self.version.major + 1, 0)
 
         if self._have_pending_entries():
             self.new_entries.add(self.version)

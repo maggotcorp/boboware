@@ -1,29 +1,30 @@
+### Note:
+- This is a smaller release due to the bugfixes it contains, make sure to also read the changelog for [mntm-006](https://github.com/Next-Flip/Momentum-Firmware/releases/tag/mntm-006)
+
 ### Added:
 - Apps:
-  - Games: Pinball0 (by @rdefeo)
-  - NFC: Metroflip (by @luu176)
+  - Games: Laser Tag (by @RocketGod-git & @jamisonderek)
+- NFC: Added new Saflok parser (#196 #201 by @zinongli & @xtruan & @zacharyweiss & @evilmog & @Arkwin)
+- OFW: Desktop: New Procrastination dolphin animation (by @Astrrra)
 
 ### Updated:
 - Apps:
-  - BT/USB Remote: Add PTT support for Gather (by @SapphicCode)
-  - ESP Flasher: Add c3 and c6 to s3 option (by @jaylikesbunda)
-  - FlipLibrary: Added Wikipedia, dog facts and random quotes, bug fixes (by @jblanked), connectivity and progress improvements (by @jamisonderek)
-  - FlipSocial: Improved authentication (by @jblanked)
-  - FlipStore: Many bugfixes, support ESP32 firmware downloads, allow deleting apps (by @jblanked)
-  - FlipTrader: Improved progress display, added connectivity check on startup (by @jamisonderek)
-  - FlipWeather: Stability improvements (by @jblanked), improved progress display, added connectivity check on startup (by @jamisonderek)
-  - FlipWiFi: Improved error handling, updated scan loading and parsing (by @jblanked), added connectivity check on startup (by @jamisonderek)
-  - FlipBIP: Refactor to make adding coins easier (by @xtruan)
-  - uPython: Enabled extra functions for the `random` module (by @ofabel)
-  - Pokemon Trade Tool: Update to gblink v0.63 which includes saving/loading of pin configurations for the EXT link interface (by @kbembedded)
-  - Snake 2.0: Progress saving, endless mode, game timer, fruit positioning bugfixes (by @Willzvul)
-  - WebCrawler: Improved progress display, added connectivity check on startup (by @jamisonderek)
-  - UL: NFC Magic: Added possibility to write 7b MFC to Gen1 tags (by @mishamyte)
-  - UL: Fixed apps for firmware USB CDC callback changes (by @xMasterX)
+  - Picopass: CVE-2024-41566, When keys are unknown emulate with a dummy MAC and ignore reader MACs (by @nvx)
+  - Seader: Card parsing and saving UI and logic improvements (by @bettse)
+  - Authenticator: Confirm token export on Flipper (by @akopachov)
+  - NFC Playlist: Allow delay up to 12s (by @xtruan)
+  - BLE Spam: Fix delay help section (by @Willy-JL)
+  - WAV Player: Fix unresponsiveness (by @Willy-JL)
+- Sub-GHz:
+  - Show Weather Station icon for WS signals (by @Willy-JL)
+  - Update Oregon 2 and 3 weather info display to new design (by @Willy-JL)
+- API: Publishing T5577 page 1 block count macro (by @zinongli)
 
 ### Fixed:
-- Desktop: Fixed Wardriving animation design (by @Davim09)
-- OFW: GPIO: Merged gsurkov/vcp_break_support branch for usb uart bridge (WIP!!!)
-
-### Removed:
-- Nothing
+- Sub-GHz: Fix Acurite 986 temperature value conversion (by @Willy-JL)
+- Desktop:
+  - Fix disabling keybinds (by @Willy-JL)
+  - Sanity check PIN length for good measure (by @Willy-JL)
+  - Fix PIN locked with no PIN set edge case (by @Willy-JL)
+- Settings: Fix duplicates in Power Settings when opening submenus (by @Willy-JL)
+- RGB Backlight: Fix config migration (by @Willy-JL)

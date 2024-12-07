@@ -1,7 +1,6 @@
 #include "manifest.h"
 
 #include <toolbox/stream/buffered_file_stream.h>
-#include <toolbox/strint.h>
 #include <toolbox/hex.h>
 
 struct ResourceManifestReader {
@@ -98,12 +97,7 @@ ResourceManifestEntry* resource_manifest_reader_next(ResourceManifestReader* res
             furi_string_right(
                 resource_manifest->linebuf, sizeof(resource_manifest->entry.hash) * 2 + 1);
 
-            if(strint_to_uint32(
-                   furi_string_get_cstr(resource_manifest->linebuf),
-                   NULL,
-                   &resource_manifest->entry.size,
-                   10) != StrintParseNoError)
-                break;
+            resource_manifest->entry.size = atoi(furi_string_get_cstr(resource_manifest->linebuf));
 
             /* Remove size */
             size_t offs = furi_string_search_char(resource_manifest->linebuf, ':');
