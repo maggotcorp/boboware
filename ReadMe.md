@@ -3,7 +3,7 @@
 
 ```bash
 To download the repository:
-$ git clone --recursive --jobs 8 https://github.com/Next-Flip/Momentum-Firmware.git
+$ git clone --recursive --jobs 8 https://github.com/timotheuzi/Timo-firmware.git
 $ cd Momentum-Firmware/
 
 To flash directly to the Flipper (Needs to be connected via USB, qFlipper closed)
