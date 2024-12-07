@@ -42,9 +42,6 @@ typedef enum {
     // Comp
     FuriHalInterruptIdCOMP,
 
-    // RTC
-    FuriHalInterruptIdRtcAlarm,
-
     // HSEM
     FuriHalInterruptIdHsem,
 

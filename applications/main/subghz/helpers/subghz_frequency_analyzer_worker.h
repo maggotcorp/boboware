@@ -47,7 +47,9 @@ void subghz_frequency_analyzer_worker_set_pair_callback(
  * @param instance SubGhzFrequencyAnalyzerWorker instance
  * @param txrx pointer to SubGhzTxRx
  */
-void subghz_frequency_analyzer_worker_start(SubGhzFrequencyAnalyzerWorker* instance);
+void subghz_frequency_analyzer_worker_start(
+    SubGhzFrequencyAnalyzerWorker* instance,
+    SubGhzTxRx* txrx);
 
 /** Stop SubGhzFrequencyAnalyzerWorker
  * 
@@ -76,8 +78,3 @@ void subghz_frequency_analyzer_worker_set_trigger_level(
  * @return RSSI trigger level
  */
 float subghz_frequency_analyzer_worker_get_trigger_level(SubGhzFrequencyAnalyzerWorker* instance);
-
-// Round up the frequency
-uint32_t subghz_frequency_analyzer_get_nearest_frequency(
-    SubGhzFrequencyAnalyzerWorker* instance,
-    uint32_t input);

@@ -65,10 +65,7 @@ static void furi_event_loop_timer_enqueue_request(
     TimerQueue_push_back(instance->timer_queue, timer);
 
     xTaskNotifyIndexed(
-        (TaskHandle_t)instance->thread_id,
-        FURI_EVENT_LOOP_FLAG_NOTIFY_INDEX,
-        FuriEventLoopFlagTimer,
-        eSetBits);
+        instance->thread_id, FURI_EVENT_LOOP_FLAG_NOTIFY_INDEX, FuriEventLoopFlagTimer, eSetBits);
 }
 
 /*

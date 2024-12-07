@@ -59,6 +59,7 @@ typedef enum {
 typedef enum {
     FuriEventLoopProcessStatusComplete,
     FuriEventLoopProcessStatusIncomplete,
+    FuriEventLoopProcessStatusAgain,
     FuriEventLoopProcessStatusFreeLater,
 } FuriEventLoopProcessStatus;
 

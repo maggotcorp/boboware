@@ -4,7 +4,8 @@
 *.gdb_history
 *.old
 *.sub
-
+build/
+toolchain/
 
 # LSP
 .cache
@@ -13,7 +14,7 @@ compile_commands.json
 # JetBrains IDEs
 .idea/
 
-#vs codium
+# VS codium
 .vscode/
 
 # Sublime Text

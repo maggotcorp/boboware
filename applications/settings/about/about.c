@@ -165,7 +165,7 @@ static DialogMessageButton about_screen_fw_version(DialogsApp* dialogs, DialogMe
     buffer = furi_string_alloc();
     const Version* ver = furi_hal_version_get_firmware_version();
     const BleGlueC2Info* c2_ver = NULL;
-#if defined(SRV_BT) || defined(FAP_VERSION)
+#ifdef SRV_BT
     c2_ver = ble_glue_get_c2_info();
 #endif
 
