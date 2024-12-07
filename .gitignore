@@ -4,8 +4,12 @@
 *.gdb_history
 *.old
 *.sub
+
+# rando
 build/
 toolchain/
+external/
+dist/
 
 # LSP
 .cache
