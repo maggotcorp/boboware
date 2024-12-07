@@ -18,7 +18,7 @@ compile_commands.json
 # JetBrains IDEs
 .idea/
 
-#vs codium
+# VS codium
 .vscode/
 
 # Sublime Text

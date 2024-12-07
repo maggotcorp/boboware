@@ -56,7 +56,7 @@ static CdcCallbacks cdc_cb = {
     vcp_on_cdc_rx,
     vcp_state_callback,
     vcp_on_cdc_control_line,
-    NULL,
+    config_callback
 };
 
 static CliVcp* vcp = NULL;
