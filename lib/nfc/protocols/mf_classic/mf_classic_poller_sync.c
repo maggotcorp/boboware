@@ -37,8 +37,7 @@ static MfClassicError mf_classic_poller_collect_nt_handler(
         poller,
         data->collect_nt_context.block,
         data->collect_nt_context.key_type,
-        &data->collect_nt_context.nt,
-        false);
+        &data->collect_nt_context.nt);
 }
 
 static MfClassicError
@@ -48,8 +47,7 @@ static MfClassicError
         data->auth_context.block_num,
         &data->auth_context.key,
         data->auth_context.key_type,
-        &data->auth_context,
-        false);
+        &data->auth_context);
 }
 
 static MfClassicError mf_classic_poller_read_block_handler(
@@ -63,8 +61,7 @@ static MfClassicError mf_classic_poller_read_block_handler(
             data->read_block_context.block_num,
             &data->read_block_context.key,
             data->read_block_context.key_type,
-            NULL,
-            false);
+            NULL);
         if(error != MfClassicErrorNone) break;
 
         error = mf_classic_poller_read_block(
@@ -90,8 +87,7 @@ static MfClassicError mf_classic_poller_write_block_handler(
             data->read_block_context.block_num,
             &data->read_block_context.key,
             data->read_block_context.key_type,
-            NULL,
-            false);
+            NULL);
         if(error != MfClassicErrorNone) break;
 
         error = mf_classic_poller_write_block(
@@ -117,8 +113,7 @@ static MfClassicError mf_classic_poller_read_value_handler(
             data->read_value_context.block_num,
             &data->read_value_context.key,
             data->read_value_context.key_type,
-            NULL,
-            false);
+            NULL);
         if(error != MfClassicErrorNone) break;
 
         MfClassicBlock block = {};
@@ -149,8 +144,7 @@ static MfClassicError mf_classic_poller_change_value_handler(
             data->change_value_context.block_num,
             &data->change_value_context.key,
             data->change_value_context.key_type,
-            NULL,
-            false);
+            NULL);
         if(error != MfClassicErrorNone) break;
 
         error = mf_classic_poller_value_cmd(

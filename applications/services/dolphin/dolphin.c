@@ -48,26 +48,6 @@ void dolphin_deed(DolphinDeed deed) {
     furi_record_close(RECORD_DOLPHIN);
 }
 
-void dolphin_get_settings(Dolphin* dolphin, DolphinSettings* settings) {
-    furi_check(dolphin);
-    furi_check(settings);
-
-    DolphinEvent event;
-    event.type = DolphinEventTypeSettingsGet;
-    event.settings = settings;
-    dolphin_event_send_wait(dolphin, &event);
-}
-
-void dolphin_set_settings(Dolphin* dolphin, DolphinSettings* settings) {
-    furi_check(dolphin);
-    furi_check(settings);
-
-    DolphinEvent event;
-    event.type = DolphinEventTypeSettingsSet;
-    event.settings = settings;
-    dolphin_event_send_wait(dolphin, &event);
-}
-
 DolphinStats dolphin_stats(Dolphin* dolphin) {
     furi_check(dolphin);
 
@@ -231,7 +211,7 @@ static void dolphin_reset_butthurt_timer(Dolphin* dolphin) {
     }
 }
 
-static void dolphin_process_event(FuriEventLoopObject* object, void* context) {
+static bool dolphin_process_event(FuriEventLoopObject* object, void* context) {
     UNUSED(object);
 
     Dolphin* dolphin = context;
@@ -250,9 +230,7 @@ static void dolphin_process_event(FuriEventLoopObject* object, void* context) {
 
     } else if(event.type == DolphinEventTypeStats) {
         event.stats->icounter = dolphin->state->data.icounter;
-        event.stats->butthurt = (dolphin->state->data.flags & DolphinFlagHappyMode) ?
-                                    0 :
-                                    dolphin->state->data.butthurt;
+        event.stats->butthurt = dolphin->state->data.butthurt;
         event.stats->timestamp = dolphin->state->data.timestamp;
         event.stats->level = dolphin_get_level(dolphin->state->data.icounter);
         event.stats->level_up_is_pending =
@@ -270,20 +248,13 @@ static void dolphin_process_event(FuriEventLoopObject* object, void* context) {
         dolphin_state_load(dolphin->state);
         dolphin_reset_butthurt_timer(dolphin);
 
-    } else if(event.type == DolphinEventTypeSettingsGet) {
-        event.settings->happy_mode = dolphin->state->data.flags & DolphinFlagHappyMode;
-
-    } else if(event.type == DolphinEventTypeSettingsSet) {
-        dolphin->state->data.flags &= ~DolphinFlagHappyMode;
-        if(event.settings->happy_mode) dolphin->state->data.flags |= DolphinFlagHappyMode;
-        dolphin->state->dirty = true;
-        dolphin_state_save(dolphin->state);
-
     } else {
         furi_crash();
     }
 
     dolphin_event_release(&event);
+
+    return true;
 }
 
 static void dolphin_storage_callback(const void* message, void* context) {

@@ -105,7 +105,7 @@ void ccid_test_app_free(CcidTestApp* app) {
     furi_record_close(RECORD_GUI);
     app->gui = NULL;
 
-    iso7816_handler_free(app->iso7816_handler);
+    free(app->iso7816_handler);
 
     // Free rest
     free(app);
@@ -121,7 +121,8 @@ int32_t ccid_test_app(void* p) {
     furi_hal_usb_unlock();
 
     furi_check(furi_hal_usb_set_config(&usb_ccid, &app->ccid_cfg) == true);
-    iso7816_handler_set_usb_ccid_callbacks();
+    furi_hal_usb_ccid_set_callbacks(
+        (CcidCallbacks*)&app->iso7816_handler->ccid_callbacks, app->iso7816_handler);
     furi_hal_usb_ccid_insert_smartcard();
 
     //handle button events
@@ -141,7 +142,7 @@ int32_t ccid_test_app(void* p) {
     }
 
     //tear down USB
-    iso7816_handler_reset_usb_ccid_callbacks();
+    furi_hal_usb_ccid_set_callbacks(NULL, NULL);
     furi_hal_usb_set_config(usb_mode_prev, NULL);
 
     //teardown view
