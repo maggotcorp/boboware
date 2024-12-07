@@ -5,7 +5,7 @@
 *.old
 *.sub
 
-# rando
+# random
 build/
 toolchain/
 external/
