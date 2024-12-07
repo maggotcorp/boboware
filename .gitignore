@@ -4,7 +4,8 @@
 *.gdb_history
 *.old
 *.sub
-
+build/
+toolchain/
 
 # LSP
 .cache

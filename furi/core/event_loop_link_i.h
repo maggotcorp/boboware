@@ -21,7 +21,7 @@ void furi_event_loop_link_notify(FuriEventLoopLink* instance, FuriEventLoopEvent
 
 typedef FuriEventLoopLink* (*FuriEventLoopContractGetLink)(FuriEventLoopObject* object);
 
-typedef bool (
+typedef uint32_t (
     *FuriEventLoopContractGetLevel)(FuriEventLoopObject* object, FuriEventLoopEvent event);
 
 typedef struct {

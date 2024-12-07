@@ -35,8 +35,6 @@ void furi_init(void);
 
 void furi_run(void);
 
-void furi_background(void);
-
 #ifdef __cplusplus
 }
 #endif

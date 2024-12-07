@@ -8,8 +8,6 @@
 #include <stdbool.h>
 #include "elf/elf_api_interface.h"
 
-#include <applications.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -44,22 +42,7 @@ typedef struct {
     char icon[FAP_MANIFEST_MAX_ICON_SIZE];
 } FlipperApplicationManifestV1;
 
-typedef FlipperApplicationManifestV1 FlipperApplicationManifestOfw;
-
-typedef struct {
-    FlipperApplicationManifestBase base;
-    uint16_t stack_size;
-    uint32_t app_version;
-    char name[FAP_MANIFEST_MAX_APP_NAME_LENGTH];
-    char has_icon;
-    char icon[FAP_MANIFEST_MAX_ICON_SIZE];
-
-    FlipperApplicationFlag flags;
-} FlipperApplicationManifestV1Ex;
-
-typedef FlipperApplicationManifestV1Ex FlipperApplicationManifestEx;
-
-typedef FlipperApplicationManifestEx FlipperApplicationManifest;
+typedef FlipperApplicationManifestV1 FlipperApplicationManifest;
 
 #pragma pack(pop)
 

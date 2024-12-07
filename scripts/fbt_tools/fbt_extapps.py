@@ -90,7 +90,6 @@ class AppBuilder:
             self.app_work_dir,
             self.app._appdir.Dir(self.app.fap_icon_assets),
             icon_bundle_name=f"{self.app.fap_icon_assets_symbol or self.app.appid }_icons",
-            add_include=True,
         )
         self.app_env.Alias("_fap_icons", fap_icons)
         self.fw_env.Append(_APP_ICONS=[fap_icons])
@@ -303,21 +302,14 @@ def _validate_app_imports(target, source, env):
                 "gallagher_deobfuscate_and_parse_credential",
                 # js_
                 "js_delay_with_flags",
-                "js_event_loop_get_loop",
-                "js_flags_set",
                 "js_flags_wait",
-                "js_gui_make_view_factory",
-                "js_module_get",
-                # test_js
-                "js_thread_run",
-                "js_thread_stop",
+                "js_flags_set",
                 # totp_
                 "totp_",
                 "token_info_",
                 "memset_s",
-                # social_moscow, troika
+                # troika
                 "mosgortrans_parse_transport_block",
-                "render_section_header",
             )
         )
         and any(
@@ -325,9 +317,7 @@ def _validate_app_imports(target, source, env):
             for prefix in [
                 "advanced_plugin",
                 "gallagher",
-                "js_",  # js_app and all js_ modules
-                "social_moscow",
-                "test_js",
+                "js_",
                 "totp_",
                 "troika",
             ]

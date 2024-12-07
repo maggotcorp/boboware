@@ -11,8 +11,6 @@ typedef struct {
     FuriThread* thread;
     bool insomniac;
     FlipperApplication* fap;
-
-    bool unloaded_asset_packs;
 } LoaderAppData;
 
 struct Loader {

@@ -1,6 +1,3 @@
-// Script cannot work without subghz module so check before
-checkSdkFeatures(["subghz"]);
-
 let subghz = require("subghz");
 subghz.setup();
 

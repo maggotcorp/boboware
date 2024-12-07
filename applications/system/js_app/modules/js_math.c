@@ -305,10 +305,9 @@ void js_math_trunc(struct mjs* mjs) {
     mjs_return(mjs, mjs_mk_number(mjs, x < (double)0. ? ceil(x) : floor(x)));
 }
 
-static void* js_math_create(struct mjs* mjs, mjs_val_t* object, JsModules* modules) {
-    UNUSED(modules);
+static void* js_math_create(struct mjs* mjs, mjs_val_t* object) {
     mjs_val_t math_obj = mjs_mk_object(mjs);
-    mjs_set(mjs, math_obj, "isEqual", ~0, MJS_MK_FN(js_math_is_equal));
+    mjs_set(mjs, math_obj, "is_equal", ~0, MJS_MK_FN(js_math_is_equal));
     mjs_set(mjs, math_obj, "abs", ~0, MJS_MK_FN(js_math_abs));
     mjs_set(mjs, math_obj, "acos", ~0, MJS_MK_FN(js_math_acos));
     mjs_set(mjs, math_obj, "acosh", ~0, MJS_MK_FN(js_math_acosh));
@@ -342,7 +341,6 @@ static void* js_math_create(struct mjs* mjs, mjs_val_t* object, JsModules* modul
 static const JsModuleDescriptor js_math_desc = {
     "math",
     js_math_create,
-    NULL,
     NULL,
 };
 

@@ -288,7 +288,7 @@ static void infrared_free(InfraredApp* infrared) {
     free(infrared);
 }
 
-InfraredErrorCode infrared_add_remote_with_button(
+bool infrared_add_remote_with_button(
     const InfraredApp* infrared,
     const char* button_name,
     const InfraredSignal* signal) {
@@ -301,23 +301,21 @@ InfraredErrorCode infrared_add_remote_with_button(
     furi_string_cat_printf(
         new_path, "/%s%s", furi_string_get_cstr(new_name), INFRARED_APP_EXTENSION);
 
-    InfraredErrorCode error = InfraredErrorCodeNone;
+    bool success = false;
 
     do {
-        error = infrared_remote_create(remote, furi_string_get_cstr(new_path));
-        if(INFRARED_ERROR_PRESENT(error)) break;
-
-        error = infrared_remote_append_signal(remote, signal, button_name);
+        if(!infrared_remote_create(remote, furi_string_get_cstr(new_path))) break;
+        if(!infrared_remote_append_signal(remote, signal, button_name)) break;
+        success = true;
     } while(false);
 
     furi_string_free(new_name);
     furi_string_free(new_path);
 
-    return error;
+    return success;
 }
 
-InfraredErrorCode
-    infrared_rename_current_remote(const InfraredApp* infrared, const char* new_name) {
+bool infrared_rename_current_remote(const InfraredApp* infrared, const char* new_name) {
     InfraredRemote* remote = infrared->remote;
     const char* old_path = infrared_remote_get_path(remote);
 
@@ -337,13 +335,12 @@ InfraredErrorCode
     path_append(new_path_fstr, furi_string_get_cstr(new_name_fstr));
     furi_string_cat(new_path_fstr, INFRARED_APP_EXTENSION);
 
-    const InfraredErrorCode error =
-        infrared_remote_rename(remote, furi_string_get_cstr(new_path_fstr));
+    const bool success = infrared_remote_rename(remote, furi_string_get_cstr(new_path_fstr));
 
     furi_string_free(new_name_fstr);
     furi_string_free(new_path_fstr);
 
-    return error;
+    return success;
 }
 
 void infrared_tx_start(InfraredApp* infrared) {
@@ -376,16 +373,17 @@ void infrared_tx_start(InfraredApp* infrared) {
     infrared->app_state.is_transmitting = true;
 }
 
-InfraredErrorCode infrared_tx_start_button_index(InfraredApp* infrared, size_t button_index) {
+void infrared_tx_start_button_index(InfraredApp* infrared, size_t button_index) {
     furi_assert(button_index < infrared_remote_get_signal_count(infrared->remote));
 
-    InfraredErrorCode error =
-        infrared_remote_load_signal(infrared->remote, infrared->current_signal, button_index);
-
-    if(!INFRARED_ERROR_PRESENT(error)) {
+    if(infrared_remote_load_signal(infrared->remote, infrared->current_signal, button_index)) {
         infrared_tx_start(infrared);
+    } else {
+        infrared_show_error_message(
+            infrared,
+            "Failed to load\n\"%s\"",
+            infrared_remote_get_signal_name(infrared->remote, button_index));
     }
-    return error;
 }
 
 void infrared_tx_stop(InfraredApp* infrared) {
@@ -408,7 +406,7 @@ void infrared_blocking_task_start(InfraredApp* infrared, FuriThreadCallback call
     furi_thread_start(infrared->task_thread);
 }
 
-InfraredErrorCode infrared_blocking_task_finalize(InfraredApp* infrared) {
+bool infrared_blocking_task_finalize(InfraredApp* infrared) {
     furi_thread_join(infrared->task_thread);
     return furi_thread_get_return_code(infrared->task_thread);
 }
@@ -460,9 +458,9 @@ void infrared_set_tx_pin(InfraredApp* infrared, FuriHalInfraredTxPin tx_pin) {
 
 void infrared_enable_otg(InfraredApp* infrared, bool enable) {
     if(enable) {
-        if(!furi_hal_power_is_otg_enabled()) furi_hal_power_enable_otg();
+        furi_hal_power_enable_otg();
     } else {
-        if(furi_hal_power_is_otg_enabled()) furi_hal_power_disable_otg();
+        furi_hal_power_disable_otg();
     }
     infrared->app_state.is_otg_enabled = enable;
 }
@@ -558,18 +556,10 @@ int32_t infrared_app(void* p) {
             is_rpc_mode = true;
         } else {
             const char* file_path = (const char*)p;
-            InfraredErrorCode error = infrared_remote_load(infrared->remote, file_path);
+            is_remote_loaded = infrared_remote_load(infrared->remote, file_path);
 
-            if(!INFRARED_ERROR_PRESENT(error)) {
-                is_remote_loaded = true;
-            } else {
-                is_remote_loaded = false;
-                bool wrong_file_type = INFRARED_ERROR_CHECK(error, InfraredErrorCodeWrongFileType);
-                const char* format = wrong_file_type ?
-                                         "Library file\n\"%s\" can't be opened as a remote" :
-                                         "Failed to load\n\"%s\"";
-
-                infrared_show_error_message(infrared, format, file_path);
+            if(!is_remote_loaded) {
+                infrared_show_error_message(infrared, "Failed to load\n\"%s\"", file_path);
                 return -1;
             }
 

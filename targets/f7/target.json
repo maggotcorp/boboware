@@ -35,7 +35,7 @@
         "microtar",
         "usb_stm32",
         "infrared",
-        "fwassets",
+        "assets",
         "one_wire",
         "ibutton",
         "music_worker",
