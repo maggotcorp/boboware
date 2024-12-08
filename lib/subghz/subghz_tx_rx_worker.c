@@ -122,8 +122,8 @@ void subghz_tx_rx_worker_tx(SubGhzTxRxWorker* instance, uint8_t* data, size_t si
             break;
         }
     }
-    //subghz_devices_idle(instance->device);
-    //instance->status = SubGhzTxRxWorkerStatusIDLE;
+    subghz_devices_idle(instance->device);
+    instance->status = SubGhzTxRxWorkerStatusIDLE;
 }
 /** Worker thread
  * 
@@ -194,7 +194,7 @@ static int32_t subghz_tx_rx_worker_thread(void* context) {
             }
         }
 
-        if(timeout_tx) timeout_tx--;
+        //if(timeout_tx) timeout_tx--;
         furi_delay_tick(1);
     }
 
