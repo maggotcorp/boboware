@@ -40,7 +40,6 @@ void furi_hal_init(void) {
     furi_hal_interrupt_init();
     furi_hal_flash_init();
     furi_hal_resources_init();
-    furi_hal_region_init();
     furi_hal_spi_config_init();
     furi_hal_spi_dma_init();
     furi_hal_speaker_init();

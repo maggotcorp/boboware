@@ -194,7 +194,7 @@ static int32_t subghz_tx_rx_worker_thread(void* context) {
             }
         }
 
-        //if(timeout_tx) timeout_tx--;
+        if(timeout_tx) timeout_tx--;
         furi_delay_tick(1);
     }
 

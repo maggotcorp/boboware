@@ -7,7 +7,6 @@
 
 # random
 build/
-toolchain/
 external/
 dist/
 

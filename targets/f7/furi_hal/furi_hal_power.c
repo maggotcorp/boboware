@@ -73,14 +73,18 @@ void furi_hal_power_init(void) {
     // Find and init gauge
     size_t retry = 2;
     while(retry > 0) {
-        furi_hal_power.gauge_ok =
-            bq27220_init(&furi_hal_i2c_handle_power, furi_hal_power_gauge_data_memory);
+        furi_hal_power.gauge_ok = bq27220_init(&furi_hal_i2c_handle_power);
+        if(furi_hal_power.gauge_ok) {
+            furi_hal_power.gauge_ok = bq27220_apply_data_memory(
+                &furi_hal_i2c_handle_power, furi_hal_power_gauge_data_memory);
+        }
         if(furi_hal_power.gauge_ok) {
             break;
         } else {
-            // Gauge need some time to think about it's behavior
-            // We must wait, otherwise next init cycle will fail at unseal stage
-            furi_delay_us(4000000);
+            // Normal startup time is 250ms
+            // But if we try to access gauge at that stage it will become unresponsive
+            // 2 seconds timeout needed to restart communication
+            furi_delay_us(2020202);
         }
         retry--;
     }
@@ -106,8 +110,8 @@ void furi_hal_power_init(void) {
 bool furi_hal_power_gauge_is_ok(void) {
     bool ret = true;
 
-    Bq27220BatteryStatus battery_status;
-    Bq27220OperationStatus operation_status;
+    BatteryStatus battery_status;
+    OperationStatus operation_status;
 
     furi_hal_i2c_acquire(&furi_hal_i2c_handle_power);
 
@@ -128,7 +132,7 @@ bool furi_hal_power_gauge_is_ok(void) {
 bool furi_hal_power_is_shutdown_requested(void) {
     bool ret = false;
 
-    Bq27220BatteryStatus battery_status;
+    BatteryStatus battery_status;
 
     furi_hal_i2c_acquire(&furi_hal_i2c_handle_power);
 
@@ -326,7 +330,6 @@ void furi_hal_power_shutdown(void) {
 
 void furi_hal_power_off(void) {
     // Crutch: shutting down with ext 3V3 off is causing LSE to stop
-    furi_hal_rtc_prepare_for_shutdown();
     furi_hal_power_enable_external_3_3v();
     furi_hal_vibro_on(true);
     furi_delay_us(50000);
@@ -590,8 +593,8 @@ void furi_hal_power_debug_get(PropertyValueCallback out, void* context) {
     PropertyValueContext property_context = {
         .key = key, .value = value, .out = out, .sep = '.', .last = false, .context = context};
 
-    Bq27220BatteryStatus battery_status;
-    Bq27220OperationStatus operation_status;
+    BatteryStatus battery_status;
+    OperationStatus operation_status;
 
     furi_hal_i2c_acquire(&furi_hal_i2c_handle_power);
 
