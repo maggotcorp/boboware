@@ -114,13 +114,12 @@ void subghz_tx_rx_worker_tx(SubGhzTxRxWorker* instance, uint8_t* data, size_t si
             break;
         }
     }
-    while(furi_hal_gpio_read(
-        instance->device_data_gpio)) { // Wait for GDO0 to be cleared -> end of packet
+    while(true) { // Wait for GDO0 to be cleared -> end of packet
         furi_delay_tick(1);
-        if(!--timeout) {
+        /*if(!--timeout) {
             FURI_LOG_W(TAG, "TX cc1101_g0 timeout");
             break;
-        }
+        }*/
     }
     subghz_devices_idle(instance->device);
     instance->status = SubGhzTxRxWorkerStatusIDLE;
@@ -152,7 +151,7 @@ static int32_t subghz_tx_rx_worker_thread(void* context) {
     uint8_t timeout_tx = 0;
     bool callback_rx = false;
 
-    while(instance->worker_running) {
+    while(true) {
         //transmit
         size_tx = furi_stream_buffer_bytes_available(instance->stream_tx);
         if(size_tx > 0 && !timeout_tx) {
