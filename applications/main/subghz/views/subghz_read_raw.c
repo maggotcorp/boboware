@@ -393,7 +393,9 @@ bool subghz_read_raw_input(InputEvent* event, void* context) {
                     break;
                 case SubGhzReadRAWStatusTX:
                     // Start TXRepeat
-                    model->status = SubGhzReadRAWStatusTXRepeat;
+                    instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
+                    model->status = SubGhzReadRAWStatusLoadKeyTXRepeat;
+                    ret = true;
                     break;
                 case SubGhzReadRAWStatusLoadKeyIDLE:
                     // Start Load Key TX
@@ -403,7 +405,9 @@ bool subghz_read_raw_input(InputEvent* event, void* context) {
                     break;
                 case SubGhzReadRAWStatusLoadKeyTX:
                     // Start Load Key TXRepeat
+                    instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
                     model->status = SubGhzReadRAWStatusLoadKeyTXRepeat;
+                    ret = true;
                     break;
 
                 default:
