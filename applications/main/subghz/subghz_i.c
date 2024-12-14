@@ -210,6 +210,7 @@ bool subghz_key_load(SubGhz* subghz, const char* file_path, bool show_dialog) {
 
         load_key_state = SubGhzLoadKeyStateOK;
     } while(0);
+    //todo is this the spot?
 
     furi_string_free(temp_str);
     flipper_format_free(fff_data_file);
