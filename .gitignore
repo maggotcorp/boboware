@@ -7,7 +7,7 @@
 
 # random
 build/
-# external/
+external/
 dist/
 
 # LSP
