@@ -108,7 +108,7 @@ void subghz_read_raw_update_sample_write(SubGhzReadRAW* instance, size_t sample)
         },
         false);
 }
-
+//todo should have a continous option
 void subghz_read_raw_stop_send(SubGhzReadRAW* instance) {
     furi_assert(instance);
 
@@ -121,16 +121,16 @@ void subghz_read_raw_stop_send(SubGhzReadRAW* instance) {
             case SubGhzReadRAWStatusLoadKeyTXRepeat:
                 instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
                 break;
-            case SubGhzReadRAWStatusTX:
+            /*case SubGhzReadRAWStatusTX:
                 model->status = SubGhzReadRAWStatusIDLE;
                 break;
             case SubGhzReadRAWStatusLoadKeyTX:
                 model->status = SubGhzReadRAWStatusLoadKeyIDLE;
-                break;
-
+                break;*/
             default:
-                FURI_LOG_W(TAG, "unknown status");
-                model->status = SubGhzReadRAWStatusIDLE;
+                FURI_LOG_W(TAG, "Continuous should be an option");
+                //model->status = SubGhzReadRAWStatusIDLE;
+                instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
                 break;
             }
         },
