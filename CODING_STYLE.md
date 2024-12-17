@@ -60,7 +60,6 @@ Examples:
 	Gui
 	SubGhzKeystore
 
-
 ### Functions are snake_case
 
 	furi_hal_usb_init

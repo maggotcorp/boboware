@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 
-from enum import Enum
-from dataclasses import dataclass
-from typing import Tuple
 from array import array
+from dataclasses import dataclass
+from enum import Enum
+from typing import Tuple
 
 
 class OBException(ValueError):
@@ -28,8 +28,8 @@ _OBS_descr = (
     OBParams(0, (15, 16), "UNUSED1"),
     OBParams(0, (16, 17), "IWDGSW"),
     OBParams(0, (17, 18), "IWDGSTOP"),
-    OBParams(0, (18, 19), "IWGDSTDBY"),  #  ST's typo: IWDGSTDBY
-    OBParams(0, (18, 19), "IWDGSTDBY"),  #  ST's typo: IWDGSTDBY
+    OBParams(0, (18, 19), "IWGDSTDBY"),  # ST's typo: IWDGSTDBY
+    OBParams(0, (18, 19), "IWDGSTDBY"),  # ST's typo: IWDGSTDBY
     OBParams(0, (19, 20), "WWDGSW"),
     OBParams(0, (20, 23), "UNUSED2"),
     OBParams(0, (23, 24), "nBOOT1"),
@@ -71,7 +71,6 @@ _OBS_descr = (
     OBParams(15, (30, 31), "NBRSD"),
     OBParams(15, (31, 32), "C2OPT"),
 )
-
 
 _OBS = dict((param.name, param) for param in _OBS_descr)
 
@@ -196,7 +195,7 @@ def main():
     for idx in range(len(ob_sample_arr)):
         real_masked = ob_sample_arr[idx] & mask[idx]
         print(
-            f"#{idx}: ref {ref[idx]:08x} real {real_masked:08x} ({ob_sample_arr[idx]:08x} & {mask[idx]:08x}) match {ref[idx]==real_masked}"
+            f"#{idx}: ref {ref[idx]:08x} real {real_masked:08x} ({ob_sample_arr[idx]:08x} & {mask[idx]:08x}) match {ref[idx] == real_masked}"
         )
 
     # print(ob_sample)

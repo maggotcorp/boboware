@@ -1,3 +1,8 @@
+from SCons.Action import Action
+from SCons.Builder import Builder
+from SCons.Errors import StopError
+from SCons.Script import GetOption
+from SCons.Warnings import WarningOnByDefault, warn
 from ansi.color import fg
 from fbt.appmanifest import (
     AppManager,
@@ -6,11 +11,7 @@ from fbt.appmanifest import (
     FlipperAppType,
     FlipperManifestException,
 )
-from SCons.Action import Action
-from SCons.Builder import Builder
-from SCons.Errors import StopError
-from SCons.Script import GetOption
-from SCons.Warnings import WarningOnByDefault, warn
+
 
 # Adding objects for application management to env
 #  AppManager env["APPMGR"] - loads all manifests; manages list of known apps

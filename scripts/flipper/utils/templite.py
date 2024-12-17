@@ -28,10 +28,9 @@
 #  MA 02110-1301, USA.
 
 
-from enum import Enum
-
-import sys
 import os
+import sys
+from enum import Enum
 
 
 class TempliteCompiler:
@@ -97,10 +96,10 @@ class TempliteCompiler:
         while self.cursor < len(self.source):
             # Process plain text till first token occurance
             if state == self.State.TEXT:
-                if self.source[self.cursor :].startswith("{%"):
+                if self.source[self.cursor:].startswith("{%"):
                     state = self.State.CONTROL
                     self.cursor += 1
-                elif self.source[self.cursor :].startswith("{{"):
+                elif self.source[self.cursor:].startswith("{{"):
                     state = self.State.VARIABLE
                     self.cursor += 1
                 else:
@@ -109,14 +108,14 @@ class TempliteCompiler:
                 if state != self.State.TEXT:
                     self.processText()
             elif state == self.State.CONTROL:
-                if self.source[self.cursor :].startswith("%}"):
+                if self.source[self.cursor:].startswith("%}"):
                     self.cursor += 1
                     state = self.State.TEXT
                     self.processControl()
                 else:
                     self.block += self.source[self.cursor]
             elif state == self.State.VARIABLE:
-                if self.source[self.cursor :].startswith("}}"):
+                if self.source[self.cursor:].startswith("}}"):
                     self.cursor += 1
                     state = self.State.TEXT
                     self.processVariable()

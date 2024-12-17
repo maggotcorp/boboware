@@ -8,8 +8,9 @@
 # strings for labeling purposes.
 
 import gdb
-from .Types import StdTypes
+
 from .QueueTools import *
+from .Types import StdTypes
 
 
 class HandleRegistry:

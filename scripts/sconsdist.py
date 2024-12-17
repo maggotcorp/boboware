@@ -4,10 +4,10 @@ import json
 import shutil
 import tarfile
 import zipfile
+from ansi.color import fg
 from os import makedirs, walk
 from os.path import basename, exists, join, relpath
 
-from ansi.color import fg
 from flipper.app import App
 from flipper.assets.tarball import FLIPPER_TAR_FORMAT, tar_sanitizer_filter
 from update import Main as UpdateMain
@@ -147,10 +147,10 @@ class Main(App):
 
         required_components = ("firmware.elf", "full.bin", "update.dir")
         if all(
-            map(
-                lambda c: c in self._dist_components,
-                required_components,
-            )
+                map(
+                    lambda c: c in self._dist_components,
+                    required_components,
+                )
         ):
             self.bundle_sdk()
 
@@ -171,9 +171,9 @@ class Main(App):
 
         sdk_bundle_path = self.get_dist_path(self.get_dist_file_name("sdk", "zip"))
         with zipfile.ZipFile(
-            sdk_bundle_path,
-            "w",
-            zipfile.ZIP_DEFLATED,
+                sdk_bundle_path,
+                "w",
+                zipfile.ZIP_DEFLATED,
         ) as zf:
             for component_key in sdk_components_keys:
                 component_path = self._dist_components.get(component_key)
@@ -222,8 +222,8 @@ class Main(App):
             f"Generating update bundle with version {self.args.version} for {self.target}"
         )
         bundle_dir_name = f"{self.target}-update-{self.args.suffix}"[
-            : self.DIST_FOLDER_MAX_NAME_LENGTH
-        ]
+                          : self.DIST_FOLDER_MAX_NAME_LENGTH
+                          ]
         bundle_dir = self.get_dist_path(bundle_dir_name)
         bundle_args = [
             "generate",
@@ -261,13 +261,13 @@ class Main(App):
 
             # Create tgz archive
             with tarfile.open(
-                join(
-                    self.output_dir_path,
-                    bundle_tgz := f"{self.DIST_FILE_PREFIX}{bundle_dir_name}.tgz",
-                ),
-                "w:gz",
-                compresslevel=9,
-                format=FLIPPER_TAR_FORMAT,
+                    join(
+                        self.output_dir_path,
+                        bundle_tgz := f"{self.DIST_FILE_PREFIX}{bundle_dir_name}.tgz",
+                    ),
+                    "w:gz",
+                    compresslevel=9,
+                    format=FLIPPER_TAR_FORMAT,
             ) as tar:
                 self.note_dist_component(
                     "update", "tgz", self.get_dist_path(bundle_tgz)

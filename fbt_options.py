@@ -4,7 +4,7 @@ import os
 
 # For more details on these options, run 'fbt -h'
 
-FIRMWARE_ORIGIN = "timoland"
+FIRMWARE_ORIGIN = "boboland"
 
 # Default hardware target
 TARGET_HW = 7
@@ -29,14 +29,15 @@ if not os.environ.get("DIST_SUFFIX"):
             .strip()
         )
 
+
     try:
         # For tags, dist name is just the tag name: mntm-(ver)
         DIST_SUFFIX = git("describe", "--tags", "--abbrev=0", "--exact-match")
     except Exception:
         # If not a tag, dist name is: mntm-(branch)-(commmit)
-        branch_name = git("rev-parse", "--abbrev-ref", "HEAD").removeprefix("mntm-")
+        branch_name = git("rev-parse", "--abbrev-ref", "HEAD").removeprefix("bobo-")
         commit_sha = git("rev-parse", "HEAD")[:8]
-        DIST_SUFFIX = f"mntm-{branch_name}-{commit_sha}"
+        DIST_SUFFIX = f"bobo-{branch_name}-{commit_sha}"
     # Dist name is only for naming of output files
     DIST_SUFFIX = DIST_SUFFIX.replace("/", "-")
     # Instead, FW version uses tag name (mntm-xxx), or "mntm-dev" if not a tag (see scripts/version.py)

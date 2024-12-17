@@ -46,8 +46,8 @@ class Main(App):
         szTargetName = self.args.label.encode("ascii")
 
         data = (
-            struct.pack("<6sBI255sII", b"Target", 0, 1, szTargetName, len(data), 1)
-            + data
+                struct.pack("<6sBI255sII", b"Target", 0, 1, szTargetName, len(data), 1)
+                + data
         )
 
         # Prefix
