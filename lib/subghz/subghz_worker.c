@@ -47,7 +47,7 @@ static int32_t subghz_worker_thread_callback(void* context) {
     SubGhzWorker* instance = context;
 
     LevelDuration level_duration;
-    while(instance->running) {
+    while(true) {
         int ret = furi_stream_buffer_receive(
             instance->stream, &level_duration, sizeof(LevelDuration), 10);
         if(ret == sizeof(LevelDuration)) {
