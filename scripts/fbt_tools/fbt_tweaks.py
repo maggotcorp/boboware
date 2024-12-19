@@ -1,10 +1,10 @@
+import SCons.Warnings as Warnings
 import os
 import sys
 import traceback
-
-import SCons.Warnings as Warnings
-from ansi.color import fg
 from SCons.Errors import UserError
+from ansi.color import fg
+
 
 # from SCons.Script.Main import find_deepest_user_frame
 
@@ -30,7 +30,7 @@ def fbt_warning(e):
     fbt_line = "\nfbt: warning: %s\n" % e.args[0]
     sys.stderr.write(fg.boldmagenta(fbt_line))
     fbt_line = (
-        fg.yellow("%s, line %d, " % (routine, lineno)) + 'in file "%s"\n' % filename
+            fg.yellow("%s, line %d, " % (routine, lineno)) + 'in file "%s"\n' % filename
     )
     sys.stderr.write(fg.yellow(fbt_line))
 

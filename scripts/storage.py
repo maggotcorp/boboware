@@ -150,7 +150,7 @@ class Main(App):
         self.logger.error("Never use it with internal storage (/int)")
 
         if self.args.flipper_path.startswith(
-            "/int"
+                "/int"
         ) or self.args.flipper_path.startswith("/any"):
             self.logger.error("Stop at this point or device warranty will be void")
             say = input("Anything to say? ").strip().lower()

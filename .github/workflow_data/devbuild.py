@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 import datetime as dt
-import requests
 import json
 import os
+import requests
 
 base_url = f"{os.environ['INDEXER_URL']}/builds/firmware/dev"
 artifact_tgz = f"{base_url}/{os.environ['ARTIFACT_TAG']}.tgz"
 artifact_sdk = f"{base_url}/{os.environ['ARTIFACT_TAG'].replace('update', 'sdk')}.zip"
 artifact_lab = f"https://lab.flipper.net/?url={artifact_tgz}&channel=dev-cfw&version={os.environ['VERSION_TAG']}"
-
 
 if __name__ == "__main__":
     with open(os.environ["GITHUB_EVENT_PATH"], "r") as f:

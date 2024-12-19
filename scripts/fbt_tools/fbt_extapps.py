@@ -1,19 +1,18 @@
+import SCons.Warnings
 import itertools
 import pathlib
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional
-
-import SCons.Warnings
+from SCons.Action import Action
+from SCons.Builder import Builder
+from SCons.Errors import UserError
+from SCons.Node.FS import Entry, File
 from ansi.color import fg
+from dataclasses import dataclass, field
 from fbt.appmanifest import FlipperApplication, FlipperAppType, FlipperManifestException
 from fbt.elfmanifest import assemble_manifest_data
 from fbt.fapassets import FileBundler
 from fbt.sdk.cache import SdkCache
 from fbt.util import resolve_real_dir_node
-from SCons.Action import Action
-from SCons.Builder import Builder
-from SCons.Errors import UserError
-from SCons.Node.FS import Entry, File
+from typing import Dict, List, Optional
 
 _FAP_META_SECTION = ".fapmeta"
 _FAP_FILEASSETS_SECTION = ".fapassets"
@@ -89,7 +88,7 @@ class AppBuilder:
         fap_icons = self.app_env.CompileIcons(
             self.app_work_dir,
             self.app._appdir.Dir(self.app.fap_icon_assets),
-            icon_bundle_name=f"{self.app.fap_icon_assets_symbol or self.app.appid }_icons",
+            icon_bundle_name=f"{self.app.fap_icon_assets_symbol or self.app.appid}_icons",
         )
         self.app_env.Alias("_fap_icons", fap_icons)
         self.fw_env.Append(_APP_ICONS=[fap_icons])
@@ -181,7 +180,7 @@ class AppBuilder:
         app_artifacts.validator = self.app_env.ValidateAppImports(
             app_artifacts.compact,
             _CHECK_APP=self.app.do_strict_import_checks
-            and self.app_env.get("STRICT_FAP_IMPORT_CHECK"),
+                       and self.app_env.get("STRICT_FAP_IMPORT_CHECK"),
         )[0]
 
         if self.app.apptype == FlipperAppType.PLUGIN:
@@ -312,7 +311,7 @@ def _validate_app_imports(target, source, env):
                 "mosgortrans_parse_transport_block",
             )
         )
-        and any(
+           and any(
             prefix in source[0].path
             for prefix in [
                 "advanced_plugin",
@@ -332,9 +331,9 @@ def _validate_app_imports(target, source, env):
         disabled_api_syms = unresolved_syms.intersection(sdk_cache.get_disabled_names())
         if disabled_api_syms:
             warning_msg += (
-                fg.brightyellow(" (in API, but disabled: ")
-                + fg.brightmagenta(f"{disabled_api_syms}")
-                + fg.brightyellow(")")
+                    fg.brightyellow(" (in API, but disabled: ")
+                    + fg.brightmagenta(f"{disabled_api_syms}")
+                    + fg.brightyellow(")")
             )
         if env.get("_CHECK_APP"):
             raise UserError(warning_msg)

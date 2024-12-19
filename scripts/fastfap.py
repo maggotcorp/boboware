@@ -6,10 +6,10 @@ import subprocess
 import tempfile
 from collections import defaultdict
 from dataclasses import dataclass
-
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
 from elftools.elf.sections import SymbolTableSection
+
 from fbt.sdk.hashes import gnu_sym_hash
 from flipper.app import App
 

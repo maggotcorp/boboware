@@ -1,6 +1,6 @@
+from SCons.Action import Action
 from SCons.Builder import Builder
 from SCons.Defaults import Touch
-from SCons.Action import Action
 
 
 def generate(env):

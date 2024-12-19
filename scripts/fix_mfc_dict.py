@@ -2,8 +2,8 @@ import pathlib
 import string
 
 file = (
-    pathlib.Path(__file__).parent
-    / "../applications/main/nfc/resources/nfc/assets/mf_classic_dict.nfc"
+        pathlib.Path(__file__).parent
+        / "../applications/main/nfc/resources/nfc/assets/mf_classic_dict.nfc"
 )
 try:
     lines = file.read_text(encoding="ascii").splitlines()

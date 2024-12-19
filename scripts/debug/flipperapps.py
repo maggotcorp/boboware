@@ -1,10 +1,9 @@
+import gdb
+import posixpath
+import struct
+import zlib
 from dataclasses import dataclass
 from typing import Optional, Tuple, Dict, ClassVar
-import struct
-import posixpath
-import zlib
-
-import gdb
 
 
 def get_file_crc32(filename):

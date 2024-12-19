@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
+import argparse
 import os
 import requests
-import argparse
 import subprocess
+
 
 # usage:
 # COMMIT_HASH, COMMIT_MSG, BRANCH_NAME,

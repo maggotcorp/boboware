@@ -15,7 +15,8 @@
 
 ### Description
 
-This file format is used to store the device type and the UID of an NFC device. It does not store any internal data, so it is only used as a header for other formats.
+This file format is used to store the device type and the UID of an NFC device. It does not store any internal data, so
+it is only used as a header for other formats.
 
 Version differences:
 
@@ -36,7 +37,7 @@ Version differences:
     ATQA: 00 44
     SAK: 00
 
-### Description 
+### Description
 
 This file format is used to store the UID, SAK and ATQA of a ISO14443-3A device.
 UID must be either 4 or 7 bytes long. ATQA is 2 bytes long. SAK is 1 byte long.
@@ -56,7 +57,7 @@ None, there are no versions yet.
     Application data: 00 12 34 FF
     Protocol info: 11 81 E1
 
-### Description 
+### Description
 
 This file format is used to store the UID, Application data and Protocol info of a ISO14443-3B device.
 UID must be 4 bytes long. Application data is 4 bytes long. Protocol info is 3 bytes long.
@@ -79,10 +80,11 @@ None, there are no versions yet.
     SAK: 20
     # ISO14443-4A specific data
     ATS: 06 75 77 81 02 80
-    
-### Description 
 
-This file format is used to store the UID, SAK and ATQA of a ISO14443-4A device. It also stores the Answer to Select (ATS) data of the card.
+### Description
+
+This file format is used to store the UID, SAK and ATQA of a ISO14443-4A device. It also stores the Answer to Select (
+ATS) data of the card.
 ATS must be no less than 5 bytes long.
 
 Version differences:
@@ -129,13 +131,20 @@ None, there are no versions yet.
 
 ### Description
 
-This file format is used to store the UID, SAK and ATQA of a Mifare Ultralight/NTAG device. It also stores the internal data of the card, the signature, the version, and the counters. The data is stored in pages, just like on the card itself.
+This file format is used to store the UID, SAK and ATQA of a Mifare Ultralight/NTAG device. It also stores the internal
+data of the card, the signature, the version, and the counters. The data is stored in pages, just like on the card
+itself.
 
-The "NTAG/Ultralight type" field contains the concrete device type. It must be one of: Mifare Ultralight, Mifare Ultralight 11, Mifare Ultralight 21, NTAG203, NTAG213, NTAG215, NTAG216, NTAG I2C 1K, NTAG I2C 2K, NTAG I2C Plus 1K, NTAG I2C Plus 2K.
+The "NTAG/Ultralight type" field contains the concrete device type. It must be one of: Mifare Ultralight, Mifare
+Ultralight 11, Mifare Ultralight 21, NTAG203, NTAG213, NTAG215, NTAG216, NTAG I2C 1K, NTAG I2C 2K, NTAG I2C Plus 1K,
+NTAG I2C Plus 2K.
 
-The "Signature" field contains the reply of the tag to the READ_SIG command. More on that can be found here: <https://www.nxp.com/docs/en/data-sheet/MF0ULX1.pdf> (page 31)
+The "Signature" field contains the reply of the tag to the READ_SIG command. More on that can be found
+here: <https://www.nxp.com/docs/en/data-sheet/MF0ULX1.pdf> (page 31)
 
-The "Mifare version" field is not related to the file format version but to the Mifare Ultralight version. It contains the response of the tag to the GET_VERSION command. More on that can be found here: <https://www.nxp.com/docs/en/data-sheet/MF0ULX1.pdf> (page 21)
+The "Mifare version" field is not related to the file format version but to the Mifare Ultralight version. It contains
+the response of the tag to the GET_VERSION command. More on that can be found
+here: <https://www.nxp.com/docs/en/data-sheet/MF0ULX1.pdf> (page 21)
 
 Other fields are the direct representation of the card's internal state. Learn more about them in the same datasheet.
 
@@ -191,7 +200,10 @@ Version differences:
 
 ### Description
 
-This file format is used to store the NFC-A and Mifare Classic specific data of a Mifare Classic card. Aside from the NFC-A data, it stores the card type (1K/4K) and the internal data of the card. The data is stored in blocks, there is no sector grouping. If the block's data is unknown, it is represented by '??'. Otherwise, the data is represented as a hex string.
+This file format is used to store the NFC-A and Mifare Classic specific data of a Mifare Classic card. Aside from the
+NFC-A data, it stores the card type (1K/4K) and the internal data of the card. The data is stored in blocks, there is no
+sector grouping. If the block's data is unknown, it is represented by '??'. Otherwise, the data is represented as a hex
+string.
 
 Version differences:
 
@@ -265,7 +277,9 @@ Example:
 
 ### Description
 
-This file format is used to store the NFC-A and Mifare DESFire specific data of a Mifare DESFire card. Aside from the NFC-A data, it stores the card type (DESFire) and the internal data of the card. The data is stored per-application, and per-file. Here, the card was written using those pm3 commands:
+This file format is used to store the NFC-A and Mifare DESFire specific data of a Mifare DESFire card. Aside from the
+NFC-A data, it stores the card type (DESFire) and the internal data of the card. The data is stored per-application, and
+per-file. Here, the card was written using those pm3 commands:
 
     hf mfdes createapp --aid 123456 --fid 2345 --dfname astra
     hf mfdes createfile --aid 123456 --fid 01 --isofid 0001 --size 000100
@@ -301,7 +315,8 @@ None, there are no versions yet.
 
 ### Description
 
-This file contains a list of Mifare Classic keys. Each key is represented as a hex string. Lines starting with '#' are ignored as comments. Blank lines are ignored as well.
+This file contains a list of Mifare Classic keys. Each key is represented as a hex string. Lines starting with '#' are
+ignored as comments. Blank lines are ignored as well.
 
 ## EMV resources
 
@@ -320,7 +335,8 @@ This file contains a list of Mifare Classic keys. Each key is represented as a h
 
 ### Description
 
-This file stores a list of EMV currency codes, country codes, or AIDs and their names. Each line contains a hex value and a name separated by a colon and a space.
+This file stores a list of EMV currency codes, country codes, or AIDs and their names. Each line contains a hex value
+and a name separated by a colon and a space.
 
 Version differences:
 

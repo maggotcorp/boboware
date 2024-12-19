@@ -114,13 +114,13 @@ class Main(App):
             self.logger.error(f"Got {tests} failed tests.")
             self.logger.error(f"Leaked (not failing on this stat): {leak}")
             self.logger.error(f"Status: {status}")
-            self.logger.error(f"Time: {elapsed_time/1000} seconds")
+            self.logger.error(f"Time: {elapsed_time / 1000} seconds")
             flipper.stop()
             return 1
 
         self.logger.info(f"Leaked (not failing on this stat): {leak}")
         self.logger.info(
-            f"Tests ran successfully! Time elapsed {elapsed_time/1000} seconds. Passed {total} tests."
+            f"Tests ran successfully! Time elapsed {elapsed_time / 1000} seconds. Passed {total} tests."
         )
 
         flipper.stop()

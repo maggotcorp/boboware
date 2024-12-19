@@ -1,6 +1,7 @@
 # Data types {#js_data_types}
 
 Here is a list of common data types used by mJS.
+
 - string - sequence of single byte characters, no UTF8 support
 - number
 - boolean

@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [f7]
+        target: [ f7 ]
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4

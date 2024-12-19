@@ -3,6 +3,7 @@
 - [Describe changes here]
 
 -----
+
 # For the reviewer
 
 - [ ] I've uploaded the firmware with this patch to a device and verified its functionality

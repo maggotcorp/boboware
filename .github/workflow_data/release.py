@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-import requests
 import json
 import os
+import requests
 
 if __name__ == "__main__":
     with open(os.environ["GITHUB_EVENT_PATH"], "r") as f:

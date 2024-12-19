@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 import datetime as dt
-import requests
 import json
-import sys
 import os
-
+import requests
+import sys
 
 if __name__ == "__main__":
     with open(os.environ["GITHUB_EVENT_PATH"], "r") as f:

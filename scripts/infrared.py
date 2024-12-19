@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from os import path
-
 from flipper.app import App
 from flipper.utils.fff import *
 

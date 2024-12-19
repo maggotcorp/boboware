@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with PyCortexMDebug.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from os import path
 import sys
+from os import path
 
 directory, file = path.split(__file__)
 directory = path.expanduser(directory)
