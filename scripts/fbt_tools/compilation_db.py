@@ -29,15 +29,14 @@ which is the name that most clang tools search for by default.
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+import SCons
 import fnmatch
 import itertools
 import json
-from oslex import join, split
-
-import SCons
 from SCons.Tool.asm import ASPPSuffixes, ASSuffixes
 from SCons.Tool.cc import CSuffixes
 from SCons.Tool.cxx import CXXSuffixes
+from oslex import join, split
 
 # TODO: (-nofl) Is there a better way to do this than this global? Right now this exists so that the
 # emitter we add can record all of the things it emits, so that the scanner for the top level

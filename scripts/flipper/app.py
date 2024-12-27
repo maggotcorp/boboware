@@ -1,7 +1,7 @@
-import logging
 import argparse
-import sys
 import colorlog
+import logging
+import sys
 
 
 class App:

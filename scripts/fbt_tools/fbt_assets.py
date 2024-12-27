@@ -1,11 +1,9 @@
 import os
 import subprocess
-
-from ansi.color import fg
 from SCons.Action import Action
 from SCons.Builder import Builder
 from SCons.Errors import StopError
-from SCons.Node.FS import File
+from ansi.color import fg
 
 
 def _icons_emitter(target, source, env):

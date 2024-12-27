@@ -16,13 +16,12 @@ You should have received a copy of the GNU General Public License
 along with PyCortexMDebug.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import gdb
-import re
-import math
-import sys
-import struct
-import pkg_resources
 import fnmatch
+import gdb
+import math
+import pkg_resources
+import re
+import struct
 import traceback
 
 from .svd import SVDFile
@@ -131,15 +130,15 @@ class SVD(gdb.Command):
                     data = self.format(data, form, r.size)
                     if form == "a":
                         data += (
-                            " <"
-                            + re.sub(
-                                r"\s+",
-                                " ",
-                                gdb.execute(
-                                    "info symbol {}".format(data), True, True
-                                ).strip(),
-                            )
-                            + ">"
+                                " <"
+                                + re.sub(
+                            r"\s+",
+                            " ",
+                            gdb.execute(
+                                "info symbol {}".format(data), True, True
+                            ).strip(),
+                        )
+                                + ">"
                         )
                 except gdb.MemoryError:
                     data = "(error reading)"

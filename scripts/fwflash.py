@@ -8,9 +8,10 @@ import time
 import typing
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from serial.tools.list_ports_common import ListPortInfo
 
 from flipper.app import App
-from serial.tools.list_ports_common import ListPortInfo
+
 
 # When adding an interface, also add it to SWD_TRANSPORT in fbt/ufbt options
 
@@ -180,8 +181,8 @@ def blackmagic_find_serial(serial: str):
             ports = list(
                 filter(
                     lambda p: p.serial_number == serial
-                    or p.name == serial
-                    or p.device == serial,
+                              or p.name == serial
+                              or p.device == serial,
                     ports,
                 )
             )
@@ -197,9 +198,9 @@ def blackmagic_find_serial(serial: str):
 
     if serial:
         if (
-            serial != port.serial_number
-            and serial != port.name
-            and serial != port.device
+                serial != port.serial_number
+                and serial != port.name
+                and serial != port.device
         ):
             return None
 
@@ -235,9 +236,9 @@ def blackmagic_find_networked(serial: str):
 
 class BlackmagicProgrammer(Programmer):
     def __init__(
-        self,
-        port_resolver,  # typing.Callable[typing.Union[str, None], typing.Optional[str]]
-        name: str,
+            self,
+            port_resolver,  # typing.Callable[typing.Union[str, None], typing.Optional[str]]
+            name: str,
     ):
         self.port_resolver = port_resolver
         self.name = name
@@ -314,9 +315,9 @@ class BlackmagicProgrammer(Programmer):
 
         output = process.stdout.read().decode("utf-8").strip()
         flashed = (
-            "Loading section .text," in output
-            and "MIS-MATCHED!" not in output
-            and "target image does not match the loaded file" not in output
+                "Loading section .text," in output
+                and "MIS-MATCHED!" not in output
+                and "target image does not match the loaded file" not in output
         )
 
         if not flashed:
@@ -377,6 +378,7 @@ network_flash_interfaces: list[Programmer] = [
 ]
 
 all_flash_interfaces = [*local_flash_interfaces, *network_flash_interfaces]
+
 
 ####################
 

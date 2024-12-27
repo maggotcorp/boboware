@@ -223,12 +223,12 @@ class AppManager:
         self.known_apps[app.appid] = app
 
     def filter_apps(
-        self,
-        *,
-        applist: List[str],
-        ext_applist: List[str],
-        hw_target: str,
-        skip_external: bool = False,
+            self,
+            *,
+            applist: List[str],
+            ext_applist: List[str],
+            hw_target: str,
+            skip_external: bool = False,
     ):
         return AppBuildset(
             self,
@@ -274,14 +274,14 @@ class AppBuildset:
         print(message)
 
     def __init__(
-        self,
-        appmgr: AppManager,
-        hw_target: str,
-        appnames: List[str],
-        *,
-        extra_ext_appnames: List[str],
-        skip_external: bool = False,
-        message_writer: Callable | None = None,
+            self,
+            appmgr: AppManager,
+            hw_target: str,
+            appnames: List[str],
+            *,
+            extra_ext_appnames: List[str],
+            skip_external: bool = False,
+            message_writer: Callable | None = None,
     ):
         self.appmgr = appmgr
         self.appnames = set(appnames)
@@ -369,10 +369,10 @@ class AppBuildset:
         conflicts = []
         for app in self.appnames:
             if conflict_app_name := list(
-                filter(
-                    lambda dep_name: dep_name in self.appnames,
-                    self.appmgr.get(app).conflicts,
-                )
+                    filter(
+                        lambda dep_name: dep_name in self.appnames,
+                        self.appmgr.get(app).conflicts,
+                    )
             ):
                 conflicts.append((app, conflict_app_name))
 
@@ -385,7 +385,7 @@ class AppBuildset:
         unsatisfied = []
         for app in self.appnames:
             if missing_dep := list(
-                filter(self._is_missing_dep, self.appmgr.get(app).requires)
+                    filter(self._is_missing_dep, self.appmgr.get(app).requires)
             ):
                 unsatisfied.append((app, missing_dep))
 
@@ -415,11 +415,11 @@ class AppBuildset:
                     parent_app._plugins.append(extension_app)
 
                     if (
-                        parent_app.apptype in self.BUILTIN_APP_TYPES
-                        and parent_app_id in self.appnames
+                            parent_app.apptype in self.BUILTIN_APP_TYPES
+                            and parent_app_id in self.appnames
                     ) or (
-                        parent_app.apptype not in self.BUILTIN_APP_TYPES
-                        and parent_app in self.extapps
+                            parent_app.apptype not in self.BUILTIN_APP_TYPES
+                            and parent_app in self.extapps
                     ):
                         keep_app |= True
 

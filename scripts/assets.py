@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import shutil
 import pathlib
 
 from flipper.app import App
@@ -26,8 +25,8 @@ ICONS_TEMPLATE_C_FRAME = "const uint8_t {name}[] = {data};\n"
 ICONS_TEMPLATE_C_DATA = "const uint8_t* const {name}[] = {data};\n"
 ICONS_TEMPLATE_C_ICONS = "const Icon {name} = {{.width={width},.height={height},.frame_count={frame_count},.frame_rate={frame_rate},.frames=_{name}}};\n"
 
-MAX_IMAGE_WIDTH = 2**16 - 1
-MAX_IMAGE_HEIGHT = 2**16 - 1
+MAX_IMAGE_WIDTH = 2 ** 16 - 1
+MAX_IMAGE_HEIGHT = 2 ** 16 - 1
 
 
 class Main(App):

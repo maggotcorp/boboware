@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import heatshrink2 as hs
+
 from flipper.app import App
 from flipper.assets.heatshrink_stream import HeatshrinkDataStreamHeader
 from flipper.assets.tarball import compress_tree_tarball

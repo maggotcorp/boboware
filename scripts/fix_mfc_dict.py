@@ -4,8 +4,8 @@ import string
 KEY_LENGTH = 12
 
 file = (
-    pathlib.Path(__file__).parent
-    / "../applications/main/nfc/resources/nfc/assets/mf_classic_dict.nfc"
+        pathlib.Path(__file__).parent
+        / "../applications/main/nfc/resources/nfc/assets/mf_classic_dict.nfc"
 )
 lines = file.read_text().split("\n")
 
