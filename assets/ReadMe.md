@@ -17,7 +17,7 @@
 
 `NAME_VARIANT_SIZE`
 
-- `NAME`    - mandatory - Asset name in CamelCase. [A-Za-z0-9], special symbols not allowed
+- `NAME`    - mandatory - Asset name in CamelCase.[A-Za-z0-9], special symbols not allowed
 - `VARIANT` - optional - icon variant: can relate to state or rendering conditions. Examples: active, inactive,
   inverted.
 - `SIZE`    - mandatory - size in px. Example square 10, 20, 24, etc. Example rectangular: 10x8, 19x5, etc.
