@@ -4,7 +4,7 @@
 
 Applications for factory testing the Flipper.
 
-- `accessor`            - Wiegand server
+- `accessor`            - Wiegand server 
 - `battery_test_app`    - Battery debug app
 - `blink_test`          - LED blinker
 - `bt_debug_app`        - BT test app. Requires full BT stack installed
