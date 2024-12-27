@@ -3,7 +3,7 @@
 - This is a smaller release due to the bugfixes it contains, make sure to also read the changelog
   for [mntm-006](https://github.com/Next-Flip/Momentum-Firmware/releases/tag/mntm-006)
 
-### Added:
+### Added:  
 
 - Apps:
     - Games: Laser Tag (by @RocketGod-git & @jamisonderek)
