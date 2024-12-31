@@ -295,7 +295,7 @@ class STM32WB55:
             raise Exception("Address must be aligned to 8 bytes")
 
         if word_1 == self.openocd.read_32(address) and word_2 == self.openocd.read_32(
-            address + 4
+                address + 4
         ):
             self.logger.debug("Data is already programmed")
             return

@@ -1,7 +1,6 @@
 import os
 import struct
 from dataclasses import dataclass, field
-
 from flipper.assets.icon import file2image
 
 from .appmanifest import FlipperApplication
@@ -46,9 +45,9 @@ class ElfManifestV1:
 
 
 def assemble_manifest_data(
-    app_manifest: FlipperApplication,
-    hardware_target: int,
-    sdk_version,
+        app_manifest: FlipperApplication,
+        hardware_target: int,
+        sdk_version,
 ):
     image_data = b""
     if app_manifest.fap_icon:
@@ -64,7 +63,7 @@ def assemble_manifest_data(
         image_data = image.data
 
     app_version_as_int = ((app_manifest.fap_version[0] & 0xFFFF) << 16) | (
-        app_manifest.fap_version[1] & 0xFFFF
+            app_manifest.fap_version[1] & 0xFFFF
     )
 
     data = ElfManifestBaseHeader(

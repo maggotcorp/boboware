@@ -1,20 +1,28 @@
-
 # JavaScript scripting API (WIP)
+
 ## Note: This documentation is still work in progress!
+
 Todo:
+
 - Migrate to new format from OFW (see /documentation/js/ folder)
 - Add missing parameters & returns (Dialog and lower)
 
 ## Description
+
 Momentum supports JavaScript scripting using [mjs](https://github.com/cesanta/mjs).
-**Note: Read about mjs's limitations in the link above! You will experience alot of missing js features (e.g. createTimeout).**
+**Note: Read about mjs's limitations in the link above! You will experience alot of missing js features (e.g.
+createTimeout).**
 
 ## Examples
-Make sure to check out the [included examples](https://github.com/Next-Flip/Momentum-Firmware/tree/dev/applications/system/js_app/examples/apps/Scripts)! They cover basically everything that is possible with Flipper JS.
+
+Make sure to check out
+the [included examples](https://github.com/Next-Flip/Momentum-Firmware/tree/dev/applications/system/js_app/examples/apps/Scripts)!
+They cover basically everything that is possible with Flipper JS.
 
 ## API
 
 ### Global
+
 - `print(...args: any): undefined`
 - `delay(...args: any): undefined | error`
 - `to_string(num: number): string`
@@ -26,7 +34,9 @@ Make sure to check out the [included examples](https://github.com/Next-Flip/Mome
 - `to_lower_case(text: string): string | error`
 
 ### SubGHZ
+
 `const subghz = require("subghz");`
+
 - `subghz.setup(): undefined`
 - `subghz.setRx(): undefined`
 - `subghz.setIdle(): undefined`
@@ -38,14 +48,18 @@ Make sure to check out the [included examples](https://github.com/Next-Flip/Mome
 - `subghz.transmitFile(file: string): bool | error`
 
 ### Usbdisk
+
 `const usbdisk = require("usbdisk");`
+
 - `createImage(file: string, size: number): undefined | error`
 - `start(file: string): undefined | error`
 - `stop(): undefined | error`
 - `wasEjected(): bool | error`
 
 ### BadUsb
+
 `const badusb = require("badusb");`
+
 - `setup({ vid: number, pid: number, mfr_name: string, prod_name: string }): undefined | error`
 - `quit(): undefined | error`
 - `isConnected(): bool | error`
@@ -58,40 +72,53 @@ Make sure to check out the [included examples](https://github.com/Next-Flip/Mome
 - `altPrintln(text: string, delay: number | undefined): undefined | error`
 
 ### BleBeacon
+
 `const blebeacon = require("blebeacon");`
+
 - `isActive(): bool | error`
-- `setConfig(mac: Uint8Array, power: number | undefined, intvMin: number | undefined, intvMax: number | undefined): undefined | error`
+-
+`setConfig(mac: Uint8Array, power: number | undefined, intvMin: number | undefined, intvMax: number | undefined): undefined | error`
 - `setData(data: Uint8Array): undefined | error`
 - `start(): undefined | error`
 - `stop(): undefined | error`
 - `keepAlive(keep: boolean): undefined | error`
 
 ### Dialog
+
 `const dialog = require("dialog");`
+
 - `message()`
 - `custom()`
 - `pickFile()`
 
 ### Flipper
+
 `const flipper= require("flipper");`
+
 - `getModel()`
 - `getName()`
 - `getBatteryCharge()`
 
 ### Gpio
+
 `const gpio = require("gpio");`
+
 - `init()`
 - `write()`
 - `read()`
 
 ### Keyboard
+
 `const keyboard = require("keyboard");`
+
 - `setHeader()`
 - `text()`
 - `byte()`
 
 ### Math
+
 `const math = require("math");`
+
 - `abs()`
 - `acos()`
 - `acosh()`
@@ -119,13 +146,17 @@ Make sure to check out the [included examples](https://github.com/Next-Flip/Mome
 - `E`
 
 ### Notification
+
 `const notify = require("notification");`
+
 - `success()`
 - `error()`
 - `blink()`
 
 ### Serial
+
 `const serial = require("serial");`
+
 - `setup()`
 - `write()`
 - `read()`
@@ -134,7 +165,9 @@ Make sure to check out the [included examples](https://github.com/Next-Flip/Mome
 - `expect()`
 
 ### Storage
+
 `const storage = require("storage");`
+
 - `read()`
 - `write()`
 - `append()`
@@ -145,7 +178,9 @@ Make sure to check out the [included examples](https://github.com/Next-Flip/Mome
 - `virtualQuit()`
 
 ### Submenu
+
 `const submenu = require("submenu");`
+
 - `addItem()`
 - `setHeader()`
 - `show()`

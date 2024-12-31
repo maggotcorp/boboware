@@ -8,6 +8,7 @@
 #
 
 import gdb
+
 from .List import ListInspector
 from .Task import TaskInspector
 
@@ -24,11 +25,11 @@ class QueueMode:
     @staticmethod
     def IsValid(qType):
         if (
-            qType == QueueMode.QUEUE
-            or qType == QueueMode.MUTEX
-            or qType == QueueMode.COUNTING
-            or qType == QueueMode.BINARY
-            or qType == QueueMode.RECURSIVE
+                qType == QueueMode.QUEUE
+                or qType == QueueMode.MUTEX
+                or qType == QueueMode.COUNTING
+                or qType == QueueMode.BINARY
+                or qType == QueueMode.RECURSIVE
         ):
             return True
         else:

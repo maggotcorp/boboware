@@ -20,5 +20,5 @@ def should_gen_cdb_and_link_dir(env, requested_targets):
     # If updater is explicitly requested, link to the latest updater
     # Otherwise, link to firmware
     return (is_updater and explicitly_building_updater) or (
-        not is_updater and not explicitly_building_updater
+            not is_updater and not explicitly_building_updater
     )

@@ -2,11 +2,10 @@ import logging
 import os
 import typing
 from enum import Enum
-
-from flipper.utils.programmer import Programmer
-from flipper.utils.openocd import OpenOCD
-from flipper.utils.stm32wb55 import STM32WB55
 from flipper.assets.obdata import OptionBytesData
+from flipper.utils.openocd import OpenOCD
+from flipper.utils.programmer import Programmer
+from flipper.utils.stm32wb55 import STM32WB55
 
 
 class OpenOCDProgrammerResult(Enum):
@@ -19,10 +18,10 @@ class OpenOCDProgrammerResult(Enum):
 
 class OpenOCDProgrammer(Programmer):
     def __init__(
-        self,
-        interface: str = "interface/cmsis-dap.cfg",
-        port_base: typing.Union[int, None] = None,
-        serial: typing.Union[str, None] = None,
+            self,
+            interface: str = "interface/cmsis-dap.cfg",
+            port_base: typing.Union[int, None] = None,
+            serial: typing.Union[str, None] = None,
     ):
         super().__init__()
 
@@ -74,14 +73,14 @@ class OpenOCDProgrammer(Programmer):
 
         # Split into 8 byte, word + word
         for i in range(0, len(ob_reference), 8):
-            ref = ob_reference[i : i + 8]
-            read = ob_read[i : i + 8]
+            ref = ob_reference[i: i + 8]
+            read = ob_read[i: i + 8]
 
             diff_str1 = ""
             diff_str2 = ""
             for j in range(0, len(ref.hex()), 2):
-                byte_str_1 = ref.hex()[j : j + 2]
-                byte_str_2 = read.hex()[j : j + 2]
+                byte_str_1 = ref.hex()[j: j + 2]
+                byte_str_2 = read.hex()[j: j + 2]
 
                 if byte_str_1 == byte_str_2:
                     diff_str1 += "__"
@@ -139,7 +138,7 @@ class OpenOCDProgrammer(Programmer):
         return return_code
 
     def _unpack_u32(self, data: bytes, offset: int):
-        return int.from_bytes(data[offset : offset + 4], "little")
+        return int.from_bytes(data[offset: offset + 4], "little")
 
     def option_bytes_set(self, file_path: str) -> bool:
         # Registers
@@ -243,7 +242,7 @@ class OpenOCDProgrammer(Programmer):
             # Also check that data is already written
             already_written = True
             for i in range(0, data_size, 4):
-                file_word = int.from_bytes(data[i : i + 4], "little")
+                file_word = int.from_bytes(data[i: i + 4], "little")
                 device_word = self.openocd.read_32(address + i)
                 if device_word != 0xFFFFFFFF and device_word != file_word:
                     self.logger.error(
@@ -263,8 +262,8 @@ class OpenOCDProgrammer(Programmer):
 
             # Write OTP memory by 8 bytes
             for i in range(0, data_size, 8):
-                word_1 = int.from_bytes(data[i : i + 4], "little")
-                word_2 = int.from_bytes(data[i + 4 : i + 8], "little")
+                word_1 = int.from_bytes(data[i: i + 4], "little")
+                word_2 = int.from_bytes(data[i + 4: i + 8], "little")
                 self.logger.debug(
                     f"Writing {word_1:08X} {word_2:08X} to {address + i:08X}"
                 )
@@ -274,7 +273,7 @@ class OpenOCDProgrammer(Programmer):
             validation_result = True
 
             for i in range(0, data_size, 4):
-                file_word = int.from_bytes(data[i : i + 4], "little")
+                file_word = int.from_bytes(data[i: i + 4], "little")
                 device_word = self.openocd.read_32(address + i)
                 if file_word != device_word:
                     self.logger.error(

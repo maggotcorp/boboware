@@ -186,8 +186,8 @@ bool subghz_scene_set_type_on_event(void* context, SceneManagerEvent event) {
 
         uint64_t key = (uint64_t)rand();
 
-        uint64_t gangqi_key;
-        subghz_txrx_gen_serial_gangqi(&gangqi_key);
+        //uint64_t gangqi_key;
+        //subghz_txrx_gen_serial_gangqi(&gangqi_key);
 
         GenInfo gen_info = {0};
         switch(event.event) {
@@ -311,7 +311,7 @@ bool subghz_scene_set_type_on_event(void* context, SceneManagerEvent event) {
                 .data.bits = 24,
                 .data.te = 0};
             break;
-        case SetTypeGangQi_433:
+        /*case SetTypeGangQi_433:
             gen_info = (GenInfo){
                 .type = GenData,
                 .mod = "AM650",
@@ -321,13 +321,13 @@ bool subghz_scene_set_type_on_event(void* context, SceneManagerEvent event) {
                 .data.key = gangqi_key,
                 .data.bits = 34,
                 .data.te = 0};
-            break;
+            break;*/
         case SetTypeHollarm_433:
             gen_info = (GenInfo){
                 .type = GenData,
                 .mod = "AM650",
                 .freq = 433920000,
-                .data.name = SUBGHZ_PROTOCOL_HOLLARM_NAME, // Add button 0x2 and crc sum to the end
+                .data.name = SUBGHZ_PROTOCOL_HOLTEK_NAME, // Add button 0x2 and crc sum to the end
                 .data.key = (key & 0x000FFF0000) | 0xF0B0002200 |
                             ((((((key & 0x000FFF0000) | 0xF0B0002200) >> 32) & 0xFF) +
                               ((((key & 0x000FFF0000) | 0xF0B0002200) >> 24) & 0xFF) +
@@ -342,7 +342,7 @@ bool subghz_scene_set_type_on_event(void* context, SceneManagerEvent event) {
                 .type = GenData,
                 .mod = "AM650",
                 .freq = 868350000,
-                .data.name = SUBGHZ_PROTOCOL_MARANTEC24_NAME, // Add button code 0x8 to the end
+                .data.name = SUBGHZ_PROTOCOL_MARANTEC_NAME, // Add button code 0x8 to the end
                 .data.key = (key & 0xFFFFF0) | 0x000008,
                 .data.bits = 24,
                 .data.te = 0};

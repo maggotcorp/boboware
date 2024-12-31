@@ -3,9 +3,14 @@ PyCortexMDebug
 
 ## SVD
 
-ARM defines an SVD (System View Description) file format in its CMSIS standard as a means for Cortex-M-based chip manufacturers to provide a common description of peripherals, registers, and register fields. You can download SVD files for different manufacturers [here](http://www.arm.com/products/processors/cortex-m/cortex-microcontroller-software-interface-standard.php).
+ARM defines an SVD (System View Description) file format in its CMSIS standard as a means for Cortex-M-based chip
+manufacturers to provide a common description of peripherals, registers, and register fields. You can download SVD files
+for different
+manufacturers [here](http://www.arm.com/products/processors/cortex-m/cortex-microcontroller-software-interface-standard.php).
 
-The implementation consists of two components -- An lxml-based parser module (pysvd) and a GDB file (gdb_svd). I haven't yet worked out a perfect workflow for this, though it's quite easy to use when you already tend to have a GDB initialization file for starting up OpenOCD and the like. However your workflow works, just make sure to, in GDB:
+The implementation consists of two components -- An lxml-based parser module (pysvd) and a GDB file (gdb_svd). I haven't
+yet worked out a perfect workflow for this, though it's quite easy to use when you already tend to have a GDB
+initialization file for starting up OpenOCD and the like. However your workflow works, just make sure to, in GDB:
 
     source gdb_svd.py
     svd_load [your_svd_file].svd

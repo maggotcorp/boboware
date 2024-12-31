@@ -17,33 +17,39 @@ Filename extension: `.ibtn`
 The file stores a single iButton key, complete with all data required by the protocol.
 
 ## Version history
+
 ### 2. Current version.
+
 Changelog:
+
 - Added support for different Dallas protocols
 - Fields after `Protocol` are protocol-dependent for flexibiliy
 
 #### Format fields
 
-| Name        | Type   | Description                                  |
-| ----------- | ------ | -------------------------------------------- |
+| Name        | Type   | Description                                                                      |
+|-------------|--------|----------------------------------------------------------------------------------|
 | Protocol    | string | Currently supported: DS1990, DS1992, DS1996, DS1971, DSGeneric*, Cyfral, Metakom |
-| Rom Data    | hex    | Read-only memory data (Dallas protocols only) |
-| Sram Data   | hex    | Static RAM data (DS1992 and DS1996 only)
-| Eeprom Data | hex    | EEPROM data (DS1971 only)
-| Data        | hex    | Key data (Cyfral & Metakom only)              |
+| Rom Data    | hex    | Read-only memory data (Dallas protocols only)                                    |
+| Sram Data   | hex    | Static RAM data (DS1992 and DS1996 only)                                         
+| Eeprom Data | hex    | EEPROM data (DS1971 only)                                                        
+| Data        | hex    | Key data (Cyfral & Metakom only)                                                 |
 
-NOTE 1: DSGeneric is a catch-all protocol for all unknown 1-Wire devices. It reads only the ROM and does not perform any checks on the read data. 
+NOTE 1: DSGeneric is a catch-all protocol for all unknown 1-Wire devices. It reads only the ROM and does not perform any
+checks on the read data.
 It can also be used if a key with a deliberately invalid family code or checksum is required.
 
-NOTE 2: When adding new protocols, it is not necessarily to increase the format version, define the format in the protocol implementation instead.
+NOTE 2: When adding new protocols, it is not necessarily to increase the format version, define the format in the
+protocol implementation instead.
 
 ### 1. Initial version.
+
 Deprecated, will be converted to current version upon saving.
 
 #### Format fields
 
 | Name     | Type   | Description                                  |
-| -------- | ------ | -------------------------------------------- |
+|----------|--------|----------------------------------------------|
 | Key type | string | Currently supported: Cyfral, Dallas, Metakom |
 | Data     | hex    | Key data                                     |
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env python
-from PIL import Image, ImageOps
 import heatshrink2
-import pathlib
-import shutil
-import struct
-import typing
-import time
-import re
 import io
 import os
+import pathlib
+import re
+import shutil
+import struct
+import time
+import typing
+from PIL import Image, ImageOps
 
 
 def convert_bm(img: "Image.Image | pathlib.Path") -> bytes:
@@ -111,7 +111,7 @@ def pack_font(src: pathlib.Path, dst: pathlib.Path):
         for line in code.splitlines():
             if line.count(b'"') == 2:
                 font += (
-                    line[line.find(b'"') + 1 : line.rfind(b'"')]
+                    line[line.find(b'"') + 1: line.rfind(b'"')]
                     .decode("unicode_escape")
                     .encode("latin_1")
                 )
@@ -122,7 +122,7 @@ def pack_font(src: pathlib.Path, dst: pathlib.Path):
 
 
 def pack(
-    input: "str | pathlib.Path", output: "str | pathlib.Path", logger: typing.Callable
+        input: "str | pathlib.Path", output: "str | pathlib.Path", logger: typing.Callable
 ):
     input = pathlib.Path(input)
     output = pathlib.Path(output)
@@ -186,9 +186,9 @@ def pack(
         if (source / "Fonts").is_dir():
             for font in (source / "Fonts").iterdir():
                 if (
-                    not font.is_file()
-                    or font.name.startswith(".")
-                    or font.suffix not in (".c", ".u8f")
+                        not font.is_file()
+                        or font.name.startswith(".")
+                        or font.suffix not in (".c", ".u8f")
                 ):
                     continue
                 logger(f"Compile: font for pack '{source.name}': {font.name}")
