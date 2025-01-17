@@ -8,13 +8,16 @@
   - Games: Pinball0 (by @rdefeo)
   - NFC: Metroflip (by @luu176)
 - CLI: Add `clear` and `cls` commands, add `did you mean ...?` command suggestion (#342 by @dexvleads)
+- Main Menu: Add coverflow menu style (#314 by @CodyTolene)
 - BadKB: Added german Mac keyboard Layout (#325 by @Cloudy261)
 - UL: Sub-GHz: Jolly Motors support with add manually (by @pkooiman & @xMasterX)
 - OFW: Desktop: Add winter animations (by @Astrrra)
+- API:
+  - Added `canvas_draw_icon_animation_ex()` to draw animated icons resized (#314 by @CodyTolene)
+  - OFW: Added `flipper_format_write_empty_line()` (by @janwiesemann)
 - OFW: Furi: Pipe support (by @portasynthinca3)
 - OFW: Furi: Thread stdin support (by @portasynthinca3)
 - OFW: RPC: Command to send a signal once (by @Astrrra)
-- OFW: API: Added `flipper_format_write_empty_line()` (by @janwiesemann)
 - OFW: Add VCP break support (by @gsurkov)
 
 ### Updated:

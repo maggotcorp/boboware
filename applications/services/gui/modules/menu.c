@@ -459,7 +459,6 @@ static void menu_draw_callback(Canvas* canvas, void* _model) {
             break;
         }
         case MenuStyleCoverFlow: {
-            canvas_clear(canvas);
             canvas_set_font(canvas, FontPrimary);
 
             // Draw frames
@@ -548,7 +547,6 @@ static void menu_draw_callback(Canvas* canvas, void* _model) {
 
             // Draw label for center item
             if(center_item) {
-                FuriString* name = furi_string_alloc();
                 menu_get_name(center_item, name, false);
                 elements_scrollable_text_line_centered(
                     canvas,
@@ -559,7 +557,6 @@ static void menu_draw_callback(Canvas* canvas, void* _model) {
                     0,
                     false,
                     true);
-                furi_string_free(name);
             }
 
             // Add scrollbar element
@@ -917,6 +914,7 @@ static void menu_process_left(Menu* menu) {
             case MenuStyleDsi:
             case MenuStylePs4:
             case MenuStyleVertical:
+            case MenuStyleCoverFlow:
                 size_t vertical_offset = model->vertical_offset;
                 if(position > 0) {
                     position--;
@@ -943,9 +941,7 @@ static void menu_process_left(Menu* menu) {
                     position = position - 8;
                 }
                 break;
-            case MenuStyleCoverFlow:
-                position = (position + count - 1) % count;
-                break;
+
             default:
                 break;
             }
@@ -983,6 +979,7 @@ static void menu_process_right(Menu* menu) {
             case MenuStyleDsi:
             case MenuStylePs4:
             case MenuStyleVertical:
+            case MenuStyleCoverFlow:
                 size_t vertical_offset = model->vertical_offset;
                 if(position < count - 1) {
                     position++;
@@ -1009,9 +1006,7 @@ static void menu_process_right(Menu* menu) {
                     position = position - 8;
                 }
                 break;
-            case MenuStyleCoverFlow:
-                position = (position + 1) % count;
-                break;
+
             default:
                 break;
             }
