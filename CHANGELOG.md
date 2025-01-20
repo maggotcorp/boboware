@@ -8,6 +8,7 @@
   - Games: Pinball0 (by @rdefeo)
   - GPIO: FlipperHTTP: FlipWorld (by @jblanked)
   - NFC: Metroflip (by @luu176)
+  - USB: USB Game Controller (by @expected-ingot)
 - Archive: Setting to show dynamic path in file browser statusbar (#322 by @956MB)
 - CLI: Add `clear` and `cls` commands, add `did you mean ...?` command suggestion (#342 by @dexvleads)
 - Main Menu: Add coverflow menu style (#314 by @CodyTolene)
