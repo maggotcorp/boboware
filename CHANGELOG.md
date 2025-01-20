@@ -6,6 +6,7 @@
 ### Added:
 - Apps:
   - Games: Pinball0 (by @rdefeo)
+  - GPIO: FlipperHTTP: FlipWorld (by @jblanked)
   - NFC: Metroflip (by @luu176)
 - Archive: Setting to show dynamic path in file browser statusbar (#322 by @956MB)
 - CLI: Add `clear` and `cls` commands, add `did you mean ...?` command suggestion (#342 by @dexvleads)
@@ -28,7 +29,7 @@
   - Color Guess: Simplify app code (by @leedave)
   - Countdown Timer: Default to 60 seconds on open (by @andrejka27)
   - Cross Remote: Fix Sub-GHz actions rolling code support, animations for transmit, allow interrupting chain (by @leedave), loop transmit feature (by @miccayo)
-  - ESP Flasher: Add c3 and c6 to s3 option (by @jaylikesbunda), update Marauder bins to 1.1.0 (by @justcallmekoko)
+  - ESP Flasher: Add c3 and c6 to s3 option (by @jaylikesbunda), update bins for Marauder to 1.2.0 (by @justcallmekoko) and FlipperHTTP to 1.6.1 (by @jblanked)
   - FlipBIP: Refactor to make adding coins easier (by @xtruan)
   - FlipLibrary: Wikipedia, dog facts, random quotes, weather, asset price, predictions, trivia, advice, uuid and many more, bug fixes (by @jblanked), holidays, improvements to connectivity and progress (by @jamisonderek)
   - FlipSocial: Improved authentication, loading screens, many bug fixes, bio and friend counts, new feed screen with posted time, search users and contacts, home announcements and notifications, private feed option, endless feed (by @jblanked), RPC_KEYBOARD support (by @jamisonderek)

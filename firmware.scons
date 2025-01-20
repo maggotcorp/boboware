@@ -39,6 +39,7 @@ env = ENV.Clone(
         Dir("!applications/external/flip_trader"),
         Dir("!applications/external/flip_weather"),
         Dir("!applications/external/flip_wifi"),
+        Dir("!applications/external/flip_world"),
         Dir("!applications/external/web_crawler"),
     ],
     LIBPATH=[
