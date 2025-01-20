@@ -347,7 +347,7 @@ black_base_args = [
     "--include",
     '"(\\.scons|\\.py|SConscript|SConstruct|\\.fam)$"',
     "--exclude",
-    '"(mp_flipper/flipperzero/random\\.py)$"',
+    '"(mp_flipper/(flipperzero|docs)/.*\\.py)$"',
 ]
 
 distenv.PhonyTarget(
