@@ -10,7 +10,9 @@
   - GPIO: TEA5767 FM Radio (by @coolshrimp)
   - NFC: Metroflip (by @luu176)
   - USB: USB Game Controller (by @expected-ingot)
-- Infrared: Easy Learn mode to quickly save buttons without typing (#350 by @jaylikesbunda)
+- Infrared:
+  - Easy Learn mode to quickly save buttons without typing (#350 by @jaylikesbunda)
+  - Move Easy Learn and Learn RAW toggles inside Learning/Receiving screen for quick access, RAW mode doesn't require Debug anymore (by @Willy-JL)
 - Archive: Setting to show dynamic path in file browser statusbar (#322 by @956MB)
 - CLI: Add `clear` and `cls` commands, add `did you mean ...?` command suggestion (#342 by @dexvleads)
 - Main Menu: Add coverflow menu style (#314 by @CodyTolene)
