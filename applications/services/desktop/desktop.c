@@ -137,6 +137,10 @@ static bool desktop_custom_event_callback(void* context, uint32_t event) {
 
     } else if(event == DesktopGlobalAutoLock) {
         if(!desktop->app_running && !desktop->locked) {
+            // Disable AutoLock if usb_inhibit_autolock option enabled and device have active USB session.
+            if((desktop->settings.usb_inhibit_auto_lock) && (furi_hal_usb_is_locked())) {
+                return true;
+            }
             desktop_lock(desktop, desktop->settings.auto_lock_with_pin);
         }
 

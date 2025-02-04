@@ -2,11 +2,12 @@
 
 #include <furi.h>
 #include <furi_hal.h>
-#include <loader/loader.h>
 #include <momentum/momentum.h>
 
 #include <update_util/update_operation.h>
 #include <notification/notification_messages.h>
+
+#include <loader/loader.h>
 
 #define TAG "Power"
 
@@ -252,106 +253,6 @@ static ViewPort* power_battery_view_port_alloc(Power* power) {
     return battery_view_port;
 }
 
-static void power_start_auto_shutdown_timer(Power* power) {
-    furi_timer_start(
-        power->auto_shutdown_timer, furi_ms_to_ticks(power->settings.shutdown_idle_delay_ms));
-}
-
-static void power_stop_auto_shutdown_timer(Power* power) {
-    furi_timer_stop(power->auto_shutdown_timer);
-}
-
-static uint32_t power_is_running_auto_shutdown_timer(Power* power) {
-    return furi_timer_is_running(power->auto_shutdown_timer);
-}
-
-static void power_auto_shutdown_callback(const void* value, void* context) {
-    furi_assert(value);
-    furi_assert(context);
-    UNUSED(value);
-    Power* power = context;
-    power_start_auto_shutdown_timer(power);
-}
-
-static void power_auto_shutdown_arm(Power* power) {
-    if(power->settings.shutdown_idle_delay_ms) {
-        if(power->input_events_subscription == NULL) {
-            power->input_events_subscription = furi_pubsub_subscribe(
-                power->input_events_pubsub, power_auto_shutdown_callback, power);
-        }
-        if(power->ascii_events_subscription == NULL) {
-            power->ascii_events_subscription = furi_pubsub_subscribe(
-                power->ascii_events_pubsub, power_auto_shutdown_callback, power);
-        }
-        power_start_auto_shutdown_timer(power);
-    }
-}
-
-static void power_auto_shutdown_inhibit(Power* power) {
-    power_stop_auto_shutdown_timer(power);
-    if(power->input_events_subscription) {
-        furi_pubsub_unsubscribe(power->input_events_pubsub, power->input_events_subscription);
-        power->input_events_subscription = NULL;
-    }
-    if(power->ascii_events_subscription) {
-        furi_pubsub_unsubscribe(power->ascii_events_pubsub, power->ascii_events_subscription);
-        power->ascii_events_subscription = NULL;
-    }
-}
-
-static void power_loader_callback(const void* message, void* context) {
-    furi_assert(context);
-    Power* power = context;
-    const LoaderEvent* event = message;
-
-    if(event->type == LoaderEventTypeApplicationBeforeLoad) {
-        power->app_running = true;
-        power_auto_shutdown_inhibit(power);
-    } else if(
-        event->type == LoaderEventTypeApplicationLoadFailed ||
-        event->type == LoaderEventTypeApplicationStopped) {
-        power->app_running = false;
-        power_auto_shutdown_arm(power);
-    }
-}
-
-static void power_storage_callback(const void* message, void* context) {
-    furi_assert(context);
-    Power* power = context;
-    const StorageEvent* event = message;
-
-    if(event->type == StorageEventTypeCardMount) {
-        PowerMessage msg = {
-            .type = PowerMessageTypeReloadSettings,
-        };
-
-        furi_check(
-            furi_message_queue_put(power->message_queue, &msg, FuriWaitForever) == FuriStatusOk);
-    }
-}
-
-static void power_auto_shutdown_timer_callback(void* context) {
-    furi_assert(context);
-    Power* power = context;
-
-    // Suppress shutdown on idle while charging to avoid the battery from not charging fully. Then restart timer back to original timeout.
-    if(power->state != PowerStateNotCharging) {
-        FURI_LOG_D(TAG, "Plugged in, reset idle timer");
-        power_auto_shutdown_arm(power);
-    } else {
-        power_auto_shutdown_inhibit(power);
-        power_off(power);
-    }
-}
-
-static void power_apply_settings(Power* power) {
-    if(power->settings.shutdown_idle_delay_ms && !power->app_running) {
-        power_auto_shutdown_arm(power);
-    } else if(power_is_running_auto_shutdown_timer(power)) {
-        power_auto_shutdown_inhibit(power);
-    }
-}
-
 static bool power_update_info(Power* power) {
     const PowerInfo info = {
         .is_charging = furi_hal_power_is_charging(),
@@ -499,6 +400,101 @@ static void power_handle_reboot(PowerBootMode mode) {
     furi_hal_power_reset();
 }
 
+//start furi timer for autopoweroff
+static void power_start_auto_poweroff_timer(Power* power) {
+    furi_timer_start(
+        power->auto_poweroff_timer, furi_ms_to_ticks(power->settings.auto_poweroff_delay_ms));
+}
+
+//stop furi timer for autopoweroff
+static void power_stop_auto_poweroff_timer(Power* power) {
+    furi_timer_stop(power->auto_poweroff_timer);
+}
+
+static uint32_t power_is_running_auto_poweroff_timer(Power* power) {
+    return furi_timer_is_running(power->auto_poweroff_timer);
+}
+
+// start|restart poweroff timer
+static void power_auto_poweroff_callback(const void* value, void* context) {
+    furi_assert(value);
+    furi_assert(context);
+    Power* power = context;
+    power_start_auto_poweroff_timer(power);
+}
+
+// callback for poweroff timer (what we do when timer end)
+static void power_auto_poweroff_timer_callback(void* context) {
+    furi_assert(context);
+    Power* power = context;
+
+    //Dont poweroff device if charger connected
+    if(power->state != PowerStateNotCharging) {
+        FURI_LOG_D(TAG, "We dont auto_power_off until battery is charging");
+        power_start_auto_poweroff_timer(power);
+    } else {
+        power_off(power);
+    }
+}
+
+//start|restart timer and events subscription and callbacks for input events (we restart timer when user press keys)
+static void power_auto_poweroff_arm(Power* power) {
+    if(power->settings.auto_poweroff_delay_ms) {
+        if(power->input_events_subscription == NULL) {
+            power->input_events_subscription = furi_pubsub_subscribe(
+                power->input_events_pubsub, power_auto_poweroff_callback, power);
+        }
+        if(power->ascii_events_subscription == NULL) {
+            power->ascii_events_subscription = furi_pubsub_subscribe(
+                power->ascii_events_pubsub, power_auto_poweroff_callback, power);
+        }
+        power_start_auto_poweroff_timer(power);
+    }
+}
+
+// stop timer and event subscription
+static void power_auto_poweroff_disarm(Power* power) {
+    power_stop_auto_poweroff_timer(power);
+    if(power->input_events_subscription) {
+        furi_pubsub_unsubscribe(power->input_events_pubsub, power->input_events_subscription);
+        power->input_events_subscription = NULL;
+    }
+    if(power->ascii_events_subscription) {
+        furi_pubsub_unsubscribe(power->ascii_events_pubsub, power->ascii_events_subscription);
+        power->ascii_events_subscription = NULL;
+    }
+}
+
+//check message queue from Loader - is some app started or not (if started we dont do auto poweroff)
+static void power_loader_callback(const void* message, void* context) {
+    furi_assert(context);
+    Power* power = context;
+    const LoaderEvent* event = message;
+
+    // disarm timer if some apps started
+    if(event->type == LoaderEventTypeApplicationBeforeLoad) {
+        power->app_running = true;
+        power_auto_poweroff_disarm(power);
+        // arm timer if some apps was not loaded or was stoped
+    } else if(
+        event->type == LoaderEventTypeApplicationLoadFailed ||
+        event->type == LoaderEventTypeApplicationStopped) {
+        power->app_running = false;
+        power_auto_poweroff_arm(power);
+    }
+}
+
+// apply power settings
+static void power_settings_apply(Power* power) {
+    //apply auto_poweroff settings
+    if(power->settings.auto_poweroff_delay_ms && !power->app_running) {
+        power_auto_poweroff_arm(power);
+    } else if(power_is_running_auto_poweroff_timer(power)) {
+        power_auto_poweroff_disarm(power);
+    }
+}
+
+// do something depend from power queue message
 static void power_message_callback(FuriEventLoopObject* object, void* context) {
     furi_assert(context);
     Power* power = context;
@@ -531,12 +527,12 @@ static void power_message_callback(FuriEventLoopObject* object, void* context) {
     case PowerMessageTypeSetSettings:
         furi_assert(msg.lock);
         power->settings = *msg.csettings;
-        power_apply_settings(power);
+        power_settings_apply(power);
         power_settings_save(&power->settings);
         break;
     case PowerMessageTypeReloadSettings:
         power_settings_load(&power->settings);
-        power_apply_settings(power);
+        power_settings_apply(power);
         break;
     default:
         furi_crash();
@@ -573,6 +569,22 @@ static void power_tick_callback(void* context) {
     }
 }
 
+static void power_storage_callback(const void* message, void* context) {
+    furi_assert(context);
+    Power* power = context;
+    const StorageEvent* event = message;
+
+    if(event->type == StorageEventTypeCardMount) {
+        PowerMessage msg = {
+            .type = PowerMessageTypeReloadSettings,
+        };
+
+        furi_check(
+            furi_message_queue_put(power->message_queue, &msg, FuriWaitForever) == FuriStatusOk);
+    }
+}
+
+// load inital settings from file for power service
 static void power_init_settings(Power* power) {
     Storage* storage = furi_record_open(RECORD_STORAGE);
     furi_pubsub_subscribe(storage_get_pubsub(storage), power_storage_callback, power);
@@ -583,7 +595,7 @@ static void power_init_settings(Power* power) {
     }
 
     power_settings_load(&power->settings);
-    power_apply_settings(power);
+    power_settings_apply(power);
     furi_record_close(RECORD_STORAGE);
 }
 
@@ -597,13 +609,15 @@ static Power* power_alloc(void) {
     // Gui
     Gui* gui = furi_record_open(RECORD_GUI);
 
-    // Auto shutdown on idle
+    // auto_poweroff
+    //---define subscription to loader events message (info about started apps) and defina callback for this
     Loader* loader = furi_record_open(RECORD_LOADER);
     furi_pubsub_subscribe(loader_get_pubsub(loader), power_loader_callback, power);
     power->input_events_pubsub = furi_record_open(RECORD_INPUT_EVENTS);
     power->ascii_events_pubsub = furi_record_open(RECORD_ASCII_EVENTS);
-    power->auto_shutdown_timer =
-        furi_timer_alloc(power_auto_shutdown_timer_callback, FuriTimerTypeOnce, power);
+    //define autopoweroff timer and they callback
+    power->auto_poweroff_timer =
+        furi_timer_alloc(power_auto_poweroff_timer_callback, FuriTimerTypeOnce, power);
 
     power->view_holder = view_holder_alloc();
     power->view_power_off = power_off_alloc();
@@ -639,6 +653,10 @@ int32_t power_srv(void* p) {
     }
 
     Power* power = power_alloc();
+
+    // load inital settings for power service
+    power_init_settings(power);
+
     power_update_info(power);
 
     furi_record_create(RECORD_POWER, power);
@@ -647,7 +665,6 @@ int32_t power_srv(void* p) {
     Loader* loader = furi_record_open(RECORD_LOADER);
     power->app_running = loader_is_locked(loader);
     furi_record_close(RECORD_LOADER);
-    power_init_settings(power);
 
     furi_event_loop_run(power->event_loop);
 
