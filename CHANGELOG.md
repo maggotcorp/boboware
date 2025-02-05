@@ -1,5 +1,5 @@
 ### Breaking Changes:
-- UL: Desktop: Option to prevent Auto Lock when connected to USB (by @Dmitry422)
+- UL: Desktop: Option to prevent Auto Lock when connected to USB/RPC (by @Dmitry422)
   - Desktop settings will be reset, need to reconfigure
   - Keybinds will remain configured
 

@@ -124,7 +124,7 @@ void desktop_settings_scene_start_on_enter(void* context) {
     // USB connection Inhibit autolock OFF|ON|with opened RPC session
     item = variable_item_list_add(
         variable_item_list,
-        "Auto Lock disarm by active USB session",
+        "Prevent Auto Lock with USB/RPC session",
         USB_INHIBIT_AUTO_LOCK_DELAY_COUNT,
         desktop_settings_scene_start_usb_inhibit_auto_lock_delay_changed,
         app);
