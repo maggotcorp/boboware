@@ -4,7 +4,8 @@
   - Keybinds will remain configured
 
 ### Added:
-- Nothing
+- Apps:
+  - Games: Quadrastic (by @ivanbarsukov)
 
 ### Updated:
 - Apps:
