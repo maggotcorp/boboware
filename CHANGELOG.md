@@ -10,6 +10,7 @@
 ### Updated:
 - Apps:
   - BH1750 Lightmeter: Update EV compute logic (by @bogdumi)
+  - Cross Remote: Use firmware's IR settings (by @Willy-JL)
   - FlipWorld: NPCs, in-game menu, new controls, weapon option, many bugfixes (by @jblanked)
   - IR Intervalometer: Add Pentax camera support (by @petrikjp)
   - KeyCopier: Separate Brand and Key Format selection for ease of use (by @zinongli)
