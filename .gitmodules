@@ -1,6 +1,3 @@
-[submodule "applications/external"]
-	path = applications/external
-	url = https://github.com/Next-Flip/Momentum-Apps.git
 [submodule "applications/main/booper"]
 	path = applications/main/booper
 	url = https://github.com/klamath1977/flipper-zero-rf-jammer.git
