@@ -20,6 +20,7 @@
 - OFW: Infrared: Increase max carrier limit to 1000000 (by @skotopes)
 
 ### Fixed:
+- Asset Packs: Fix level-up animations not being themed (by @Willy-JL)
 - About: Fix missing Prev. button when invoked from Device Info keybind (by @Willy-JL)
 
 ### Removed:
