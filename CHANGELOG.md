@@ -20,7 +20,7 @@
 - OFW: Infrared: Increase max carrier limit to 1000000 (by @skotopes)
 
 ### Fixed:
-- Nothing
+- About: Fix missing Prev. button when invoked from Device Info keybind (by @Willy-JL)
 
 ### Removed:
 - Nothing
