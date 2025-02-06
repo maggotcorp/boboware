@@ -18,7 +18,8 @@ toolchain/
 compile_commands.json
 
 # JetBrains IDEs
-.idea/
+# .idea/
+shelf/
 
 # VS codium
 .vscode/
