@@ -1,6 +1,7 @@
-import argparse
 import heatshrink2
+import argparse
 import io
+
 
 parser = argparse.ArgumentParser(
     description="Turn .xbm files into cooked .bm files for flipper FS"
@@ -20,6 +21,7 @@ width = int(f.readline().strip().split(" ")[2])
 print("W: ", width)
 height = int(f.readline().strip().split(" ")[2])
 print("H: ", height)
+
 
 data = f.read().strip().replace("\n", "").replace(" ", "").split("=")[1][:-1]
 data_str = data[1:-1].replace(",", " ").replace("0x", "")

@@ -1,10 +1,11 @@
 import csv
 import operator
 import os
-from ansi.color import fg
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, ClassVar, Set
+
+from ansi.color import fg
 
 from . import ApiEntries, ApiEntryFunction, ApiEntryVariable, ApiHeader
 
@@ -65,9 +66,9 @@ class SdkCache:
 
     def is_buildable(self) -> bool:
         return (
-                self.version != SdkVersion(0, 0)
-                and self.version_action == VersionBump.NONE
-                and not self._have_pending_entries()
+            self.version != SdkVersion(0, 0)
+            and self.version_action == VersionBump.NONE
+            and not self._have_pending_entries()
         )
 
     def _filter_enabled(self, sdk_entries):
@@ -98,7 +99,8 @@ class SdkCache:
             return ApiEntryState.DISABLED
         elif entry in self.new_entries:
             if isinstance(entry, SdkVersion):
-                return ApiEntryState.VERSION_PENDING
+                # return ApiEntryState.VERSION_PENDING
+                return ApiEntryState.APPROVED
             return ApiEntryState.PENDING
         else:
             return ApiEntryState.APPROVED
@@ -117,10 +119,10 @@ class SdkCache:
         if self._load_version_only:
             raise Exception("Only SDK version was loaded, cannot save")
 
-        if self.version_action == VersionBump.MINOR:
-            self.version = SdkVersion(self.version.major, self.version.minor + 1)
-        elif self.version_action == VersionBump.MAJOR:
-            self.version = SdkVersion(self.version.major + 1, 0)
+        # if self.version_action == VersionBump.MINOR:
+        #     self.version = SdkVersion(self.version.major, self.version.minor + 1)
+        # elif self.version_action == VersionBump.MAJOR:
+        #     self.version = SdkVersion(self.version.major + 1, 0)
 
         if self._have_pending_entries():
             self.new_entries.add(self.version)
@@ -147,9 +149,9 @@ class SdkCache:
             print(fg.green(f"API version {self.version} is up to date"))
 
         regenerate_csv = (
-                self.loaded_dirty_version
-                or self._have_pending_entries()
-                or self.version_action != VersionBump.NONE
+            self.loaded_dirty_version
+            or self._have_pending_entries()
+            or self.version_action != VersionBump.NONE
         )
 
         if regenerate_csv:
@@ -224,7 +226,7 @@ class SdkCache:
         )
 
     def sync_sets(
-            self, known_set: Set[Any], new_set: Set[Any], update_version: bool = True
+        self, known_set: Set[Any], new_set: Set[Any], update_version: bool = True
     ):
         new_entries = new_set - known_set
         if new_entries:
@@ -240,11 +242,11 @@ class SdkCache:
             known_set -= removed_entries
             # If any of removed entries was a part of active API, that's a major bump
             if update_version and any(
-                    filter(
-                        lambda e: e not in self.disabled_entries
-                                  and e not in self.new_entries,
-                        removed_entries,
-                    )
+                filter(
+                    lambda e: e not in self.disabled_entries
+                    and e not in self.new_entries,
+                    removed_entries,
+                )
             ):
                 self.version_action = VersionBump.MAJOR
             self.disabled_entries -= removed_entries

@@ -1,11 +1,11 @@
 import subprocess
-from SCons.Action import _subproc
-from SCons.Errors import StopError
-from SCons.Tool import ar, asm, gcc, gnulink, gxx
 
 import gdb
 import objdump
 import strip
+from SCons.Action import _subproc
+from SCons.Errors import StopError
+from SCons.Tool import ar, asm, gcc, gnulink, gxx
 
 
 def prefix_commands(env, command_prefix, cmd_list):

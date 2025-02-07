@@ -1,10 +1,10 @@
 import logging
 import multiprocessing
 import os
-from PIL import Image
 from pathlib import Path
 
 from flipper.app import App
+from PIL import Image
 
 _logger = logging.getLogger(__name__)
 

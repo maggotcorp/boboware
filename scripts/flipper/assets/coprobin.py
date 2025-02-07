@@ -1,8 +1,9 @@
+import struct
 import math
 import os
 import os.path
-import struct
 import sys
+
 
 #  From lib/stm32wb_copro/wpan/interface/patterns/ble_thread/shci/shci.h
 __STACK_TYPE_CODES = {
@@ -56,7 +57,7 @@ class CoproFooterBase:
     def __init__(self, raw: bytes):
         if len(raw) != self.SIG_BIN_SIZE:
             raise CoproException("Invalid footer size")
-        sig_common_part = raw[-self._SIG_BIN_COMMON_SIZE:]
+        sig_common_part = raw[-self._SIG_BIN_COMMON_SIZE :]
         parts = struct.unpack("BBBBI", sig_common_part)
         self.version_major = parts[3]
         self.version_minor = parts[2]
@@ -78,9 +79,9 @@ class CoproFusFooter(CoproFooterBase):
     def __init__(self, raw: bytes):
         super().__init__(raw)
         if self.magic not in (
-                self.FUS_MAGIC_IMG_OTHER,
-                self.FUS_MAGIC_IMG_FUS,
-                self.FUS_MAGIC_IMG_STACK,
+            self.FUS_MAGIC_IMG_OTHER,
+            self.FUS_MAGIC_IMG_FUS,
+            self.FUS_MAGIC_IMG_STACK,
         ):
             raise CoproException(f"Invalid FUS img magic {self.magic:x}")
         own_data = raw[: -self._SIG_BIN_COMMON_SIZE]
@@ -139,12 +140,12 @@ class CoproBinary:
             whole_file = fin.read()
             self.binary_size = len(whole_file)
 
-            img_sig_footer_bin = whole_file[-CoproFooterBase.SIG_BIN_SIZE:]
+            img_sig_footer_bin = whole_file[-CoproFooterBase.SIG_BIN_SIZE :]
             self.img_sig_footer = CoproSigFooter(img_sig_footer_bin)
             img_sig_size = self.img_sig_footer.size + CoproSigFooter.SIG_BIN_SIZE
             img_sig_bin = whole_file[
-                          -(img_sig_size + CoproFusFooter.SIG_BIN_SIZE): -img_sig_size
-                          ]
+                -(img_sig_size + CoproFusFooter.SIG_BIN_SIZE) : -img_sig_size
+            ]
             self.img_sig = CoproFusFooter(img_sig_bin)
 
     def is_valid(self):

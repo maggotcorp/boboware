@@ -3,9 +3,10 @@ import logging
 import os
 import posixpath
 import tarfile
+from io import BytesIO
+
 from flipper.assets.coprobin import CoproBinary, get_stack_type
 from flipper.utils import file_sha256, timestamp
-from io import BytesIO
 
 CUBE_COPRO_PATH = "firmware"
 

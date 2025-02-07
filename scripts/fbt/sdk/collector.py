@@ -1,13 +1,14 @@
-from cxxheaderparser.parser import CxxParser
 from typing import List
+from .hashes import gnu_sym_hash
 
+from cxxheaderparser.parser import CxxParser
 from . import (
     ApiEntries,
     ApiEntryFunction,
     ApiEntryVariable,
     ApiHeader,
 )
-from .hashes import gnu_sym_hash
+
 
 # 'Fixing' complaints about typedefs
 CxxParser._fundamentals.discard("wchar_t")

@@ -10,7 +10,7 @@ build/
 external/
 dist/
 .github/
-targets/
+# targets/
 toolchain/
 
 # LSP

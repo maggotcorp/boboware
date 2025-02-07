@@ -1,5 +1,5 @@
-import argparse
 import heatshrink2
+import argparse
 import os
 
 
@@ -51,8 +51,10 @@ with open(args["infile"], "rb") as f:
     fileStream = f.read()
 filename = os.path.splitext(os.path.basename(args["outfile"]))[0]
 
+
 imageWidth = args["Width"]
 imageHeight = args["Height"]
+
 
 # remove headers and padding
 if fileStream[0:2] == bytes([0x01, 0x00]):
@@ -60,6 +62,7 @@ if fileStream[0:2] == bytes([0x01, 0x00]):
 else:
     if fileStream[0:1] == bytes([0x00]):
         unpad = fileStream[2:]
+
 
 # lzss decompress
 data_decoded_str = heatshrink2.decompress(unpad, window_sz2=8, lookahead_sz2=4)

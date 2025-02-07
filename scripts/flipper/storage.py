@@ -4,9 +4,10 @@ import logging
 import math
 import os
 import posixpath
-import serial
 import sys
 import time
+
+import serial
 
 
 def timing(func):
@@ -78,7 +79,7 @@ class BufferedRead:
                     read = self.buffer[:i]
                 else:
                     read = self.buffer[: i + len(eol)]
-                self.buffer = self.buffer[i + len(eol):]
+                self.buffer = self.buffer[i + len(eol) :]
                 return read
 
             # read and append to buffer
@@ -261,7 +262,7 @@ class FlipperStorage:
                 current_chunk = math.ceil(ftell / buffer_size)
                 approx_speed = ftell / (time.time() - start_time + 0.0001)
                 sys.stdout.write(
-                    f"\r<{percent:3d}%, chunk {current_chunk:2d} of {total_chunks:2d} @ {approx_speed / 1024:.2f} kb/s"
+                    f"\r<{percent:3d}%, chunk {current_chunk:2d} of {total_chunks:2d} @ {approx_speed/1024:.2f} kb/s"
                 )
                 sys.stdout.flush()
         print()
@@ -295,7 +296,7 @@ class FlipperStorage:
             current_chunk = math.ceil(read_size / buffer_size)
             approx_speed = read_size / (time.time() - start_time + 0.0001)
             sys.stdout.write(
-                f"\r>{percent:3d}%, chunk {current_chunk:2d} of {total_chunks:2d} @ {approx_speed / 1024:.2f} kb/s"
+                f"\r>{percent:3d}%, chunk {current_chunk:2d} of {total_chunks:2d} @ {approx_speed/1024:.2f} kb/s"
             )
             sys.stdout.flush()
         print()
@@ -324,8 +325,8 @@ class FlipperStorage:
         if self.has_error(response):
             error_code = self.get_error(response)
             if error_code in (
-                    StorageErrorCode.NOT_EXIST,
-                    StorageErrorCode.INVALID_NAME,
+                StorageErrorCode.NOT_EXIST,
+                StorageErrorCode.INVALID_NAME,
             ):
                 return False
             raise FlipperStorageException.from_error_code(path, error_code)
@@ -409,7 +410,7 @@ class FlipperStorageOperations:
         self.logger = logging.getLogger("FStorageOps")
 
     def send_file_to_storage(
-            self, flipper_file_path: str, local_file_path: str, force: bool = False
+        self, flipper_file_path: str, local_file_path: str, force: bool = False
     ):
         self.logger.debug(
             f"* send_file_to_storage:  {local_file_path}->{flipper_file_path}, {force=}"

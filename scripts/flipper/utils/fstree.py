@@ -1,5 +1,5 @@
-from collections import OrderedDict
 from enum import Enum
+from collections import OrderedDict
 
 
 class FsNode:

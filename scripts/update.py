@@ -2,17 +2,18 @@
 
 import math
 import os
-import pathlib
 import shutil
 import tarfile
 import zlib
 from os.path import exists, join
+import pathlib
 
 from flipper.app import App
-from flipper.assets import tarball
 from flipper.assets.coprobin import CoproBinary, get_stack_type
+from flipper.assets.heatshrink_stream import HeatshrinkDataStreamHeader
 from flipper.assets.obdata import ObReferenceValues, OptionBytesData
 from flipper.assets.tarball import compress_tree_tarball, tar_sanitizer_filter
+from flipper.assets import tarball
 from flipper.utils.fff import FlipperFormatFile
 from slideshow import Main as SlideshowMain
 
@@ -114,8 +115,8 @@ class Main(App):
                     return 1
             radio_version = self.copro_version_as_int(radio_meta, self.args.radiotype)
             if (
-                    get_stack_type(self.args.radiotype) not in self.WHITELISTED_STACK_TYPES
-                    and self.args.disclaimer != "yes"
+                get_stack_type(self.args.radiotype) not in self.WHITELISTED_STACK_TYPES
+                and self.args.disclaimer != "yes"
             ):
                 self.logger.error(
                     f"You are trying to bundle a non-standard stack type '{self.args.radiotype}'."
@@ -158,12 +159,12 @@ class Main(App):
                 ]
             )
             if not self.package_resources(
-                    self.args.resources, join(self.args.directory, resources_basename)
+                self.args.resources, join(self.args.directory, resources_basename)
             ):
                 return 3
 
         if not self.layout_check(updater_stage_size, dfu_size, radio_addr):
-            self.logger.warn("Memory layout looks suspicious")
+            self.logger.warning("Memory layout looks suspicious")
             if self.args.disclaimer != "yes":
                 self.show_disclaimer()
                 return 2
@@ -224,7 +225,7 @@ class Main(App):
 
     def layout_check(self, stage_size, fw_size, radio_addr):
         if stage_size > self.UPDATER_SIZE_THRESHOLD:
-            self.logger.warn(
+            self.logger.warning(
                 f"Updater size {stage_size}b > {self.UPDATER_SIZE_THRESHOLD}b and is not loadable on older firmwares!"
             )
 
@@ -236,13 +237,13 @@ class Main(App):
         self.logger.debug(f"Expected reserved space size: {fw2stack_gap}")
         fw2stack_gap_pages = fw2stack_gap / self.FLASH_PAGE_SIZE
         if fw2stack_gap_pages < 0:
-            self.logger.warn(
+            self.logger.warning(
                 f"Firmware image overlaps C2 region and is not programmable!"
             )
             return False
 
         elif fw2stack_gap_pages < self.MIN_GAP_PAGES:
-            self.logger.warn(
+            self.logger.warning(
                 f"Expected reserved flash size is too small (~{int(fw2stack_gap_pages)} page(s), need >={self.MIN_GAP_PAGES} page(s))"
             )
             return False
@@ -287,12 +288,12 @@ class Main(App):
         release = coprometa.img_sig.version_build
         stype = get_stack_type(stacktype)
         return (
-                major
-                | (minor << 8)
-                | (sub << 16)
-                | (branch << 24)
-                | (release << 32)
-                | (stype << 40)
+            major
+            | (minor << 8)
+            | (sub << 16)
+            | (branch << 24)
+            | (release << 32)
+            | (stype << 40)
         )
 
     @staticmethod
@@ -319,7 +320,7 @@ class Main(App):
     def batch(iterable, n=1):
         iterable_len = len(iterable)
         for ndx in range(0, iterable_len, n):
-            yield iterable[ndx: min(ndx + n, iterable_len)]
+            yield iterable[ndx : min(ndx + n, iterable_len)]
 
 
 if __name__ == "__main__":

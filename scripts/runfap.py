@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import operator
-import time
 from functools import reduce
+import time
 
 from flipper.app import App
 from flipper.storage import FlipperStorage, FlipperStorageOperations
@@ -59,7 +59,7 @@ class Main(App):
             with FlipperStorage(port) as storage:
                 storage_ops = FlipperStorageOperations(storage)
                 for fap_local_path, fap_dst_path in zip(
-                        self.args.sources, self.args.targets
+                    self.args.sources, self.args.targets
                 ):
                     self.logger.info(f'Installing "{fap_local_path}" to {fap_dst_path}')
 

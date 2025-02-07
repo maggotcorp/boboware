@@ -8,7 +8,8 @@
 
 
 import gdb
-
+from .List import ListInspector
+from .Task import TaskInspector
 from .HandleRegistry import HandleRegistry
 from .QueueTools import *
 

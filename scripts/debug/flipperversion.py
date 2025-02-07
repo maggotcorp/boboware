@@ -1,6 +1,8 @@
-import gdb
 from dataclasses import dataclass, field
 from typing import Dict, Optional
+
+import gdb
+
 
 # Must match FuriHalRtcRegisterVersion index in FuriHalRtcRegister enum
 RTC_BACKUP_VERSION_REGISTER_IDX = 0x2

@@ -17,13 +17,13 @@ along with PyCortexMDebug.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import lxml.objectify as objectify
+import sys
+from collections import OrderedDict
 import os
 import pickle
-import re
-import sys
 import traceback
+import re
 import warnings
-from collections import OrderedDict
 
 
 class SmartDict:
@@ -46,9 +46,9 @@ class SmartDict:
 
     def is_ambiguous(self, key):
         return (
-                key not in self.od
-                and key not in self.casemap
-                and len(list(self.prefix_match_iter(key))) > 1
+            key not in self.od
+            and key not in self.casemap
+            and len(list(self.prefix_match_iter(key))) > 1
         )
 
     def prefix_match_iter(self, key):
@@ -77,7 +77,7 @@ class SmartDict:
 
     def __delitem__(self, key):
         if (
-                self.casemap[key.lower()] == key
+            self.casemap[key.lower()] == key
         ):  # Check that we did not overwrite this entry
             del self.casemap[key.lower()]
         del self.od[key]

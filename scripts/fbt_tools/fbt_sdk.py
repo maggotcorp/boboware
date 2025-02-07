@@ -3,15 +3,17 @@ import os.path
 import pathlib
 import posixpath
 import shutil
-from SCons.Action import Action
-from SCons.Builder import Builder
-from SCons.Errors import UserError
-# from SCons.Scanner import C
-from SCons.Script import Entry
-from SCons.Util import LogicalLines
+
 from fbt.sdk.cache import SdkCache
 from fbt.sdk.collector import SdkCollector
 from fbt.util import PosixPathWrapper
+from SCons.Action import Action
+from SCons.Builder import Builder
+from SCons.Errors import UserError
+
+# from SCons.Scanner import C
+from SCons.Script import Entry
+from SCons.Util import LogicalLines
 
 
 def ProcessSdkDepends(env, filename):
@@ -211,7 +213,7 @@ def gen_sdk_data(sdk_cache: SdkCache):
         )
 
     for var_def in sdk_cache.get_variables():
-        api_lines.append(f"API_VARIABLE({var_def.name}, {var_def.var_type})")
+        api_lines.append(f"API_VARIABLE({var_def.name}, {var_def.var_type })")
 
     api_def.append(",\n".join(api_lines))
 

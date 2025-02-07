@@ -1,8 +1,7 @@
 # About
 
 This folder contains supplementary scripts that automates routine actions.
-Flashing scripts are based on cli version
-of [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html).
+Flashing scripts are based on cli version of [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html).
 You will need to add STM32_Programmer_CLI to your path to use them.
 
 # Flashing empty MCU/Flipper
@@ -59,12 +58,12 @@ Build the firmware and run in the root folder of the repo:
 python scripts/storage.py -p <flipper_cli_port> send build/latest/resources /ext
 ```
 
+
 # Slideshow creation
 
-Put fullscreen slideshow frames in .png format into `assets/slideshow/my_show` folder, named frame_xx.png, where xx is
-zero-padded frame number, starting with #0.
+Put fullscreen slideshow frames in .png format into `assets/slideshow/my_show` folder, named frame_xx.png, where xx is zero-padded frame number, starting with #0.
 
-Then run
+Then run 
 
 ```bash
 python scripts/slideshow.py -i assets/slideshow/my_show/ -o assets/slideshow/my_show/.slideshow

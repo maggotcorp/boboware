@@ -1,8 +1,9 @@
 import json
 import os
 import sys
-from SCons.Errors import StopError
 from functools import reduce
+
+from SCons.Errors import StopError
 
 
 def _load_sdk_data(sdk_root):

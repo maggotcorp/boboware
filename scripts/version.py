@@ -16,8 +16,8 @@ class GitVersion:
 
     def get_version_info(self):
         commit = (
-                self._exec_git(f"rev-parse --short={self.REVISION_SUFFIX_LENGTH} HEAD")
-                or "unknown"
+            self._exec_git(f"rev-parse --short={self.REVISION_SUFFIX_LENGTH} HEAD")
+            or "unknown"
         )
 
         dirty = False
@@ -35,13 +35,13 @@ class GitVersion:
         # If WORKFLOW_BRANCH_OR_TAG is set in environment, is has precedence
         # (set by CI)
         branch = (
-                os.environ.get("WORKFLOW_BRANCH_OR_TAG", None)
-                or tag
-                or self._exec_git("rev-parse --abbrev-ref HEAD").removeprefix("timoware-")
-                or "unknown"
+            os.environ.get("WORKFLOW_BRANCH_OR_TAG", None)
+            or tag
+            or self._exec_git("rev-parse --abbrev-ref HEAD").removeprefix("mntm-")
+            or "unknown"
         )
 
-        version = tag or "timoware-dev"
+        version = tag or "mntm-dev"
 
         if "SOURCE_DATE_EPOCH" in os.environ:
             commit_date = datetime.utcfromtimestamp(
