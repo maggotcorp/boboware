@@ -1,21 +1,21 @@
-#include "thread.h"
 #include "thread_i.h"
+#include "thread_list_i.h"
 #include "timer.h"
-#include "thread_list.h"
 #include "kernel.h"
+#include "message_queue.h"
 #include "memmgr.h"
 #include "memmgr_heap.h"
 #include "check.h"
 #include "common_defines.h"
 #include "string.h"
 
-#include <timers.h>
 #include "log.h"
 #include <furi_hal_rtc.h>
 
 #include <FreeRTOS.h>
 #include <stdint.h>
 #include <task.h>
+#include <timers.h>
 
 #include <task_control_block.h>
 
@@ -24,6 +24,59 @@
 #define THREAD_NOTIFY_INDEX (1) // Index 0 is used for stream buffers
 
 #define THREAD_MAX_STACK_SIZE (UINT16_MAX * sizeof(StackType_t))
+
+typedef struct {
+    FuriThreadStdoutWriteCallback write_callback;
+    FuriString* buffer;
+    void* context;
+} FuriThreadStdout;
+
+typedef struct {
+    FuriThreadStdinReadCallback read_callback;
+    FuriString* unread_buffer; // <! stores data from `ungetc` and friends
+    void* context;
+} FuriThreadStdin;
+
+struct FuriThread {
+    StaticTask_t container;
+    StackType_t* stack_buffer;
+
+    volatile FuriThreadState state;
+    int32_t ret;
+
+    FuriThreadCallback callback;
+    void* context;
+
+    FuriThreadStateCallback state_callback;
+    void* state_context;
+
+    FuriThreadSignalCallback signal_callback;
+    void* signal_context;
+
+    char* name;
+    char* appid;
+
+    FuriThreadPriority priority;
+
+    size_t stack_size;
+    size_t heap_size;
+
+    FuriThreadStdout output;
+    FuriThreadStdin input;
+
+    // Keep all non-alignable byte types in one place,
+    // this ensures that the size of this structure is minimal
+    bool is_service;
+    bool heap_trace_enabled;
+};
+
+// IMPORTANT: container MUST be the FIRST struct member
+static_assert(offsetof(FuriThread, container) == 0);
+
+// Our idle priority should be equal to the one from FreeRTOS
+static_assert(FuriThreadPriorityIdle == tskIDLE_PRIORITY);
+
+static FuriMessageQueue* furi_thread_scrub_message_queue = NULL;
 
 static size_t __furi_thread_stdout_write(FuriThread* thread, const char* data, size_t size);
 static int32_t __furi_thread_stdout_flush(FuriThread* thread);
@@ -41,7 +94,7 @@ static void furi_thread_set_state(FuriThread* thread, FuriThreadState state) {
     furi_assert(thread);
     thread->state = state;
     if(thread->state_callback) {
-        thread->state_callback(state, thread->state_context);
+        thread->state_callback(thread, state, thread->state_context);
     }
 }
 
@@ -57,7 +110,7 @@ static void furi_thread_body(void* context) {
     furi_thread_set_state(thread, FuriThreadStateRunning);
 
     if(thread->heap_trace_enabled == true) {
-        memmgr_heap_enable_thread_trace(thread);
+        memmgr_heap_enable_thread_trace((FuriThreadId)thread);
     }
 
     thread->ret = thread->callback(thread->context);
@@ -66,14 +119,14 @@ static void furi_thread_body(void* context) {
 
     if(thread->heap_trace_enabled == true) {
         furi_delay_ms(33);
-        thread->heap_size = memmgr_heap_get_thread_memory(thread);
+        thread->heap_size = memmgr_heap_get_thread_memory((FuriThreadId)thread);
         furi_log_print_format(
             thread->heap_size ? FuriLogLevelError : FuriLogLevelInfo,
             TAG,
             "%s allocation balance: %zu",
             thread->name ? thread->name : "Thread",
             thread->heap_size);
-        memmgr_heap_disable_thread_trace(thread);
+        memmgr_heap_disable_thread_trace((FuriThreadId)thread);
     }
 
     furi_check(thread->state == FuriThreadStateRunning);
@@ -81,14 +134,17 @@ static void furi_thread_body(void* context) {
     // flush stdout
     __furi_thread_stdout_flush(thread);
 
-    furi_thread_set_state(thread, FuriThreadStateStopped);
+    furi_thread_set_state(thread, FuriThreadStateStopping);
 
-    vTaskDelete(NULL);
+    furi_message_queue_put(furi_thread_scrub_message_queue, &thread, FuriWaitForever);
+
+    vTaskSuspend(NULL);
     furi_thread_catch();
 }
 
 static void furi_thread_init_common(FuriThread* thread) {
     thread->output.buffer = furi_string_alloc();
+    thread->input.unread_buffer = furi_string_alloc();
 
     FuriThread* parent = NULL;
     if(xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED) {
@@ -105,6 +161,8 @@ static void furi_thread_init_common(FuriThread* thread) {
         furi_thread_set_appid(thread, "driver");
     }
 
+    thread->priority = FuriThreadPriorityNormal;
+
     FuriHalRtcHeapTrackMode mode = furi_hal_rtc_get_heap_track_mode();
     if(mode == FuriHalRtcHeapTrackModeAll) {
         thread->heap_trace_enabled = true;
@@ -112,6 +170,31 @@ static void furi_thread_init_common(FuriThread* thread) {
         if(parent) thread->heap_trace_enabled = parent->heap_trace_enabled;
     } else {
         thread->heap_trace_enabled = false;
+    }
+}
+
+void furi_thread_init(void) {
+    furi_thread_scrub_message_queue = furi_message_queue_alloc(8, sizeof(FuriThread*));
+}
+
+void furi_thread_scrub(void) {
+    FuriThread* thread_to_scrub = NULL;
+    while(true) {
+        furi_check(
+            furi_message_queue_get(
+                furi_thread_scrub_message_queue, &thread_to_scrub, FuriWaitForever) ==
+            FuriStatusOk);
+
+        TaskHandle_t task = (TaskHandle_t)thread_to_scrub;
+
+        // Delete task: FreeRTOS will remove task from all lists where it may be
+        vTaskDelete(task);
+        // Sanity check: ensure that local storage is ours and clear it
+        furi_check(pvTaskGetThreadLocalStoragePointer(task, 0) == thread_to_scrub);
+        vTaskSetThreadLocalStoragePointer(task, 0, NULL);
+
+        // Deliver thread stopped callback
+        furi_thread_set_state(thread_to_scrub, FuriThreadStateStopped);
     }
 }
 
@@ -162,7 +245,6 @@ void furi_thread_free(FuriThread* thread) {
     furi_check(thread->is_service == false);
     // Cannot free a non-joined thread
     furi_check(thread->state == FuriThreadStateStopped);
-    furi_check(!thread->is_active);
 
     furi_thread_set_name(thread, NULL);
     furi_thread_set_appid(thread, NULL);
@@ -172,6 +254,7 @@ void furi_thread_free(FuriThread* thread) {
     }
 
     furi_string_free(thread->output.buffer);
+    furi_string_free(thread->input.unread_buffer);
     free(thread);
 }
 
@@ -229,21 +312,19 @@ void furi_thread_set_context(FuriThread* thread, void* context) {
 void furi_thread_set_priority(FuriThread* thread, FuriThreadPriority priority) {
     furi_check(thread);
     furi_check(thread->state == FuriThreadStateStopped);
-    furi_check(priority >= FuriThreadPriorityIdle && priority <= FuriThreadPriorityIsr);
+    furi_check(priority <= FuriThreadPriorityIsr);
     thread->priority = priority;
 }
 
 FuriThreadPriority furi_thread_get_priority(FuriThread* thread) {
     furi_check(thread);
-    TaskHandle_t hTask = furi_thread_get_id(thread);
+    TaskHandle_t hTask = (TaskHandle_t)thread;
     return (FuriThreadPriority)uxTaskPriorityGet(hTask);
 }
 
 void furi_thread_set_current_priority(FuriThreadPriority priority) {
     furi_check(priority <= FuriThreadPriorityIsr);
-
-    UBaseType_t new_priority = priority ? priority : FuriThreadPriorityNormal;
-    vTaskPrioritySet(NULL, new_priority);
+    vTaskPrioritySet(NULL, priority);
 }
 
 FuriThreadPriority furi_thread_get_current_priority(void) {
@@ -305,9 +386,6 @@ void furi_thread_start(FuriThread* thread) {
     furi_thread_set_state(thread, FuriThreadStateStarting);
 
     uint32_t stack_depth = thread->stack_size / sizeof(StackType_t);
-    UBaseType_t priority = thread->priority ? thread->priority : FuriThreadPriorityNormal;
-
-    thread->is_active = true;
 
     furi_check(
         xTaskCreateStatic(
@@ -315,19 +393,9 @@ void furi_thread_start(FuriThread* thread) {
             thread->name,
             stack_depth,
             thread,
-            priority,
+            thread->priority,
             thread->stack_buffer,
             &thread->container) == (TaskHandle_t)thread);
-}
-
-void furi_thread_cleanup_tcb_event(TaskHandle_t task) {
-    FuriThread* thread = pvTaskGetThreadLocalStoragePointer(task, 0);
-    if(thread) {
-        // clear thread local storage
-        vTaskSetThreadLocalStoragePointer(task, 0, NULL);
-        furi_check(thread == (FuriThread*)task);
-        thread->is_active = false;
-    }
 }
 
 bool furi_thread_join(FuriThread* thread) {
@@ -341,8 +409,8 @@ bool furi_thread_join(FuriThread* thread) {
     //
     // If your thread exited, but your app stuck here: some other thread uses
     // all cpu time, which delays kernel from releasing task handle
-    while(thread->is_active) {
-        furi_delay_ms(10);
+    while(thread->state != FuriThreadStateStopped) {
+        furi_delay_tick(2);
     }
 
     return true;
@@ -350,7 +418,7 @@ bool furi_thread_join(FuriThread* thread) {
 
 FuriThreadId furi_thread_get_id(FuriThread* thread) {
     furi_check(thread);
-    return thread;
+    return (FuriThreadId)thread;
 }
 
 void furi_thread_enable_heap_trace(FuriThread* thread) {
@@ -378,7 +446,7 @@ int32_t furi_thread_get_return_code(FuriThread* thread) {
 }
 
 FuriThreadId furi_thread_get_current_id(void) {
-    return xTaskGetCurrentTaskHandle();
+    return (FuriThreadId)xTaskGetCurrentTaskHandle();
 }
 
 FuriThread* furi_thread_get_current(void) {
@@ -584,15 +652,16 @@ bool furi_thread_enumerate(FuriThreadList* thread_list) {
             FuriThreadListItem* item =
                 furi_thread_list_get_or_insert(thread_list, (FuriThread*)task[i].xHandle);
 
-            item->thread = (FuriThreadId)task[i].xHandle;
-            item->app_id = furi_thread_get_appid(item->thread);
+            FuriThreadId thread_id = (FuriThreadId)task[i].xHandle;
+            item->thread = (FuriThread*)thread_id;
+            item->app_id = furi_thread_get_appid(thread_id);
             item->name = task[i].pcTaskName;
             item->priority = task[i].uxCurrentPriority;
             item->stack_address = (uint32_t)tcb->pxStack;
-            size_t thread_heap = memmgr_heap_get_thread_memory(item->thread);
+            size_t thread_heap = memmgr_heap_get_thread_memory(thread_id);
             item->heap = thread_heap == MEMMGR_HEAP_UNKNOWN ? 0u : thread_heap;
             item->stack_size = (tcb->pxEndOfStack - tcb->pxStack + 1) * sizeof(StackType_t);
-            item->stack_min_free = furi_thread_get_stack_space(item->thread);
+            item->stack_min_free = furi_thread_get_stack_space(thread_id);
             item->state = furi_thread_state_name(task[i].eCurrentState);
             item->counter_previous = item->counter_current;
             item->counter_current = task[i].ulRunTimeCounter;
@@ -656,11 +725,20 @@ uint32_t furi_thread_get_stack_space(FuriThreadId thread_id) {
 
 static size_t __furi_thread_stdout_write(FuriThread* thread, const char* data, size_t size) {
     if(thread->output.write_callback != NULL) {
-        thread->output.write_callback(data, size);
+        thread->output.write_callback(data, size, thread->output.context);
     } else {
         furi_log_tx((const uint8_t*)data, size);
     }
     return size;
+}
+
+static size_t
+    __furi_thread_stdin_read(FuriThread* thread, char* data, size_t size, FuriWait timeout) {
+    if(thread->input.read_callback != NULL) {
+        return thread->input.read_callback(data, size, timeout, thread->input.context);
+    } else {
+        return 0;
+    }
 }
 
 static int32_t __furi_thread_stdout_flush(FuriThread* thread) {
@@ -673,17 +751,31 @@ static int32_t __furi_thread_stdout_flush(FuriThread* thread) {
     return 0;
 }
 
-void furi_thread_set_stdout_callback(FuriThreadStdoutWriteCallback callback) {
-    FuriThread* thread = furi_thread_get_current();
-    furi_check(thread);
-    __furi_thread_stdout_flush(thread);
-    thread->output.write_callback = callback;
-}
-
 FuriThreadStdoutWriteCallback furi_thread_get_stdout_callback(void) {
     FuriThread* thread = furi_thread_get_current();
     furi_check(thread);
     return thread->output.write_callback;
+}
+
+FuriThreadStdinReadCallback furi_thread_get_stdin_callback(void) {
+    FuriThread* thread = furi_thread_get_current();
+    furi_check(thread);
+    return thread->input.read_callback;
+}
+
+void furi_thread_set_stdout_callback(FuriThreadStdoutWriteCallback callback, void* context) {
+    FuriThread* thread = furi_thread_get_current();
+    furi_check(thread);
+    __furi_thread_stdout_flush(thread);
+    thread->output.write_callback = callback;
+    thread->output.context = context;
+}
+
+void furi_thread_set_stdin_callback(FuriThreadStdinReadCallback callback, void* context) {
+    FuriThread* thread = furi_thread_get_current();
+    furi_check(thread);
+    thread->input.read_callback = callback;
+    thread->input.context = context;
 }
 
 size_t furi_thread_stdout_write(const char* data, size_t size) {
@@ -716,6 +808,31 @@ int32_t furi_thread_stdout_flush(void) {
     furi_check(thread);
 
     return __furi_thread_stdout_flush(thread);
+}
+
+size_t furi_thread_stdin_read(char* buffer, size_t size, FuriWait timeout) {
+    FuriThread* thread = furi_thread_get_current();
+    furi_check(thread);
+
+    size_t from_buffer = MIN(furi_string_size(thread->input.unread_buffer), size);
+    size_t from_input = size - from_buffer;
+    size_t from_input_actual =
+        __furi_thread_stdin_read(thread, buffer + from_buffer, from_input, timeout);
+    memcpy(buffer, furi_string_get_cstr(thread->input.unread_buffer), from_buffer);
+    furi_string_right(thread->input.unread_buffer, from_buffer);
+
+    return from_buffer + from_input_actual;
+}
+
+void furi_thread_stdin_unread(char* buffer, size_t size) {
+    FuriThread* thread = furi_thread_get_current();
+    furi_check(thread);
+
+    FuriString* new_buf = furi_string_alloc(); // there's no furi_string_alloc_set_strn :(
+    furi_string_set_strn(new_buf, buffer, size);
+    furi_string_cat(new_buf, thread->input.unread_buffer);
+    furi_string_free(thread->input.unread_buffer);
+    thread->input.unread_buffer = new_buf;
 }
 
 void furi_thread_suspend(FuriThreadId thread_id) {

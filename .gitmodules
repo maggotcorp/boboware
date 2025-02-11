@@ -1,6 +1,6 @@
 [submodule "applications/main/booper"]
 	path = applications/main/booper
-	url = https://github.com/maggotcorp/booper
+	url = https://github.com/maggotcorp/booper.git
 [submodule "assets/protobuf"]
 	path = assets/protobuf
 	url = https://github.com/Next-Flip/flipperzero-protobuf.git
