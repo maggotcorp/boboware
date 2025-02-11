@@ -55,7 +55,7 @@ Background services providing system APIs to applications.
 - `applications.h`      - Firmware application list header
 - `bt`                  - BLE service and application
 - `cli`                 - Console service and API
-- `crypto`              - Crypto cli tools
+~~- `crypto`              - Crypto cli tools~~
 - `desktop`             - Desktop service
 - `dialogs`             - Dialogs service: GUI Dialogs for your app
 - `dolphin`             - Dolphin service and supplementary apps
