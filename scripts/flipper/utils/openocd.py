@@ -1,6 +1,6 @@
-import logging
 import socket
 import subprocess
+import logging
 
 
 class OpenOCD:

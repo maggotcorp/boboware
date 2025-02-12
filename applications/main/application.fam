@@ -5,12 +5,12 @@ App(
     provides=[
         "gpio",
         "ibutton",
+        "booper_app",
         "infrared",
         "lfrfid",
         "nfc",
         "subghz",
         "bad_kb",
-        "booper",
         "u2f",
         "archive",
         "main_apps_on_start",

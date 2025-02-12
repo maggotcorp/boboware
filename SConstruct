@@ -234,7 +234,7 @@ firmware_debug = distenv.PhonyTarget(
 )
 distenv.Depends(firmware_debug, firmware_flash)
 
-distenv.PhonyTarget(
+firmware_blackmagic = distenv.PhonyTarget(
     "blackmagic",
     "${GDBPYCOM}",
     source=firmware_env["FW_ELF"],
@@ -242,6 +242,7 @@ distenv.PhonyTarget(
     GDBREMOTE="${BLACKMAGIC_ADDR}",
     FBT_FAP_DEBUG_ELF_ROOT=firmware_env["FBT_FAP_DEBUG_ELF_ROOT"],
 )
+distenv.Depends(firmware_blackmagic, firmware_flash)
 
 # Debug alien elf
 debug_other_opts = [
@@ -326,8 +327,9 @@ firmware_env.Append(
     IMG_LINT_SOURCES=[
         # Image assets
         "applications",
-        "!applications/external",
         "assets",
+        # Avoid merge conflicts
+        "!applications/external",
     ],
 )
 
@@ -345,6 +347,9 @@ black_commandline = [
 black_base_args = [
     "--include",
     '"(\\.scons|\\.py|SConscript|SConstruct|\\.fam)$"',
+    # Avoid merge conflicts
+    "--exclude",
+    '"applications/external"',
 ]
 
 distenv.PhonyTarget(

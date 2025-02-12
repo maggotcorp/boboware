@@ -51,8 +51,8 @@ def generate(env):
     ]
 
     if (
-            isinstance(fbt_hooks, DefaultFbtHooks)
-            and env.subst("${FIRMWARE_ORIGIN}") != "Official"
+        isinstance(fbt_hooks, DefaultFbtHooks)
+        and env.subst("${FIRMWARE_ORIGIN}") != "Official"
     ):
         # If fbt_hooks.py is not present, but we are not building official firmware,
         # create "scripts/fbt/fbt_hooks.py" to implement changes to firmware build environment.

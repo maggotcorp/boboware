@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/applications/main/booper" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/FreeRTOS-Kernel" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/heatshrink" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/libusb_stm32" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/mbedtls" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/microtar" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/mlib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/nanopb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/stm32wb_cmsis" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/stm32wb_copro" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/stm32wb_hal" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/uzlib" vcs="Git" />
+  </component>
+</project>

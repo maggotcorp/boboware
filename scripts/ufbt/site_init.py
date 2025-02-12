@@ -1,7 +1,8 @@
-import SCons.Errors
 import atexit
-from SCons.Script import GetBuildFailures
+
+import SCons.Errors
 from ansi.color import fg, fx
+from SCons.Script import GetBuildFailures
 
 
 def bf_to_str(bf):

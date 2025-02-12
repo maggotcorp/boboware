@@ -1,18 +1,19 @@
-import SCons.Warnings
 import itertools
 import pathlib
-from SCons.Action import Action
-from SCons.Builder import Builder
-from SCons.Errors import UserError
-from SCons.Node.FS import Entry, File
-from ansi.color import fg
 from dataclasses import dataclass, field
+from typing import Dict, List, Optional
+
+import SCons.Warnings
+from ansi.color import fg
 from fbt.appmanifest import FlipperApplication, FlipperAppType, FlipperManifestException
 from fbt.elfmanifest import assemble_manifest_data
 from fbt.fapassets import FileBundler
 from fbt.sdk.cache import SdkCache
 from fbt.util import resolve_real_dir_node
-from typing import Dict, List, Optional
+from SCons.Action import Action
+from SCons.Builder import Builder
+from SCons.Errors import UserError
+from SCons.Node.FS import Entry, File
 
 _FAP_META_SECTION = ".fapmeta"
 _FAP_FILEASSETS_SECTION = ".fapassets"
@@ -88,7 +89,8 @@ class AppBuilder:
         fap_icons = self.app_env.CompileIcons(
             self.app_work_dir,
             self.app._appdir.Dir(self.app.fap_icon_assets),
-            icon_bundle_name=f"{self.app.fap_icon_assets_symbol or self.app.appid}_icons",
+            icon_bundle_name=f"{self.app.fap_icon_assets_symbol or self.app.appid }_icons",
+            add_include=True,
         )
         self.app_env.Alias("_fap_icons", fap_icons)
         self.fw_env.Append(_APP_ICONS=[fap_icons])
@@ -180,7 +182,7 @@ class AppBuilder:
         app_artifacts.validator = self.app_env.ValidateAppImports(
             app_artifacts.compact,
             _CHECK_APP=self.app.do_strict_import_checks
-                       and self.app_env.get("STRICT_FAP_IMPORT_CHECK"),
+            and self.app_env.get("STRICT_FAP_IMPORT_CHECK"),
         )[0]
 
         if self.app.apptype == FlipperAppType.PLUGIN:
@@ -301,22 +303,31 @@ def _validate_app_imports(target, source, env):
                 "gallagher_deobfuscate_and_parse_credential",
                 # js_
                 "js_delay_with_flags",
-                "js_flags_wait",
+                "js_event_loop_get_loop",
                 "js_flags_set",
+                "js_flags_wait",
+                "js_gui_make_view_factory",
+                "js_module_get",
+                # test_js
+                "js_thread_run",
+                "js_thread_stop",
                 # totp_
                 "totp_",
                 "token_info_",
                 "memset_s",
-                # troika
+                # social_moscow, troika
                 "mosgortrans_parse_transport_block",
+                "render_section_header",
             )
         )
-           and any(
+        and any(
             prefix in source[0].path
             for prefix in [
                 "advanced_plugin",
                 "gallagher",
-                "js_",
+                "js_",  # js_app and all js_ modules
+                "social_moscow",
+                "test_js",
                 "totp_",
                 "troika",
             ]
@@ -331,9 +342,9 @@ def _validate_app_imports(target, source, env):
         disabled_api_syms = unresolved_syms.intersection(sdk_cache.get_disabled_names())
         if disabled_api_syms:
             warning_msg += (
-                    fg.brightyellow(" (in API, but disabled: ")
-                    + fg.brightmagenta(f"{disabled_api_syms}")
-                    + fg.brightyellow(")")
+                fg.brightyellow(" (in API, but disabled: ")
+                + fg.brightmagenta(f"{disabled_api_syms}")
+                + fg.brightyellow(")")
             )
         if env.get("_CHECK_APP"):
             raise UserError(warning_msg)

@@ -1,8 +1,9 @@
-import SCons
 import itertools
+
+import SCons
+from fbt.util import GLOB_FILE_EXCLUSION
 from SCons.Node.FS import has_glob_magic
 from SCons.Script import Flatten
-from fbt.util import GLOB_FILE_EXCLUSION
 
 
 def GlobRecursive(env, pattern, node=".", exclude=[]):

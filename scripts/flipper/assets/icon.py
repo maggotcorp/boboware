@@ -1,6 +1,6 @@
-import io
 import logging
 import subprocess
+import io
 
 ICONS_SUPPORTED_FORMATS = ["png"]
 
@@ -17,7 +17,7 @@ class Image:
 
     def data_as_carray(self):
         return (
-                "{" + "".join("0x{:02x},".format(img_byte) for img_byte in self.data) + "}"
+            "{" + "".join("0x{:02x},".format(img_byte) for img_byte in self.data) + "}"
         )
 
 

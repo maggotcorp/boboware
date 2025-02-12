@@ -1,12 +1,13 @@
-import SCons
 import os
 import re
 import subprocess
 import sys
 import webbrowser
+from pathlib import Path, PurePosixPath
+
+import SCons
 from SCons.Errors import StopError
 from SCons.Subst import quote_spaces
-from pathlib import Path, PurePosixPath
 
 WINPATHSEP_RE = re.compile(r"\\([^\"'\\]|$)")
 

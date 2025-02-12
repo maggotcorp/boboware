@@ -9,8 +9,8 @@
 # about the tasks, queues, mutexs, etc.
 #
 
-import sys
 from os import path
+import sys
 
 directory, file = path.split(__file__)
 directory = path.expanduser(directory)
@@ -19,7 +19,9 @@ directory = path.abspath(directory)
 sys.path.append(directory)
 
 import gdb
+import pprint
 
+from FreeRTOSgdb.Types import StdTypes
 from FreeRTOSgdb.List import ListInspector
 from FreeRTOSgdb.GDBCommands import ShowHandleName, ShowRegistry, ShowList
 from FreeRTOSgdb.GDBCommands import ShowQueueInfo

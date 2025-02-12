@@ -3,8 +3,8 @@
 import math
 import os
 import subprocess
-from ansi.color import fg
 
+from ansi.color import fg
 from flipper.app import App
 
 
@@ -35,7 +35,7 @@ class Main(App):
             section, size, _ = parts
             if section not in sections_to_keep:
                 continue
-            print(f"{section:<11} {size:>8} ({(int(size) / 1024):6.2f} K)")
+            print(f"{section:<11} {size:>8} ({(int(size)/1024):6.2f} K)")
 
         return 0
 

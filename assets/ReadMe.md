@@ -1,4 +1,4 @@
-# Firmware Assets {#firmware_assets}
+    # Firmware Assets {#firmware_assets}
 
 ## Requirements
 

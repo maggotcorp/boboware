@@ -1,10 +1,10 @@
-import logging
 import multiprocessing
+import logging
 import os
 from collections import Counter
+
 from flipper.utils.fff import FlipperFormatFile
 from flipper.utils.templite import Templite
-
 from .icon import ImageTools, file2image
 
 
@@ -24,13 +24,13 @@ class DolphinBubbleAnimation:
     FILE_VERSION = 1
 
     def __init__(
-            self,
-            name: str,
-            min_butthurt: int,
-            max_butthurt: int,
-            min_level: int,
-            max_level: int,
-            weight: int,
+        self,
+        name: str,
+        min_butthurt: int,
+        max_butthurt: int,
+        min_level: int,
+        max_level: int,
+        weight: int,
     ):
         # Manifest
         self.name = name
@@ -49,11 +49,11 @@ class DolphinBubbleAnimation:
 
     def load(self, animation_directory: str):
         if not os.path.isdir(animation_directory):
-            raise Exception(f"Animation folder doesn't exist: {animation_directory}")
+            raise Exception(f"Animation folder doesn't exist: { animation_directory }")
 
         meta_filename = os.path.join(animation_directory, "meta.txt")
         if not os.path.isfile(meta_filename):
-            raise Exception(f"Animation meta file doesn't exist: {meta_filename}")
+            raise Exception(f"Animation meta file doesn't exist: { meta_filename }")
 
         self.logger.debug(f"Loading meta from {meta_filename}")
         file = FlipperFormatFile()
@@ -109,15 +109,15 @@ class DolphinBubbleAnimation:
             if unique_frames_count != max_frame_number + 1:
                 self.logger.warning(f"Not all frames were used in {self.name}")
             total_frames_count = self.meta["Passive frames"] + (
-                    self.meta["Active frames"] * self.meta["Active cycles"]
+                self.meta["Active frames"] * self.meta["Active cycles"]
             )
 
             # Extra checks
             assert self.meta["Passive frames"] <= total_frames_count
             assert self.meta["Active frames"] <= total_frames_count
             assert (
-                    self.meta["Passive frames"] + self.meta["Active frames"]
-                    == ordered_frames_count
+                self.meta["Passive frames"] + self.meta["Active frames"]
+                == ordered_frames_count
             )
         except EOFError:
             raise Exception("Invalid meta file: too short")

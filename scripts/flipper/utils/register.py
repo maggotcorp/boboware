@@ -27,7 +27,7 @@ class Register32:
         self.freezed = True
 
     def _is_overlapping(
-            self, a: RegisterBitDefinition, b: RegisterBitDefinition
+        self, a: RegisterBitDefinition, b: RegisterBitDefinition
     ) -> bool:
         if a.offset + a.size <= b.offset:
             return False
@@ -88,7 +88,7 @@ class Register32:
     def set(self, value: int):
         for definition in self.definition_list:
             definition.value = (value >> definition.offset) & (
-                    (1 << definition.size) - 1
+                (1 << definition.size) - 1
             )
 
     def get(self) -> int:

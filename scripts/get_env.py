@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+
 import argparse
 import datetime
 import json
@@ -34,7 +34,11 @@ def get_commit_json(event):
     commit_url = event["pull_request"]["base"]["repo"]["commits_url"].replace(
         "{/sha}", f"/{event['pull_request']['head']['sha']}"
     )
-    with urllib.request.urlopen(commit_url, context=context) as commit_file:
+    request = urllib.request.Request(commit_url)
+    if "GH_TOKEN" in os.environ:
+        request.add_header("Authorization", "Bearer %s" % (os.environ["GH_TOKEN"]))
+
+    with urllib.request.urlopen(request, context=context) as commit_file:
         commit_json = json.loads(commit_file.read().decode("utf-8"))
     return commit_json
 
@@ -60,10 +64,10 @@ def get_details(event, args):
     data["commit_sha"] = data["commit_hash"][:8]
     data["branch_name"] = re.sub("refs/\w+/", "", ref)
     data["suffix"] = (
-            "mntm-"
-            + data["branch_name"].removeprefix("mntm-").replace("/", "-")
-            + "-"
-            + data["commit_sha"]
+        "mntm-"
+        + data["branch_name"].removeprefix("mntm-").replace("/", "-")
+        + "-"
+        + data["commit_sha"]
     )
     if ref.startswith("refs/tags/"):
         data["suffix"] = data["branch_name"].replace("/", "-")
@@ -113,4 +117,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-"""

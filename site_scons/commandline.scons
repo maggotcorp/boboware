@@ -126,12 +126,12 @@ vars.AddVariables(
         validator=PathVariable.PathIsFile,
         default="",
     ),
-    #PathVariable(
-    #    "COPRO_STACK_BIN_DIR",
-    #    help="Path to ST-provided stacks",
-    #    validator=PathVariable.PathIsDir,
-    #    default="",
-    #),
+    PathVariable(
+        "COPRO_STACK_BIN_DIR",
+        help="Path to ST-provided stacks",
+        validator=PathVariable.PathIsDir,
+        default="",
+    ),
     PathVariable(
         "COPRO_CUBE_DIR",
         help="Path to Cube root",

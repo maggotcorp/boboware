@@ -1,14 +1,14 @@
 #!/usr/bin/env python
+from PIL import Image, ImageOps
 import heatshrink2
-import io
-import os
 import pathlib
-import re
 import shutil
 import struct
-import time
 import typing
-from PIL import Image, ImageOps
+import time
+import re
+import io
+import os
 
 
 def convert_bm(img: "Image.Image | pathlib.Path") -> bytes:
@@ -45,6 +45,10 @@ def convert_bmx(img: "Image.Image | pathlib.Path") -> bytes:
     return data
 
 
+def copy_file_as_lf(src: "pathlib.Path", dst: "pathlib.Path"):
+    dst.write_bytes(src.read_bytes().replace(b"\r\n", b"\n"))
+
+
 def pack_anim(src: pathlib.Path, dst: pathlib.Path):
     if not (src / "meta.txt").is_file():
         return
@@ -53,7 +57,7 @@ def pack_anim(src: pathlib.Path, dst: pathlib.Path):
         if not frame.is_file():
             continue
         if frame.name == "meta.txt":
-            shutil.copyfile(frame, dst / frame.name)
+            copy_file_as_lf(frame, dst / frame.name)
         elif frame.name.startswith("frame_"):
             if frame.suffix == ".png":
                 (dst / frame.with_suffix(".bm").name).write_bytes(convert_bm(frame))
@@ -111,10 +115,11 @@ def pack_font(src: pathlib.Path, dst: pathlib.Path):
         for line in code.splitlines():
             if line.count(b'"') == 2:
                 font += (
-                    line[line.find(b'"') + 1: line.rfind(b'"')]
+                    line[line.find(b'"') + 1 : line.rfind(b'"')]
                     .decode("unicode_escape")
                     .encode("latin_1")
                 )
+        font += b"\0"
         dst.with_suffix(".u8f").write_bytes(font)
     elif src.suffix == ".u8f":
         if not dst.is_file():
@@ -122,7 +127,7 @@ def pack_font(src: pathlib.Path, dst: pathlib.Path):
 
 
 def pack(
-        input: "str | pathlib.Path", output: "str | pathlib.Path", logger: typing.Callable
+    input: "str | pathlib.Path", output: "str | pathlib.Path", logger: typing.Callable
 ):
     input = pathlib.Path(input)
     output = pathlib.Path(output)
@@ -145,7 +150,7 @@ def pack(
 
         if (source / "Anims/manifest.txt").exists():
             (packed / "Anims").mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(
+            copy_file_as_lf(
                 source / "Anims/manifest.txt", packed / "Anims/manifest.txt"
             )
             manifest = (source / "Anims/manifest.txt").read_bytes()
@@ -186,9 +191,9 @@ def pack(
         if (source / "Fonts").is_dir():
             for font in (source / "Fonts").iterdir():
                 if (
-                        not font.is_file()
-                        or font.name.startswith(".")
-                        or font.suffix not in (".c", ".u8f")
+                    not font.is_file()
+                    or font.name.startswith(".")
+                    or font.suffix not in (".c", ".u8f")
                 ):
                     continue
                 logger(f"Compile: font for pack '{source.name}': {font.name}")

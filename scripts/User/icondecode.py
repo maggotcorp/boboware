@@ -1,5 +1,5 @@
-import argparse
 import heatshrink2
+import argparse
 import io
 
 

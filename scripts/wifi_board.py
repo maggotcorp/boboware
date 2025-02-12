@@ -3,14 +3,14 @@
 import json
 import logging
 import os
-import requests
-import serial.tools.list_ports as list_ports
 import subprocess
 import tarfile
 import tempfile
-from serial.tools.list_ports_common import ListPortInfo
 
+import requests
+import serial.tools.list_ports as list_ports
 from flipper.app import App
+from serial.tools.list_ports_common import ListPortInfo
 
 
 class UpdateDownloader:
@@ -135,8 +135,8 @@ class Main(App):
 
     def is_wifi_board_connected(self) -> bool:
         return (
-                len(self._grep_ports("ESP32-S2")) > 0
-                or len(self._grep_ports("CMSIS-DAP")) > 0
+            len(self._grep_ports("ESP32-S2")) > 0
+            or len(self._grep_ports("CMSIS-DAP")) > 0
         )
 
     @staticmethod

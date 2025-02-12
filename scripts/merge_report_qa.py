@@ -39,11 +39,11 @@ def main():
     commit_hash = os.getenv("COMMIT_HASH")
     commit_sha = os.getenv("COMMIT_SHA")
     commit_link = (
-            "<https://github.com/flipperdevices/flipperzero-firmware/commit/"
-            + commit_hash
-            + "|"
-            + commit_sha
-            + ">"
+        "<https://github.com/flipperdevices/flipperzero-firmware/commit/"
+        + commit_hash
+        + "|"
+        + commit_sha
+        + ">"
     )
     message = "Commit " + commit_link + " merged to dev without 'FL' ticket!"
     if not checkCommitMessage(commit_msg):

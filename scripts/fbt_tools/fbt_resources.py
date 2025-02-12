@@ -14,7 +14,7 @@ def __generate_resources_dist_entries(env):
 
     for app_artifacts in env["FW_EXTAPPS"].application_map.values():
         for _, dist_path in filter(
-                lambda dist_entry: dist_entry[0], app_artifacts.dist_entries
+            lambda dist_entry: dist_entry[0], app_artifacts.dist_entries
         ):
             src_target_entries.append(
                 (
