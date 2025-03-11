@@ -15,6 +15,6 @@ $ ./fbt updater_package
 
 To build and launch a single app:
 $ ./fbt launch APPSRC=your_appid
-
+then yea boi
 
 ```
