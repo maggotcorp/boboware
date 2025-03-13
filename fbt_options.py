@@ -34,7 +34,7 @@ if not os.environ.get("DIST_SUFFIX"):
         DIST_SUFFIX = git("describe", "--tags", "--abbrev=0", "--exact-match")
     except Exception:
         # If not a tag, dist name is: mntm-(branch)-(commmit)
-        branch_name = git("rev-parse", "--abbrev-ref", "HEAD").removeprefix("mntm-")
+        branch_name = git("rev-parse", "--abbrev-ref", "HEAD").removeprefix("bobo-")
         commit_sha = git("rev-parse", "HEAD")[:8]
         DIST_SUFFIX = f"mntm-{branch_name}-{commit_sha}"
     # Dist name is only for naming of output files
