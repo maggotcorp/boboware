@@ -1,16 +1,72 @@
-*~
+# stars #
+*.DS_Store
+*.bak
+*.log
+*.out
+*.tmp
+*.temp
+*.obj
+*.bin
+*.hex
+*.elf
+*.map
+*.lst
+*.srec
 *.swp
-*.swo
-*.gdb_history
+*.dump
+*.
+*.iml
+
+# Visual Studio Code
+.vscode/
+*.vscode/
+/.vscode
+
+# Eclipse
+.metadata/
+bin/
+tmp/
+tmp2/
 *.old
-
-
-# LSP
-.cache
-compile_commands.json
+*.backup
+*.orig
+*.rej
+*.dmp
+*.stackdump
+*.a
+*.la
+*.lo
+*.o
+*.so
+*.exe
+*.dll
+*.class
+*.d
+*.pyc
+*.pyo
+*.pyd
+*.lib
+*.pdb
+*.idb
+*.ilk
+*.exp
+*.suo
+*.user
+*.filter
+*.ncb
+*.plg
+*.opt
+*.bsc
+*.sbr
+*.aps
+*.pch
+*.res
+*.tlb
+*.tlh
 
 # JetBrains IDEs
 .idea/
+.idea
 
 # Sublime Text
 .sublime-project.sublime-workspace
@@ -44,15 +100,39 @@ null.d
 # SCons
 .sconsign.dblite
 
+# external
+external/
+/external
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+CMakeScripts/
+CMakeTmp/
+CMakeLists.txt.user
+CMakeSettings.json
+
+# Build
+/build
+build/
 
 # bundle output
 /dist
-
-# SCons build dir
-/build
+dist/
 
 # Toolchain
 /toolchain
+toolchain/
+
+# openocd output file
+*~
+*.swo
+*.gdb_history
+*.cache
+*.log.*
+
+# JetBrains IDEs
+/.idea
 
 # openocd output file
 openocd.log
@@ -68,3 +148,22 @@ PVS-Studio.log
 
 # JS packages
 node_modules/
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+ehthumbs.db
+
+# macOS
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight
+.Trashes
+`
+
+# LSP
+.cache
+compile_commands.json
