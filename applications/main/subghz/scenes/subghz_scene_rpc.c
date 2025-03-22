@@ -87,7 +87,7 @@ bool subghz_scene_rpc_on_event(void* context, SceneManagerEvent event) {
             scene_manager_set_scene_state(
                 subghz->scene_manager, SubGhzSceneRpc, SubGhzRpcStateIdle);
             rpc_system_app_confirm(subghz->rpc_ctx, result);
-        } else if(event.event == SubGhzCustomEventSceneRpcButtonPressRelease) {
+        } else if(event.event == SubGhzCustomEventSceneRpcButtonRelease) {
             bool result = false;
             if(state == SubGhzRpcStateLoaded) {
                 switch(
