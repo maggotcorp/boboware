@@ -13,6 +13,7 @@ App(
         "u2f",
         "momentum_app",
         "archive",
+        "booper_app",
         "main_apps_on_start",
     ],
 )
