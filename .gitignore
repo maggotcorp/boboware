@@ -14,7 +14,7 @@
 *.srec
 *.swp
 *.dump
-*.
+*.class
 *.iml
 
 # Visual Studio Code
