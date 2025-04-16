@@ -1,6 +1,12 @@
 #include "infrared_app_i.h"
 
+<<<<<<< HEAD
 #include <furi_hal_power.h>
+=======
+#include "infrared_settings.h"
+
+#include <power/power_service/power.h>
+>>>>>>> deva
 
 #include <string.h>
 #include <toolbox/path.h>
@@ -457,12 +463,20 @@ void infrared_set_tx_pin(InfraredApp* infrared, FuriHalInfraredTxPin tx_pin) {
 }
 
 void infrared_enable_otg(InfraredApp* infrared, bool enable) {
+<<<<<<< HEAD
     if(enable) {
         furi_hal_power_enable_otg();
     } else {
         furi_hal_power_disable_otg();
     }
+=======
+    Power* power = furi_record_open(RECORD_POWER);
+
+    power_enable_otg(power, enable);
+>>>>>>> deva
     infrared->app_state.is_otg_enabled = enable;
+
+    furi_record_close(RECORD_POWER);
 }
 
 static void infrared_load_settings(InfraredApp* infrared) {

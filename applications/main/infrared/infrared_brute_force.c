@@ -2,26 +2,70 @@
 
 #include <stdlib.h>
 #include <m-dict.h>
+#include <m-array.h>
 #include <flipper_format/flipper_format.h>
 
 #include "infrared_signal.h"
 
+<<<<<<< HEAD
+=======
+#define TAG "InfraredBruteforce"
+
+#define INFRARED_FILE_HEADER     "IR signals file"
+#define INFRARED_LIBRARY_HEADER  "IR library file"
+#define INFRARED_LIBRARY_VERSION (1)
+
+ARRAY_DEF(SignalPositionArray, size_t, M_DEFAULT_OPLIST);
+
+>>>>>>> deva
 typedef struct {
-    uint32_t index;
-    uint32_t count;
+    size_t index;
+    SignalPositionArray_t signals;
 } InfraredBruteForceRecord;
+
+static inline void ir_bf_record_init(InfraredBruteForceRecord* record) {
+    record->index = 0;
+    SignalPositionArray_init(record->signals);
+}
+#define IR_BF_RECORD_INIT(r) (ir_bf_record_init(&(r)))
+
+static inline void
+    ir_bf_record_init_set(InfraredBruteForceRecord* dest, const InfraredBruteForceRecord* src) {
+    dest->index = src->index;
+    SignalPositionArray_init_set(dest->signals, src->signals);
+}
+#define IR_BF_RECORD_INIT_SET(d, s) (ir_bf_record_init_set(&(d), &(s)))
+
+static inline void
+    ir_bf_record_set(InfraredBruteForceRecord* dest, const InfraredBruteForceRecord* src) {
+    dest->index = src->index;
+    SignalPositionArray_set(dest->signals, src->signals);
+}
+#define IR_BF_RECORD_SET(d, s) (ir_bf_record_set(&(d), &(s)))
+
+static inline void ir_bf_record_clear(InfraredBruteForceRecord* record) {
+    SignalPositionArray_clear(record->signals);
+}
+#define IR_BF_RECORD_CLEAR(r) (ir_bf_record_clear(&(r)))
+
+#define IR_BF_RECORD_OPLIST           \
+    (INIT(IR_BF_RECORD_INIT),         \
+     INIT_SET(IR_BF_RECORD_INIT_SET), \
+     SET(IR_BF_RECORD_SET),           \
+     CLEAR(IR_BF_RECORD_CLEAR))
 
 DICT_DEF2(
     InfraredBruteForceRecordDict,
     FuriString*,
     FURI_STRING_OPLIST,
     InfraredBruteForceRecord,
-    M_POD_OPLIST);
+    IR_BF_RECORD_OPLIST);
 
 struct InfraredBruteForce {
     FlipperFormat* ff;
     const char* db_filename;
     FuriString* current_record_name;
+    InfraredBruteForceRecord current_record;
     InfraredSignal* current_signal;
     InfraredBruteForceRecordDict_t records;
     bool is_started;
@@ -39,6 +83,7 @@ InfraredBruteForce* infrared_brute_force_alloc(void) {
 }
 
 void infrared_brute_force_free(InfraredBruteForce* brute_force) {
+    furi_check(brute_force);
     furi_assert(!brute_force->is_started);
     InfraredBruteForceRecordDict_clear(brute_force->records);
     furi_string_free(brute_force->current_record_name);
@@ -46,11 +91,19 @@ void infrared_brute_force_free(InfraredBruteForce* brute_force) {
 }
 
 void infrared_brute_force_set_db_filename(InfraredBruteForce* brute_force, const char* db_filename) {
+    furi_check(brute_force);
     furi_assert(!brute_force->is_started);
     brute_force->db_filename = db_filename;
 }
 
+<<<<<<< HEAD
 bool infrared_brute_force_calculate_messages(InfraredBruteForce* brute_force) {
+=======
+InfraredErrorCode infrared_brute_force_calculate_messages(
+    InfraredBruteForce* brute_force,
+    bool auto_detect_buttons) {
+    furi_check(brute_force);
+>>>>>>> deva
     furi_assert(!brute_force->is_started);
     furi_assert(brute_force->db_filename);
     bool success = false;
@@ -63,6 +116,7 @@ bool infrared_brute_force_calculate_messages(InfraredBruteForce* brute_force) {
     do {
         if(!flipper_format_buffered_file_open_existing(ff, brute_force->db_filename)) break;
 
+<<<<<<< HEAD
         bool signals_valid = false;
         while(infrared_signal_read_name(ff, signal_name)) {
             signals_valid = infrared_signal_read_body(signal, ff) &&
@@ -73,11 +127,39 @@ bool infrared_brute_force_calculate_messages(InfraredBruteForce* brute_force) {
                 InfraredBruteForceRecordDict_get(brute_force->records, signal_name);
             if(record) { //-V547
                 ++(record->count);
+=======
+        bool signal_valid = false;
+        uint32_t auto_detect_button_index = 0;
+        while(infrared_signal_read_name(ff, signal_name) == InfraredErrorCodeNone) {
+            size_t signal_start = flipper_format_tell(ff);
+            error = infrared_signal_read_body(signal, ff);
+            signal_valid = (!INFRARED_ERROR_PRESENT(error)) && infrared_signal_is_valid(signal);
+            if(!signal_valid) break;
+
+            InfraredBruteForceRecord* record =
+                InfraredBruteForceRecordDict_get(brute_force->records, signal_name);
+            if(!record) {
+                if(auto_detect_buttons) {
+                    infrared_brute_force_add_record(
+                        brute_force,
+                        auto_detect_button_index++,
+                        furi_string_get_cstr(signal_name));
+                    record = InfraredBruteForceRecordDict_get(brute_force->records, signal_name);
+                } else {
+                    FURI_LOG_E(TAG, "Unknown signal name: %s", furi_string_get_cstr(signal_name));
+                    furi_crash("Unknown signal name");
+                }
+>>>>>>> deva
             }
+            SignalPositionArray_push_back(record->signals, signal_start);
         }
+<<<<<<< HEAD
 
         if(!signals_valid) break;
         success = true;
+=======
+        if(!signal_valid) break;
+>>>>>>> deva
     } while(false);
 
     infrared_signal_free(signal);
@@ -92,6 +174,7 @@ bool infrared_brute_force_start(
     InfraredBruteForce* brute_force,
     uint32_t index,
     uint32_t* record_count) {
+    furi_check(brute_force);
     furi_assert(!brute_force->is_started);
     bool success = false;
     *record_count = 0;
@@ -102,9 +185,10 @@ bool infrared_brute_force_start(
         InfraredBruteForceRecordDict_next(it)) {
         const InfraredBruteForceRecordDict_itref_t* record = InfraredBruteForceRecordDict_cref(it);
         if(record->value.index == index) {
-            *record_count = record->value.count;
+            *record_count = SignalPositionArray_size(record->value.signals);
             if(*record_count) {
                 furi_string_set(brute_force->current_record_name, record->key);
+                brute_force->current_record = record->value;
             }
             break;
         }
@@ -123,10 +207,12 @@ bool infrared_brute_force_start(
 }
 
 bool infrared_brute_force_is_started(const InfraredBruteForce* brute_force) {
+    furi_check(brute_force);
     return brute_force->is_started;
 }
 
 void infrared_brute_force_stop(InfraredBruteForce* brute_force) {
+    furi_check(brute_force);
     furi_assert(brute_force->is_started);
     furi_string_reset(brute_force->current_record_name);
     infrared_signal_free(brute_force->current_signal);
@@ -137,8 +223,10 @@ void infrared_brute_force_stop(InfraredBruteForce* brute_force) {
     furi_record_close(RECORD_STORAGE);
 }
 
-bool infrared_brute_force_send_next(InfraredBruteForce* brute_force) {
+bool infrared_brute_force_send(InfraredBruteForce* brute_force, uint32_t signal_index) {
+    furi_check(brute_force);
     furi_assert(brute_force->is_started);
+<<<<<<< HEAD
     const bool success = infrared_signal_search_by_name_and_read(
         brute_force->current_signal,
         brute_force->ff,
@@ -147,13 +235,31 @@ bool infrared_brute_force_send_next(InfraredBruteForce* brute_force) {
         infrared_signal_transmit(brute_force->current_signal);
     }
     return success;
+=======
+
+    if(signal_index >= SignalPositionArray_size(brute_force->current_record.signals)) return false;
+
+    size_t signal_start =
+        *SignalPositionArray_cget(brute_force->current_record.signals, signal_index);
+    if(!flipper_format_seek(brute_force->ff, signal_start, FlipperFormatOffsetFromStart))
+        return false;
+
+    if(INFRARED_ERROR_PRESENT(
+           infrared_signal_read_body(brute_force->current_signal, brute_force->ff)))
+        return false;
+
+    infrared_signal_transmit(brute_force->current_signal);
+    return true;
+>>>>>>> deva
 }
 
 void infrared_brute_force_add_record(
     InfraredBruteForce* brute_force,
     uint32_t index,
     const char* name) {
-    InfraredBruteForceRecord value = {.index = index, .count = 0};
+    InfraredBruteForceRecord value;
+    ir_bf_record_init(&value);
+    value.index = index;
     FuriString* key;
     key = furi_string_alloc_set(name);
     InfraredBruteForceRecordDict_set_at(brute_force->records, key, value);

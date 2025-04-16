@@ -69,9 +69,7 @@ void gpio_scene_start_on_enter(void* context) {
         GpioOtgSettingsNum,
         gpio_scene_start_var_list_change_callback,
         app);
-    if(furi_hal_power_is_charging()) {
-        variable_item_set_locked(item, true, "Unplug USB!");
-    } else if(furi_hal_power_is_otg_enabled()) {
+    if(power_is_otg_enabled(app->power)) {
         variable_item_set_current_value_index(item, GpioOtgOn);
         variable_item_set_current_value_text(item, gpio_otg_text[GpioOtgOn]);
     } else {
@@ -94,9 +92,15 @@ bool gpio_scene_start_on_event(void* context, SceneManagerEvent event) {
 
     if(event.type == SceneManagerEventTypeCustom) {
         if(event.event == GpioStartEventOtgOn) {
+<<<<<<< HEAD
             furi_hal_power_enable_otg();
         } else if(event.event == GpioStartEventOtgOff) {
             furi_hal_power_disable_otg();
+=======
+            power_enable_otg(app->power, true);
+        } else if(event.event == GpioStartEventOtgOff) {
+            power_enable_otg(app->power, false);
+>>>>>>> deva
         } else if(event.event == GpioStartEventManualControl) {
             scene_manager_set_scene_state(app->scene_manager, GpioSceneStart, GpioItemTest);
             scene_manager_next_scene(app->scene_manager, GpioSceneTest);

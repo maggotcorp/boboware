@@ -1,12 +1,23 @@
 let gpio = require("gpio");
 
 // initialize pins
+<<<<<<< HEAD
 gpio.init("PC3", "outputPushPull", "up"); // pin, mode, pull
 print("PC3 is initialized as outputPushPull with pull-up");
+=======
+let led = gpio.get("pc3"); // same as `gpio.get(7)`
+let led2 = gpio.get("pa7"); // same as `gpio.get(2)`
+let pot = gpio.get("pc0"); // same as `gpio.get(16)`
+let button = gpio.get("pc1"); // same as `gpio.get(15)`
+led.init({ direction: "out", outMode: "push_pull" });
+pot.init({ direction: "in", inMode: "analog" });
+button.init({ direction: "in", pull: "up", inMode: "interrupt", edge: "falling" });
+>>>>>>> deva
 
 gpio.init("PC1", "input", "down"); // pin, mode, pull
 print("PC1 is initialized as input with pull-down");
 
+<<<<<<< HEAD
 // let led on PC3 blink
 gpio.write("PC3", true); // high
 delay(1000);
@@ -25,6 +36,20 @@ while (true) {
 
     delay(100);
 }
+=======
+// cycle led pwm
+print("Commencing PWM (PA7)");
+eventLoop.subscribe(eventLoop.timer("periodic", 10), function (_, _item, led2, state) {
+    led2.pwmWrite(10000, state);
+    return [led2, (state + 1) % 101];
+}, led2, 0);
+
+// read potentiometer when button is pressed
+print("Press the button (PC1)");
+eventLoop.subscribe(button.interrupt(), function (_, _item, pot) {
+    print("PC0 is at", pot.readAnalog(), "mV");
+}, pot);
+>>>>>>> deva
 
 
 // possible pins https://docs.flipper.net/gpio-and-modules#miFsS

@@ -3,6 +3,7 @@
 #include "gpio.pb.h"
 #include <furi_hal_gpio.h>
 #include <furi_hal_resources.h>
+#include <power/power_service/power.h>
 
 static const GpioPin* rpc_pin_to_hal_pin(PB_Gpio_GpioPin rpc_pin) {
     switch(rpc_pin) {
@@ -188,6 +189,51 @@ void rpc_system_gpio_set_input_pull(const PB_Main* request, void* context) {
     free(response);
 }
 
+<<<<<<< HEAD
+=======
+void rpc_system_gpio_get_otg_mode(const PB_Main* request, void* context) {
+    furi_assert(request);
+    furi_assert(context);
+    furi_assert(request->which_content == PB_Main_gpio_get_otg_mode_tag);
+
+    RpcSession* session = context;
+
+    const bool otg_enabled = furi_hal_power_is_otg_enabled();
+
+    PB_Main* response = malloc(sizeof(PB_Main));
+    response->command_id = request->command_id;
+    response->which_content = PB_Main_gpio_get_otg_mode_response_tag;
+    response->content.gpio_get_otg_mode_response.mode = otg_enabled ? PB_Gpio_GpioOtgMode_ON :
+                                                                      PB_Gpio_GpioOtgMode_OFF;
+
+    rpc_send_and_release(session, response);
+
+    free(response);
+}
+
+void rpc_system_gpio_set_otg_mode(const PB_Main* request, void* context) {
+    furi_assert(request);
+    furi_assert(context);
+    furi_assert(request->which_content == PB_Main_gpio_set_otg_mode_tag);
+
+    RpcSession* session = context;
+
+    const PB_Gpio_GpioOtgMode mode = request->content.gpio_set_otg_mode.mode;
+
+    Power* power = furi_record_open(RECORD_POWER);
+
+    if(mode == PB_Gpio_GpioOtgMode_OFF) {
+        power_enable_otg(power, false);
+    } else {
+        power_enable_otg(power, true);
+    }
+
+    furi_record_close(RECORD_POWER);
+
+    rpc_send_and_release_empty(session, request->command_id, PB_CommandStatus_OK);
+}
+
+>>>>>>> deva
 void* rpc_system_gpio_alloc(RpcSession* session) {
     furi_assert(session);
 

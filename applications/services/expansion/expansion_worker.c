@@ -1,6 +1,8 @@
 #include "expansion_worker.h"
 
+#include <power/power_service/power.h>
 #include <furi_hal_power.h>
+
 #include <furi_hal_serial.h>
 #include <furi_hal_serial_control.h>
 
@@ -246,9 +248,28 @@ static bool expansion_worker_handle_state_connected(
 
     do {
         if(rx_frame->header.type == ExpansionFrameTypeControl) {
+<<<<<<< HEAD
             if(rx_frame->content.control.command != ExpansionFrameControlCommandStartRpc) break;
             instance->state = ExpansionWorkerStateRpcActive;
             if(!expansion_worker_rpc_session_open(instance)) break;
+=======
+            const uint8_t command = rx_frame->content.control.command;
+            if(command == ExpansionFrameControlCommandStartRpc) {
+                if(!expansion_worker_rpc_session_open(instance)) break;
+                instance->state = ExpansionWorkerStateRpcActive;
+            } else if(command == ExpansionFrameControlCommandEnableOtg) {
+                Power* power = furi_record_open(RECORD_POWER);
+                power_enable_otg(power, true);
+                furi_record_close(RECORD_POWER);
+            } else if(command == ExpansionFrameControlCommandDisableOtg) {
+                Power* power = furi_record_open(RECORD_POWER);
+                power_enable_otg(power, false);
+                furi_record_close(RECORD_POWER);
+            } else {
+                break;
+            }
+
+>>>>>>> deva
             if(!expansion_worker_send_status_response(instance, ExpansionFrameErrorNone)) break;
 
         } else if(rx_frame->header.type == ExpansionFrameTypeHeartbeat) {

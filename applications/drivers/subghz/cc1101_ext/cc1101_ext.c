@@ -21,8 +21,12 @@
 #define TAG "SubGhzDeviceCc1101Ext"
 
 #define SUBGHZ_DEVICE_CC1101_EXT_TX_GPIO          (&gpio_ext_pb2)
+<<<<<<< HEAD
 #define SUBGHZ_DEVICE_CC1101_EXT_E07M20S_AMP_GPIO &gpio_ext_pc3
 
+=======
+#define SUBGHZ_DEVICE_CC1101_EXT_E07_AMP_GPIO &gpio_ext_pc3
+>>>>>>> deva
 #define SUBGHZ_DEVICE_CC1101_CONFIG_VER 1
 
 /* DMA Channels definition */
@@ -90,13 +94,17 @@ typedef struct {
     volatile SubGhzDeviceCC1101ExtState state;
     volatile SubGhzDeviceCC1101ExtRegulation regulation;
     const GpioPin* async_mirror_pin;
-    FuriHalSpiBusHandle* spi_bus_handle;
+    const FuriHalSpiBusHandle* spi_bus_handle;
     const GpioPin* g0_pin;
     SubGhzDeviceCC1101ExtAsyncTx async_tx;
     SubGhzDeviceCC1101ExtAsyncRx async_rx;
     bool extended_range;
     bool bypass_region;
+<<<<<<< HEAD
     bool power_amp;
+=======
+    bool amp_and_leds;
+>>>>>>> deva
 } SubGhzDeviceCC1101Ext;
 
 static SubGhzDeviceCC1101Ext* subghz_device_cc1101_ext = NULL;
@@ -223,12 +231,20 @@ bool subghz_device_cc1101_ext_alloc(SubGhzDeviceConf* conf) {
     subghz_device_cc1101_ext->g0_pin = SUBGHZ_DEVICE_CC1101_EXT_TX_GPIO;
     subghz_device_cc1101_ext->extended_range = false;
     subghz_device_cc1101_ext->bypass_region = false;
+<<<<<<< HEAD
     subghz_device_cc1101_ext->power_amp = false;
+=======
+    subghz_device_cc1101_ext->amp_and_leds = false;
+>>>>>>> deva
     if(conf) {
         if(conf->ver == SUBGHZ_DEVICE_CC1101_CONFIG_VER) {
             subghz_device_cc1101_ext->extended_range = conf->extended_range;
             subghz_device_cc1101_ext->bypass_region = conf->bypass_region;
+<<<<<<< HEAD
             subghz_device_cc1101_ext->power_amp = conf->power_amp;
+=======
+            subghz_device_cc1101_ext->amp_and_leds = conf->amp_and_leds;
+>>>>>>> deva
         } else {
             FURI_LOG_E(TAG, "Config version mismatch");
         }
@@ -248,10 +264,17 @@ bool subghz_device_cc1101_ext_alloc(SubGhzDeviceConf* conf) {
     }
 
     furi_hal_spi_bus_handle_init(subghz_device_cc1101_ext->spi_bus_handle);
+<<<<<<< HEAD
     if(subghz_device_cc1101_ext->power_amp) {
         furi_hal_gpio_init_simple(
             SUBGHZ_DEVICE_CC1101_EXT_E07M20S_AMP_GPIO, GpioModeOutputPushPull);
         furi_hal_gpio_write(SUBGHZ_DEVICE_CC1101_EXT_E07M20S_AMP_GPIO, 0);
+=======
+    if(subghz_device_cc1101_ext->amp_and_leds) {
+        furi_hal_gpio_init_simple(
+            SUBGHZ_DEVICE_CC1101_EXT_E07_AMP_GPIO, GpioModeOutputPushPull);
+        furi_hal_gpio_write(SUBGHZ_DEVICE_CC1101_EXT_E07_AMP_GPIO, 0);
+>>>>>>> deva
     }
 
     return subghz_device_cc1101_ext_check_init();
@@ -263,7 +286,11 @@ void subghz_device_cc1101_ext_free(void) {
     furi_hal_spi_bus_handle_deinit(subghz_device_cc1101_ext->spi_bus_handle);
 
     // resetting the CS pins to floating
+<<<<<<< HEAD
     if(momentum_settings.spi_nrf24_handle == SpiDefault || subghz_device_cc1101_ext->power_amp) {
+=======
+    if(momentum_settings.spi_nrf24_handle == SpiDefault || subghz_device_cc1101_ext->amp_and_leds) {
+>>>>>>> deva
         furi_hal_gpio_init_simple(&gpio_ext_pc3, GpioModeAnalog);
     } else if(momentum_settings.spi_nrf24_handle == SpiExtra) {
         furi_hal_gpio_init_simple(&gpio_ext_pa4, GpioModeAnalog);

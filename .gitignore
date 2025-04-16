@@ -1,9 +1,39 @@
+<<<<<<< HEAD
 # stars #
 *~
+=======
+# stars
+*.DS_Store
+*.bak
+*.log
+*.out
+*.tmp
+*.temp
+*.obj
+*.bin
+*.hex
+*.elf
+*.map
+*.lst
+*.srec
+>>>>>>> deva
 *.swp
-*.swo
-*.gdb_history
+*.dump
+*.class
+*.iml
+
+# Visual Studio Code
+.vscode/
+*.vscode/
+/.vscode
+
+# Eclipse
+.metadata/
+bin/
+tmp/
+tmp2/
 *.old
+<<<<<<< HEAD
 *.bak
 *.backup
 *.orig
@@ -15,15 +45,26 @@
 *.stackdump
 *.tmp
 *.temp
+=======
+*.backup
+*.orig
+*.rej
+*.dmp
+*.stackdump
+>>>>>>> deva
 *.a
 *.la
 *.lo
 *.o
+<<<<<<< HEAD
 *.obj
+=======
+>>>>>>> deva
 *.so
 *.exe
 *.dll
 *.class
+<<<<<<< HEAD
 *.elf
 *.hex
 *.bin
@@ -31,11 +72,16 @@
 *.lst
 *.srec
 *.elf
+=======
+>>>>>>> deva
 *.d
 *.pyc
 *.pyo
 *.pyd
+<<<<<<< HEAD
 *.dll
+=======
+>>>>>>> deva
 *.lib
 *.pdb
 *.idb
@@ -54,6 +100,7 @@
 *.res
 *.tlb
 *.tlh
+<<<<<<< HEAD
 *.bak
 *.cache
 *.log
@@ -143,6 +190,12 @@ tmp2/
 # JetBrains IDEs
 .idea/
 /.idea
+=======
+
+# JetBrains IDEs
+.idea/
+.idea
+>>>>>>> deva
 
 # Sublime Text
 .sublime-project.sublime-workspace
@@ -183,13 +236,17 @@ external/
 # CMake
 CMakeFiles/
 CMakeCache.txt
+<<<<<<< HEAD
 CMakeFiles/
+=======
+>>>>>>> deva
 CMakeScripts/
 CMakeTmp/
 CMakeLists.txt.user
 CMakeSettings.json
 
 # Build
+<<<<<<< HEAD
 build/
 *.o
 *.d
@@ -205,20 +262,28 @@ build/
 *.dump
 *.log
 *.
+=======
+/build
+build/
+>>>>>>> deva
 
 # bundle output
 /dist
 dist/
+<<<<<<< HEAD
 
 # SCons build dir
 /build
 build/
+=======
+>>>>>>> deva
 
 # Toolchain
 /toolchain
 toolchain/
 
 # openocd output file
+<<<<<<< HEAD
 openocd.log
 
 # PVS Studio temporary files
@@ -397,6 +462,16 @@ dist/
 # Toolchain
 /toolchain
 toolchain/
+=======
+*~
+*.swo
+*.gdb_history
+*.cache
+*.log.*
+
+# JetBrains IDEs
+/.idea
+>>>>>>> deva
 
 # openocd output file
 openocd.log
@@ -412,3 +487,22 @@ PVS-Studio.log
 
 # JS packages
 node_modules/
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+ehthumbs.db
+
+# macOS
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight
+.Trashes
+`
+
+# LSP
+.cache
+compile_commands.json

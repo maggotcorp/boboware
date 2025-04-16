@@ -114,6 +114,25 @@ void subghz_read_raw_stop_send(SubGhzReadRAW* instance) {
 
     with_view_model(
         instance->view,
+        SubGhzReadRAWModel* model,
+        {
+            // Only check if we're not in a repeat mode, otherwise always send start event
+            if(model->status != SubGhzReadRAWStatusTXRepeat &&
+               model->status != SubGhzReadRAWStatusLoadKeyTXRepeat) {
+                FURI_LOG_W(TAG, "Continuous should be an option");
+            }
+            // Send start event regardless of current status
+            instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
+        },
+        true);
+}
+
+/*
+void subghz_read_raw_stop_send(SubGhzReadRAW* instance) {
+    furi_assert(instance);
+
+    with_view_model(
+        instance->view,
         SubGhzReadRAWModel * model,
         {
             switch(model->status) {
@@ -126,7 +145,11 @@ void subghz_read_raw_stop_send(SubGhzReadRAW* instance) {
                 break;
             case SubGhzReadRAWStatusLoadKeyTX:
                 model->status = SubGhzReadRAWStatusLoadKeyIDLE;
+<<<<<<< HEAD
                 break;*/
+=======
+                break;
+>>>>>>> deva
             default:
                 FURI_LOG_W(TAG, "Continuous should be an option");
                 //model->status = SubGhzReadRAWStatusIDLE;
@@ -135,7 +158,49 @@ void subghz_read_raw_stop_send(SubGhzReadRAW* instance) {
             }
         },
         true);
-}
+}*/
+
+/*void subghz_read_raw_stop_send(SubGhzReadRAW* instance, bool continuous) {
+    furi_assert(instance);
+
+    with_view_model(
+        instance->view,
+        SubGhzReadRAWModel* model,
+        {
+            switch(model->status) {
+            case SubGhzReadRAWStatusTX:
+                // Handle regular TX based on continuous option
+                if(continuous) {
+                    instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
+                } else {
+                    model->status = SubGhzReadRAWStatusIDLE;
+                }
+                break;
+            case SubGhzReadRAWStatusLoadKeyTX:
+                // Handle LoadKey TX based on continuous option
+                if(continuous) {
+                    instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
+                } else {
+                    model->status = SubGhzReadRAWStatusLoadKeyIDLE;
+                }
+                break;
+            case SubGhzReadRAWStatusTXRepeat:
+            case SubGhzReadRAWStatusLoadKeyTXRepeat:
+                // These modes are already repeating, so just restart transmission
+                instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
+                break;
+            default:
+                FURI_LOG_W(TAG, "Unexpected status in stop_send: %d", model->status);
+                if(continuous) {
+                    instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
+                } else {
+                    model->status = SubGhzReadRAWStatusIDLE;
+                }
+                break;
+            }
+        },
+        true);
+}*/
 
 void subghz_read_raw_update_sin(SubGhzReadRAW* instance) {
     furi_assert(instance);
