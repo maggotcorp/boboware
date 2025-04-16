@@ -2,15 +2,18 @@
 
 ## Source code
 
-Source code for this example can be found [here](https://github.com/flipperdevices/flipperzero-firmware/tree/dev/applications/examples/example_images).
+Source code for this example can be
+found [here](https://github.com/flipperdevices/flipperzero-firmware/tree/dev/applications/examples/example_images).
 
 ## General principle
 
 To use icons, do the following:
 
-* Add a line to the application manifest: `fap_icon_assets="folder"`, where `folder` points to the folder where your icons are located
+* Add a line to the application manifest: `fap_icon_assets="folder"`, where `folder` points to the folder where your
+  icons are located
 * Add `#include "application_id_icons.h"` to the application code, where `application_id` is the appid from the manifest
-* Every icon in the folder will be available as a `I_icon_name` variable, where `icon_name` is the name of the icon file without the extension
+* Every icon in the folder will be available as a `I_icon_name` variable, where `icon_name` is the name of the icon file
+  without the extension
 
 ## Example
 

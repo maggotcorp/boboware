@@ -54,14 +54,11 @@ bool dialogs_app_process_module_file_browser(const DialogsAppMessageDataFileBrow
     ret = file_browser_context->result;
 
     view_holder_set_view(view_holder, NULL);
-    file_browser_stop(file_browser);
-
-    file_browser_free(file_browser);
     view_holder_free(view_holder);
-
+    file_browser_stop(file_browser);
+    file_browser_free(file_browser);
     api_lock_free(file_browser_context->lock);
     free(file_browser_context);
-
     furi_record_close(RECORD_GUI);
 
     return ret;

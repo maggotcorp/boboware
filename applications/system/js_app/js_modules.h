@@ -1,6 +1,4 @@
 #pragma once
-
-#include <stdint.h>
 #include "js_thread_i.h"
 #include <flipper_application/flipper_application.h>
 #include <flipper_application/plugins/plugin_manager.h>
@@ -9,6 +7,10 @@
 #define PLUGIN_APP_ID      "js"
 #define PLUGIN_API_VERSION 1
 
+<<<<<<< HEAD
+typedef void* (*JsModeConstructor)(struct mjs* mjs, mjs_val_t* object);
+typedef void (*JsModeDestructor)(void* inst);
+=======
 #define JS_SDK_VENDOR_FIRMWARE "momentum"
 #define JS_SDK_VENDOR          "flipperdevices"
 #define JS_SDK_MAJOR           0
@@ -313,49 +315,18 @@ typedef struct JsModules JsModules;
 
 typedef void* (*JsModuleConstructor)(struct mjs* mjs, mjs_val_t* object, JsModules* modules);
 typedef void (*JsModuleDestructor)(void* inst);
+>>>>>>> deva
 
 typedef struct {
     char* name;
-    JsModuleConstructor create;
-    JsModuleDestructor destroy;
-    const ElfApiInterface* api_interface;
+    JsModeConstructor create;
+    JsModeDestructor destroy;
 } JsModuleDescriptor;
+
+typedef struct JsModules JsModules;
 
 JsModules* js_modules_create(struct mjs* mjs, CompositeApiResolver* resolver);
 
 void js_modules_destroy(JsModules* modules);
 
 mjs_val_t js_module_require(JsModules* modules, const char* name, size_t name_len);
-
-/**
- * @brief Gets a module instance by its name
- * This is useful when a module wants to access a stateful API of another
- * module.
- * @returns Pointer to module context, NULL if the module is not instantiated
- */
-void* js_module_get(JsModules* modules, const char* name);
-
-/**
- * @brief `sdkCompatibilityStatus` function
- */
-void js_sdk_compatibility_status(struct mjs* mjs);
-
-/**
- * @brief `isSdkCompatible` function
- */
-void js_is_sdk_compatible(struct mjs* mjs);
-
-/**
- * @brief `checkSdkCompatibility` function
- */
-void js_check_sdk_compatibility(struct mjs* mjs);
-
-/**
- * @brief `doesSdkSupport` function
- */
-void js_does_sdk_support(struct mjs* mjs);
-
-/**
- * @brief `checkSdkFeatures` function
- */
-void js_check_sdk_features(struct mjs* mjs);

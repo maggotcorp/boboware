@@ -53,9 +53,12 @@ static void subghz_rpc_command_callback(const RpcAppSystemEvent* event, void* co
     } else if(event->type == RpcAppEventTypeButtonRelease) {
         view_dispatcher_send_custom_event(
             subghz->view_dispatcher, SubGhzCustomEventSceneRpcButtonRelease);
+<<<<<<< HEAD
+=======
     } else if(event->type == RpcAppEventTypeButtonPressRelease) {
         view_dispatcher_send_custom_event(
             subghz->view_dispatcher, SubGhzCustomEventSceneRpcButtonRelease);
+>>>>>>> deva
     } else {
         rpc_system_app_confirm(subghz->rpc_ctx, false);
     }

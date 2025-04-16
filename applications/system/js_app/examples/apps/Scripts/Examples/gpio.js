@@ -1,7 +1,10 @@
-let eventLoop = require("event_loop");
 let gpio = require("gpio");
 
 // initialize pins
+<<<<<<< HEAD
+gpio.init("PC3", "outputPushPull", "up"); // pin, mode, pull
+print("PC3 is initialized as outputPushPull with pull-up");
+=======
 let led = gpio.get("pc3"); // same as `gpio.get(7)`
 let led2 = gpio.get("pa7"); // same as `gpio.get(2)`
 let pot = gpio.get("pc0"); // same as `gpio.get(16)`
@@ -9,14 +12,31 @@ let button = gpio.get("pc1"); // same as `gpio.get(15)`
 led.init({ direction: "out", outMode: "push_pull" });
 pot.init({ direction: "in", inMode: "analog" });
 button.init({ direction: "in", pull: "up", inMode: "interrupt", edge: "falling" });
+>>>>>>> deva
 
-// blink led
-print("Commencing blinking (PC3)");
-eventLoop.subscribe(eventLoop.timer("periodic", 1000), function (_, _item, led, state) {
-    led.write(state);
-    return [led, !state];
-}, led, true);
+gpio.init("PC1", "input", "down"); // pin, mode, pull
+print("PC1 is initialized as input with pull-down");
 
+<<<<<<< HEAD
+// let led on PC3 blink
+gpio.write("PC3", true); // high
+delay(1000);
+gpio.write("PC3", false); // low
+delay(1000);
+gpio.write("PC3", true);  // high
+delay(1000);
+gpio.write("PC3", false); // low
+
+// read value from PC1 and write it to PC3
+while (true) {
+    let value = gpio.read("PC1");
+    gpio.write("PC3", value);
+
+    value ? print("PC1 is high") : print("PC1 is low");
+
+    delay(100);
+}
+=======
 // cycle led pwm
 print("Commencing PWM (PA7)");
 eventLoop.subscribe(eventLoop.timer("periodic", 10), function (_, _item, led2, state) {
@@ -29,9 +49,8 @@ print("Press the button (PC1)");
 eventLoop.subscribe(button.interrupt(), function (_, _item, pot) {
     print("PC0 is at", pot.readAnalog(), "mV");
 }, pot);
+>>>>>>> deva
 
-// the program will just exit unless this is here
-eventLoop.run();
 
 // possible pins https://docs.flipper.net/gpio-and-modules#miFsS
 // "PA7" aka 2
@@ -49,17 +68,20 @@ eventLoop.run();
 // "PB14" aka 17
 
 // possible modes
-// { direction: "out", outMode: "push_pull" }
-// { direction: "out", outMode: "open_drain" }
-// { direction: "out", outMode: "push_pull", altFn: true }
-// { direction: "out", outMode: "open_drain", altFn: true }
-// { direction: "in", inMode: "analog" }
-// { direction: "in", inMode: "plain_digital" }
-// { direction: "in", inMode: "interrupt", edge: "rising" }
-// { direction: "in", inMode: "interrupt", edge: "falling" }
-// { direction: "in", inMode: "interrupt", edge: "both" }
-// { direction: "in", inMode: "event", edge: "rising" }
-// { direction: "in", inMode: "event", edge: "falling" }
-// { direction: "in", inMode: "event", edge: "both" }
-// all variants support an optional `pull` field which can either be undefined,
-// "up" or "down"
+// "input"
+// "outputPushPull"
+// "outputOpenDrain"
+// "altFunctionPushPull"
+// "altFunctionOpenDrain"
+// "analog"
+// "interruptRise"
+// "interruptFall"
+// "interruptRiseFall"
+// "eventRise"
+// "eventFall"
+// "eventRiseFall"
+
+// possible pull
+// "no"
+// "up"
+// "down"

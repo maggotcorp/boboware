@@ -25,6 +25,6 @@ App(
     apptype=FlipperAppType.STARTUP,
     targets=["f7"],
     entry_point="ibutton_on_system_start",
-    sources=["ibutton_cli.c"],
+    sources=["ibutton_start.c"],
     order=60,
 )

@@ -6,25 +6,27 @@ enum PowerSettingsSubmenuIndex {
     PowerSettingsSubmenuIndexBatteryInfo,
     PowerSettingsSubmenuIndexReboot,
     PowerSettingsSubmenuIndexOff,
-    PowerSettingsSubmenuIndexAutoPowerOff,
+    PowerSettingsSubmenuShutdownIdle
 };
 
-#define AUTO_POWEROFF_DELAY_COUNT 13
-const char* const auto_poweroff_delay_text[AUTO_POWEROFF_DELAY_COUNT] = {
+#define SHUTDOWN_IDLE_DELAY_COUNT 9
+const char* const shutdown_idle_delay_text[SHUTDOWN_IDLE_DELAY_COUNT] = {
     "OFF",
-    "5min",
-    "10min",
-    "15min",
-    "30min",
-    "45min",
-    "60min",
-    "90min",
+    "15m",
+    "30m",
+    "1h",
     "2h",
     "6h",
     "12h",
     "24h",
-    "48h"};
+    "48h",
+};
+const uint32_t shutdown_idle_delay_value[SHUTDOWN_IDLE_DELAY_COUNT] =
+    {0, 900000, 1800000, 3600000, 7200000, 21600000, 43200000, 86400000, 172800000};
 
+<<<<<<< HEAD
+static void power_settings_scene_start_auto_lock_delay_changed(VariableItem* item) {
+=======
 const uint32_t auto_poweroff_delay_value[AUTO_POWEROFF_DELAY_COUNT] = {
     0,
     300000,
@@ -55,11 +57,12 @@ static void power_settings_scene_start_charge_supress_percent_changed(VariableIt
 
 // change variable_item_list visible text and app_poweroff_delay_time_settings when user change item in variable_item_list
 static void power_settings_scene_start_auto_poweroff_delay_changed(VariableItem* item) {
+>>>>>>> deva
     PowerSettingsApp* app = variable_item_get_context(item);
     uint8_t index = variable_item_get_current_value_index(item);
 
-    variable_item_set_current_value_text(item, auto_poweroff_delay_text[index]);
-    app->settings.auto_poweroff_delay_ms = auto_poweroff_delay_value[index];
+    variable_item_set_current_value_text(item, shutdown_idle_delay_text[index]);
+    app->settings.shutdown_idle_delay_ms = shutdown_idle_delay_value[index];
 }
 
 static void power_settings_scene_start_submenu_callback(void* context, uint32_t index) {
@@ -84,17 +87,22 @@ void power_settings_scene_start_on_enter(void* context) {
 
     item = variable_item_list_add(
         variable_item_list,
+<<<<<<< HEAD
+        "Shutdown on Idle",
+        SHUTDOWN_IDLE_DELAY_COUNT,
+        power_settings_scene_start_auto_lock_delay_changed,
+=======
         "Auto PowerOff",
         AUTO_POWEROFF_DELAY_COUNT,
         power_settings_scene_start_auto_poweroff_delay_changed,
+>>>>>>> deva
         app);
-
     value_index = value_index_uint32(
-        app->settings.auto_poweroff_delay_ms,
-        auto_poweroff_delay_value,
-        AUTO_POWEROFF_DELAY_COUNT);
+        app->settings.shutdown_idle_delay_ms,
+        shutdown_idle_delay_value,
+        SHUTDOWN_IDLE_DELAY_COUNT);
     variable_item_set_current_value_index(item, value_index);
-    variable_item_set_current_value_text(item, auto_poweroff_delay_text[value_index]);
+    variable_item_set_current_value_text(item, shutdown_idle_delay_text[value_index]);
 
     item = variable_item_list_add(
         variable_item_list,
@@ -130,6 +138,7 @@ bool power_settings_scene_start_on_event(void* context, SceneManagerEvent event)
             scene_manager_next_scene(app->scene_manager, PowerSettingsAppSceneReboot);
         } else if(event.event == PowerSettingsSubmenuIndexOff) {
             scene_manager_next_scene(app->scene_manager, PowerSettingsAppScenePowerOff);
+        } else if(event.event == PowerSettingsSubmenuShutdownIdle) {
         }
         scene_manager_set_scene_state(app->scene_manager, PowerSettingsAppSceneStart, event.event);
         consumed = true;

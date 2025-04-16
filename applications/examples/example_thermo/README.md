@@ -1,11 +1,12 @@
 # 1-Wire Thermometer {#example_thermo}
 
-This example application demonstrates the use of the 1-Wire library with a DS18B20 thermometer. 
+This example application demonstrates the use of the 1-Wire library with a DS18B20 thermometer.
 It also covers basic GUI, input handling, threads and localisation.
 
 ## Source code
 
-Source code for this example can be found [here](https://github.com/flipperdevices/flipperzero-firmware/tree/dev/applications/examples/example_thermo).
+Source code for this example can be
+found [here](https://github.com/flipperdevices/flipperzero-firmware/tree/dev/applications/examples/example_thermo).
 
 ## Electrical connections
 
@@ -14,7 +15,7 @@ Before launching the application, connect the sensor to Flipper's external GPIO 
 | :-----: | :-----: |
 | VDD | 9 |
 | GND | 18 |
-| DQ  | 17 |
+| DQ | 17 |
 
 *NOTE 1*: GND is also available on pins 8 and 11.
 
@@ -23,13 +24,15 @@ Before launching the application, connect the sensor to Flipper's external GPIO 
 ## Launching the application
 
 In order to launch this demo, follow the steps below:
+
 1. Make sure your Flipper has an SD card installed.
 2. Connect your Flipper to the computer via a USB cable.
 3. Run `./fbt launch APPSRC=example_thermo` in your terminal emulator of choice.
 
 ## Changing the data pin
 
-It is possible to use other GPIO pin as a 1-Wire data pin. In order to change it, set the `THERMO_GPIO_PIN` macro to any of the options listed below:
+It is possible to use other GPIO pin as a 1-Wire data pin. In order to change it, set the `THERMO_GPIO_PIN` macro to any
+of the options listed below:
 
 ```c
 /* Possible GPIO pin choices:
@@ -46,7 +49,8 @@ It is possible to use other GPIO pin as a 1-Wire data pin. In order to change it
 
 #define THERMO_GPIO_PIN (gpio_ibutton)
 ```
+
 Do not forget about the external pull-up resistor as these pins do not have one built-in.
 
-With the changes been made, recompile and launch the application again. 
+With the changes been made, recompile and launch the application again.
 The on-screen text should reflect it by asking to connect the thermometer to another pin.

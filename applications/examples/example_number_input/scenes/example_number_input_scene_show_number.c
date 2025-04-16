@@ -13,7 +13,8 @@ static void example_number_input_scene_update_view(void* context) {
 
     dialog_ex_set_header(dialog_ex, "The number is", 64, 0, AlignCenter, AlignTop);
 
-    char buffer[12] = {};
+    static char buffer[12]; //needs static for extended lifetime
+
     snprintf(buffer, sizeof(buffer), "%ld", app->current_number);
     dialog_ex_set_text(dialog_ex, buffer, 64, 29, AlignCenter, AlignCenter);
 

@@ -50,7 +50,8 @@ Filename extension: `.ir`
 This file format is used to store an infrared remote that consists of an arbitrary number of buttons.
 Each button is separated from others by a comment character (`#`) for better readability.
 
-Known protocols are represented in the `parsed` form, whereas non-recognized signals may be saved and re-transmitted as `raw` data.
+Known protocols are represented in the `parsed` form, whereas non-recognized signals may be saved and re-transmitted as
+`raw` data.
 
 #### Version history
 
@@ -59,7 +60,7 @@ Known protocols are represented in the `parsed` form, whereas non-recognized sig
 #### Format fields
 
 | Name       | Use    | Type   | Description                                                                                                                                   |
-| ---------- | ------ | ------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+|------------|--------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------|
 | name       | both   | string | Name of the button. Only printable ASCII characters are allowed.                                                                              |
 | type       | both   | string | Type of the signal. Must be `parsed` or `raw`.                                                                                                |
 | protocol   | parsed | string | Name of the infrared protocol. Refer to `ir` console command for the complete list of supported protocols.                                    |
@@ -81,8 +82,10 @@ Known protocols are represented in the `parsed` form, whereas non-recognized sig
 
 Filename extension: `.ir`
 
-This file format is used to store universal remote libraries. It is identical to the previous format, differing only in the `Filetype` field.
-It also has predefined button names for each universal library type, so that the universal remote application can understand them.
+This file format is used to store universal remote libraries. It is identical to the previous format, differing only in
+the `Filetype` field.
+It also has predefined button names for each universal library type, so that the universal remote application can
+understand them.
 See [Universal Remotes](../UniversalRemotes.md) for more information.
 
 ### Version history
@@ -93,14 +96,16 @@ See [Universal Remotes](../UniversalRemotes.md) for more information.
 
 ### Examples
 
-See [Infrared Unit Tests](https://github.com/flipperdevices/flipperzero-firmware/tree/dev/applications/debug/unit_tests/resources/unit_tests/infrared) for various examples.
+See [Infrared Unit Tests](https://github.com/flipperdevices/flipperzero-firmware/tree/dev/applications/debug/unit_tests/resources/unit_tests/infrared)
+for various examples.
 
 ### Description
 
 Filename extension: `.irtest`
 
 This file format is used to store technical test data that is too large to keep directly in the firmware.
-It is mostly similar to the two previous formats, with the main difference being the addition of the parsed signal arrays.
+It is mostly similar to the two previous formats, with the main difference being the addition of the parsed signal
+arrays.
 
 Each infrared protocol must have corresponding unit tests complete with an `.irtest` file.
 
@@ -114,7 +119,7 @@ Note: a single parsed signal must be represented as an array of size 1.
 #### Format fields
 
 | Name       | Use          | Type   | Description                                                      |
-| ---------- | ------------ | ------ | ---------------------------------------------------------------- |
+|------------|--------------|--------|------------------------------------------------------------------|
 | name       | both         | string | Name of the signal. Only printable ASCII characters are allowed. |
 | type       | both         | string | Type of the signal. Must be `parsed_array` or `raw`.             |
 | count      | parsed_array | uint32 | The number of parsed signals in an array. Must be at least 1.    |
@@ -134,12 +139,13 @@ The signal names in an `.irtest` file follow a convention `<name><test_number>`,
 - decoder_expected
 - encoder_decoder_input,
 
-and the number is a sequential integer: 1, 2, 3, etc., which produces names like `decoder_input1`, `encoder_decoder_input3`, and so on.
+and the number is a sequential integer: 1, 2, 3, etc., which produces names like `decoder_input1`,
+`encoder_decoder_input3`, and so on.
 
-| Name                  | Type         | Description                                                                                           |
-| --------------------- | ------------ | ----------------------------------------------------------------------------------------------------- |
+| Name                  | Type         | Description                                                                                        |
+|-----------------------|--------------|----------------------------------------------------------------------------------------------------|
 | decoder_input         | raw          | A raw signal containing the decoder input. Also used as the expected encoder output.               |
 | decoder_expected      | parsed_array | An array of parsed signals containing the expected decoder output. Also used as the encoder input. |
-| encoder_decoder_input | parsed_array | An array of parsed signals containing both the encoder-decoder input and expected output.             |
+| encoder_decoder_input | parsed_array | An array of parsed signals containing both the encoder-decoder input and expected output.          |
 
 See [Unit Tests](../UnitTests.md) for more info.

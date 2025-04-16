@@ -94,8 +94,7 @@ bool power_is_otg_enabled(Power* power) {
  * Private API for the Settings app
  */
 
-// get settings from service to settings_app by send message to power queue
-void power_api_get_settings(Power* power, PowerSettings* settings) {
+void power_get_settings(Power* power, PowerSettings* settings) {
     furi_assert(power);
     furi_assert(settings);
 
@@ -110,8 +109,7 @@ void power_api_get_settings(Power* power, PowerSettings* settings) {
     api_lock_wait_unlock_and_free(msg.lock);
 }
 
-// set settings from settings_app to service by send message to power queue
-void power_api_set_settings(Power* power, const PowerSettings* settings) {
+void power_set_settings(Power* power, const PowerSettings* settings) {
     furi_assert(power);
     furi_assert(settings);
 

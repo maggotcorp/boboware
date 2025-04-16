@@ -1,31 +1,35 @@
 # Structure
 
-## debug 
+## debug
 
 Applications for factory testing the Flipper.
 
 - `accessor`            - Wiegand server 
 - `battery_test_app`    - Battery debug app
-- `blink_test`          - LED blinker   
+- `blink_test`          - LED blinker
 - `bt_debug_app`        - BT test app. Requires full BT stack installed
 - `display_test`        - Various display tests & tweaks
 - `file_browser_test`   - Test UI for file picker
 - `keypad_test`         - Keypad test
 - `lfrfid_debug`        - LF RFID debug tool
 - `text_box_test`       - UI tests
-- `uart_echo`           - UART mode test 
+- `uart_echo`           - UART mode test
 - `unit_tests`          - Unit tests
 - `usb_mouse`           - USB HID test
 - `usb_test`            - Other USB tests
 - `vibro_test`          - Vibro test
 
-
 ## main
 
 Applications for main Flipper menu.
 
+<<<<<<< HEAD
+- `archive`             - Archive and file manager
+- `bad_kb`              - Bad KB application
+=======
 - `archive`             - Archive and file manager 
 - `bad_usb`             - Bad KB application
+>>>>>>> deva
 - `gpio`                - GPIO application: includes USART bridge and GPIO control
 - `ibutton`             - iButton application, onewire keys and more
 - `infrared`            - Infrared application, controls your IR devices
@@ -33,7 +37,6 @@ Applications for main Flipper menu.
 - `nfc`                 - NFC application, HF rfid, EMV and etc
 - `subghz`              - SubGhz application, 433 fobs and etc
 - `u2f`                 - U2F Application
-
 
 ## External
 
@@ -57,18 +60,17 @@ Background services providing system APIs to applications.
 - `applications.h`      - Firmware application list header
 - `bt`                  - BLE service and application
 - `cli`                 - Console service and API
-- `crypto`              - Crypto cli tools
+~~- `crypto`              - Crypto cli tools~~
 - `desktop`             - Desktop service
 - `dialogs`             - Dialogs service: GUI Dialogs for your app
 - `dolphin`             - Dolphin service and supplementary apps
 - `gui`                 - GUI service and API
 - `input`               - Input service
 - `loader`              - Application loader service
-- `notification`        - Notification service 
+- `notification`        - Notification service
 - `power`               - Power service
 - `rpc`                 - RPC service and API
 - `storage`             - Storage service, internal + sdcard
-
 
 ## settings
 
@@ -82,7 +84,6 @@ Small applications providing configuration for basic firmware and its services.
 - `power_settings_app`  - Basic power options
 - `storage_settings`    - Storage settings app
 - `system`              - System settings
-
 
 ## system
 

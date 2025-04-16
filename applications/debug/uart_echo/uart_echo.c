@@ -6,8 +6,6 @@
 #include <gui/view_dispatcher.h>
 #include <gui/modules/dialog_ex.h>
 
-#include <lib/toolbox/strint.h>
-
 #include <notification/notification.h>
 #include <notification/notification_messages.h>
 
@@ -352,6 +350,12 @@ int32_t uart_echo_app(void* p) {
     FuriHalSerialStopBits stop_bits = DEFAULT_STOP_BITS;
 
     if(p) {
+<<<<<<< HEAD
+        const char* baudrate_str = p;
+        if(sscanf(baudrate_str, "%lu", &baudrate) != 1) {
+            FURI_LOG_E(TAG, "Invalid baudrate: %s", baudrate_str);
+            baudrate = DEFAULT_BAUD_RATE;
+=======
         // parse argument
         char* parse_ptr = p;
         bool parse_success = false;
@@ -408,6 +412,7 @@ int32_t uart_echo_app(void* p) {
                 "Couldn't parse baud rate and framing (%s). Applying defaults (%d_8N1)",
                 (const char*)p,
                 DEFAULT_BAUD_RATE);
+>>>>>>> deva
         }
     }
 

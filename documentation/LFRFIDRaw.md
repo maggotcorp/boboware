@@ -1,6 +1,7 @@
 # Reading RAW RFID data {#lfrfid_raw}
 
-Flipper Zero has the option to read RAW data from 125 kHz cards that allows you to record the card's data and save it, similar to how a dictaphone records sound.
+Flipper Zero has the option to read RAW data from 125 kHz cards that allows you to record the card's data and save it,
+similar to how a dictaphone records sound.
 
 To use this function, you need to activate the Debug mode on your Flipper Zero by doing the following:
 
@@ -20,4 +21,5 @@ Once the Debug mode is activated on your Flipper Zero, you can read RAW data fro
 
 5. Once the reading is finished, press **OK**.
 
-Two files with data (with ASK and PSK modulations) will be saved in the `lfrfid` folder on the microSD card. Now, you can share it and the card's photo with developers by creating an issue on GitHub.
+Two files with data (with ASK and PSK modulations) will be saved in the `lfrfid` folder on the microSD card. Now, you
+can share it and the card's photo with developers by creating an issue on GitHub.

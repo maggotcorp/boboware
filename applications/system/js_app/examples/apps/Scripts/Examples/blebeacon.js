@@ -1,6 +1,3 @@
-// Script cannot work without blebeacon module so check before
-checkSdkFeatures(["blebeacon"]);
-
 let blebeacon = require("blebeacon");
 
 // Stop if previous background beacon is active
@@ -48,7 +45,7 @@ function sendRandomModelAdvertisement() {
 
     blebeacon.start();
 
-    print("Sent data for model ID " + model.toString());
+    print("Sent data for model ID " + to_string(model));
 
     currentIndex = (currentIndex + 1) % watchValues.length;
 

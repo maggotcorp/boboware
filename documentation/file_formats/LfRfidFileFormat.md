@@ -22,14 +22,14 @@ The file stores a single RFID key of the type defined by the `Key type` paramete
 ### Format fields
 
 | Name     | Description           |
-| -------- | --------------------- |
+|----------|-----------------------|
 | Key type | Key protocol type     |
 | Data     | Key data (HEX values) |
 
 ### Supported key types
 
 | Type        | Full name         |
-| ----------- | ----------------- |
+|-------------|-------------------|
 | EM4100      | EM-Micro EM4100   |
 | H10301      | HID H10301        |
 | Idteck      | IDTECK            |

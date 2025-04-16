@@ -82,24 +82,6 @@ static void menu_centered_icon(
         item->icon);
 }
 
-static void menu_centered_icon_scaled(
-    Canvas* canvas,
-    MenuItem* item,
-    size_t x,
-    size_t y,
-    size_t width,
-    size_t height,
-    size_t width_scale,
-    size_t height_scale) {
-    canvas_draw_icon_animation_ex(
-        canvas,
-        x + (width - item->icon->icon->width) / 2,
-        y + (height - item->icon->icon->height) / 2,
-        width_scale,
-        height_scale,
-        item->icon);
-}
-
 static size_t menu_scroll_counter(MenuModel* model, bool selected) {
     if(!selected) return 0;
     size_t scroll_counter = model->scroll_counter;
@@ -413,8 +395,10 @@ static void menu_draw_callback(Canvas* canvas, void* _model) {
             snprintf(clk, sizeof(clk), "%02u:%02u", hour, min);
             canvas_draw_str(canvas, 5, 34, clk);
 
+            uint32_t battery_capacity = furi_hal_power_get_battery_full_capacity();
+            uint32_t battery_remaining = furi_hal_power_get_battery_remaining_capacity();
             bool ext5v = furi_hal_power_is_otg_enabled();
-            uint8_t battery_percent = furi_hal_power_get_pct();
+            uint16_t battery_percent = (battery_remaining * 100) / battery_capacity;
             bool charge_state = false;
 
             // Determine charge state
@@ -462,6 +446,8 @@ static void menu_draw_callback(Canvas* canvas, void* _model) {
             }
             break;
         }
+<<<<<<< HEAD
+=======
         case MenuStyleCoverFlow: {
             canvas_set_font(canvas, FontPrimary);
 
@@ -569,6 +555,7 @@ static void menu_draw_callback(Canvas* canvas, void* _model) {
 
             break;
         }
+>>>>>>> deva
         default:
             break;
         }
@@ -919,7 +906,6 @@ static void menu_process_left(Menu* menu) {
             case MenuStyleDsi:
             case MenuStylePs4:
             case MenuStyleVertical:
-            case MenuStyleCoverFlow:
                 size_t vertical_offset = model->vertical_offset;
                 if(position > 0) {
                     position--;
@@ -984,7 +970,6 @@ static void menu_process_right(Menu* menu) {
             case MenuStyleDsi:
             case MenuStylePs4:
             case MenuStyleVertical:
-            case MenuStyleCoverFlow:
                 size_t vertical_offset = model->vertical_offset;
                 if(position < count - 1) {
                     position++;

@@ -8,7 +8,8 @@ IconAnimation* icon_animation_alloc(const Icon* icon) {
     furi_check(icon);
 
     IconAnimation* instance = malloc(sizeof(IconAnimation));
-    instance->icon = asset_packs_swap_icon(icon);
+    icon = asset_packs_swap_icon(icon);
+    instance->icon = icon;
     instance->timer =
         furi_timer_alloc(icon_animation_timer_callback, FuriTimerTypePeriodic, instance);
 

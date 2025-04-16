@@ -376,19 +376,16 @@ static void rpc_session_thread_pending_callback(void* context, uint32_t arg) {
     free(session);
 }
 
-static void
-    rpc_session_thread_state_callback(FuriThread* thread, FuriThreadState state, void* context) {
-    UNUSED(thread);
-    if(state == FuriThreadStateStopped) {
+static void rpc_session_thread_state_callback(FuriThreadState thread_state, void* context) {
+    if(thread_state == FuriThreadStateStopped) {
         furi_timer_pending_callback(rpc_session_thread_pending_callback, context, 0);
     }
 }
 
 RpcSession* rpc_session_open(Rpc* rpc, RpcOwner owner) {
-    if(furi_hal_rtc_is_flag_set(FuriHalRtcFlagLock)) {
-        if(owner == RpcOwnerUsb && !momentum_settings.allow_locked_rpc_usb) return NULL;
-        if(owner == RpcOwnerBle && !momentum_settings.allow_locked_rpc_ble) return NULL;
-    }
+    if(furi_hal_rtc_is_flag_set(FuriHalRtcFlagLock) &&
+       !momentum_settings.allow_locked_rpc_commands)
+        return NULL;
 
     furi_check(rpc);
 

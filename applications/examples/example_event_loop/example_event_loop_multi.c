@@ -52,7 +52,7 @@ typedef struct {
  */
 
 // This function is executed each time the data is taken out of the stream buffer. It is used to restart the worker timer.
-static void
+static bool
     event_loop_multi_app_stream_buffer_worker_callback(FuriEventLoopObject* object, void* context) {
     furi_assert(context);
     EventLoopMultiAppWorker* worker = context;
@@ -62,6 +62,8 @@ static void
     FURI_LOG_I(TAG, "Data was removed from buffer");
     // Restart the timer to generate another block of random data.
     furi_event_loop_timer_start(worker->timer, WORKER_DATA_INTERVAL_MS);
+
+    return true;
 }
 
 // This function is executed when the worker timer expires. The timer will NOT restart automatically
@@ -150,7 +152,7 @@ static void event_loop_multi_app_input_callback(InputEvent* event, void* context
 }
 
 // This function is executed each time new data is available in the stream buffer.
-static void
+static bool
     event_loop_multi_app_stream_buffer_callback(FuriEventLoopObject* object, void* context) {
     furi_assert(context);
     EventLoopMultiApp* app = context;
@@ -170,10 +172,12 @@ static void
 
     FURI_LOG_I(TAG, "Received data: %s", furi_string_get_cstr(tmp_str));
     furi_string_free(tmp_str);
+
+    return true;
 }
 
 // This function is executed each time a new message is inserted in the input queue.
-static void event_loop_multi_app_input_queue_callback(FuriEventLoopObject* object, void* context) {
+static bool event_loop_multi_app_input_queue_callback(FuriEventLoopObject* object, void* context) {
     furi_assert(context);
     EventLoopMultiApp* app = context;
 
@@ -218,6 +222,8 @@ static void event_loop_multi_app_input_queue_callback(FuriEventLoopObject* objec
         // Not a long press, just print the key's name.
         FURI_LOG_I(TAG, "Short press: %s", input_get_key_name(event.key));
     }
+
+    return true;
 }
 
 // This function is executed each time the countdown timer expires.

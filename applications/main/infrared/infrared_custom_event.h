@@ -21,8 +21,6 @@ typedef enum {
     InfraredCustomEventTypeRpcButtonPressName,
     InfraredCustomEventTypeRpcButtonPressIndex,
     InfraredCustomEventTypeRpcButtonRelease,
-    InfraredCustomEventTypeRpcButtonPressReleaseName,
-    InfraredCustomEventTypeRpcButtonPressReleaseIndex,
     InfraredCustomEventTypeRpcSessionClose,
 
     InfraredCustomEventTypeGpioTxPinChanged,

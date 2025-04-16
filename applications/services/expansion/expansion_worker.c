@@ -248,6 +248,11 @@ static bool expansion_worker_handle_state_connected(
 
     do {
         if(rx_frame->header.type == ExpansionFrameTypeControl) {
+<<<<<<< HEAD
+            if(rx_frame->content.control.command != ExpansionFrameControlCommandStartRpc) break;
+            instance->state = ExpansionWorkerStateRpcActive;
+            if(!expansion_worker_rpc_session_open(instance)) break;
+=======
             const uint8_t command = rx_frame->content.control.command;
             if(command == ExpansionFrameControlCommandStartRpc) {
                 if(!expansion_worker_rpc_session_open(instance)) break;
@@ -264,6 +269,7 @@ static bool expansion_worker_handle_state_connected(
                 break;
             }
 
+>>>>>>> deva
             if(!expansion_worker_send_status_response(instance, ExpansionFrameErrorNone)) break;
 
         } else if(rx_frame->header.type == ExpansionFrameTypeHeartbeat) {
@@ -295,14 +301,9 @@ static bool expansion_worker_handle_state_rpc_active(
             if(size_consumed != rx_frame->content.data.size) break;
 
         } else if(rx_frame->header.type == ExpansionFrameTypeControl) {
-            const uint8_t command = rx_frame->content.control.command;
-            if(command == ExpansionFrameControlCommandStopRpc) {
-                instance->state = ExpansionWorkerStateConnected;
-                expansion_worker_rpc_session_close(instance);
-            } else {
-                break;
-            }
-
+            if(rx_frame->content.control.command != ExpansionFrameControlCommandStopRpc) break;
+            instance->state = ExpansionWorkerStateConnected;
+            expansion_worker_rpc_session_close(instance);
             if(!expansion_worker_send_status_response(instance, ExpansionFrameErrorNone)) break;
 
         } else if(rx_frame->header.type == ExpansionFrameTypeStatus) {

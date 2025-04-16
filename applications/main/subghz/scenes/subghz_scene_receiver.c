@@ -50,13 +50,11 @@ const NotificationSequence subghz_sequence_tx_beep = {
 static void subghz_scene_receiver_update_statusbar(void* context) {
     SubGhz* subghz = context;
     FuriString* history_stat_str = furi_string_alloc();
-    bool show_sats = subghz->gps && furi_hal_rtc_get_timestamp() % 2;
     if(!subghz_history_get_text_space_left(
            subghz->history,
            history_stat_str,
-           subghz->last_settings->delete_old_signals,
-           show_sats,
-           show_sats ? subghz->gps->satellites : 0)) {
+           subghz->gps ? subghz->gps->satellites : 0,
+           subghz->last_settings->delete_old_signals)) {
         FuriString* frequency_str = furi_string_alloc();
         FuriString* modulation_str = furi_string_alloc();
 
@@ -89,7 +87,6 @@ static void subghz_scene_receiver_update_statusbar(void* context) {
             furi_string_get_cstr(history_stat_str),
             subghz_txrx_hopper_get_state(subghz->txrx) != SubGhzHopperStateOFF,
             READ_BIT(subghz->filter, SubGhzProtocolFlag_BinRAW) > 0,
-            show_sats,
             subghz->repeater);
 
         furi_string_free(frequency_str);
@@ -102,7 +99,6 @@ static void subghz_scene_receiver_update_statusbar(void* context) {
             "",
             subghz_txrx_hopper_get_state(subghz->txrx) != SubGhzHopperStateOFF,
             READ_BIT(subghz->filter, SubGhzProtocolFlag_BinRAW) > 0,
-            show_sats,
             subghz->repeater);
     }
     furi_string_free(history_stat_str);

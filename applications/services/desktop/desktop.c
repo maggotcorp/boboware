@@ -137,15 +137,6 @@ static bool desktop_custom_event_callback(void* context, uint32_t event) {
 
     } else if(event == DesktopGlobalAutoLock) {
         if(!desktop->app_running && !desktop->locked) {
-            // Disable AutoLock if usb_inhibit_autolock option enabled and device have active USB session.
-            if(desktop->settings.usb_inhibit_auto_lock) {
-                Rpc* rpc = furi_record_open(RECORD_RPC);
-                bool inhibit_auto_lock = furi_hal_usb_is_locked() || rpc_get_sessions_count(rpc);
-                furi_record_close(RECORD_RPC);
-                if(inhibit_auto_lock) {
-                    return true;
-                }
-            }
             desktop_lock(desktop, desktop->settings.auto_lock_with_pin);
         }
 
@@ -202,11 +193,11 @@ static void desktop_stop_auto_lock_timer(Desktop* desktop) {
 
 static void desktop_auto_lock_arm(Desktop* desktop) {
     if(desktop->settings.auto_lock_delay_ms) {
-        if(!desktop->input_events_subscription) {
+        if(desktop->input_events_subscription == NULL) {
             desktop->input_events_subscription = furi_pubsub_subscribe(
                 desktop->input_events_pubsub, desktop_auto_lock_callback, desktop);
         }
-        if(!desktop->ascii_events_subscription) {
+        if(desktop->ascii_events_subscription == NULL) {
             desktop->ascii_events_subscription = furi_pubsub_subscribe(
                 desktop->ascii_events_pubsub, desktop_auto_lock_callback, desktop);
         }
@@ -400,17 +391,13 @@ void desktop_lock(Desktop* desktop, bool with_pin) {
         furi_hal_rtc_set_pin_fails(0);
     }
 
-    if(with_pin) {
-        if(!momentum_settings.allow_locked_rpc_usb) {
-            Cli* cli = furi_record_open(RECORD_CLI);
-            cli_session_close(cli);
-            furi_record_close(RECORD_CLI);
-        }
-        if(!momentum_settings.allow_locked_rpc_ble) {
-            Bt* bt = furi_record_open(RECORD_BT);
-            bt_close_rpc_connection(bt);
-            furi_record_close(RECORD_BT);
-        }
+    if(with_pin && !momentum_settings.allow_locked_rpc_commands) {
+        Cli* cli = furi_record_open(RECORD_CLI);
+        cli_session_close(cli);
+        furi_record_close(RECORD_CLI);
+        Bt* bt = furi_record_open(RECORD_BT);
+        bt_close_rpc_connection(bt);
+        furi_record_close(RECORD_BT);
     }
 
     desktop_auto_lock_inhibit(desktop);
@@ -439,46 +426,18 @@ void desktop_unlock(Desktop* desktop) {
     furi_hal_rtc_set_pin_fails(0);
 
     if(with_pin) {
-        if(!momentum_settings.allow_locked_rpc_usb) {
-            Cli* cli = furi_record_open(RECORD_CLI);
-            cli_session_open(cli, &cli_vcp);
-            furi_record_close(RECORD_CLI);
-        }
-        if(!momentum_settings.allow_locked_rpc_ble) {
-            Bt* bt = furi_record_open(RECORD_BT);
-            bt_open_rpc_connection(bt);
-            furi_record_close(RECORD_BT);
-        }
+        Cli* cli = furi_record_open(RECORD_CLI);
+        cli_session_open(cli, &cli_vcp);
+        furi_record_close(RECORD_CLI);
+        Bt* bt = furi_record_open(RECORD_BT);
+        bt_open_rpc_connection(bt);
+        furi_record_close(RECORD_BT);
     }
 
     DesktopStatus status = {.locked = false};
     furi_pubsub_publish(desktop->status_pubsub, &status);
 
     desktop->locked = false;
-}
-
-int32_t desktop_shutdown(void* context) {
-    // Attempt to launch the app, and if failed offer to shutdown (simpler UI)
-    Desktop* desktop = context;
-    LoaderStatus result = loader_start(desktop->loader, "Power", "off", NULL);
-    if(result != LoaderStatusOk) {
-        // Mimic applications/settings/power_settings_app/scenes/power_settings_scene_power_off.c
-        DialogMessage* message = dialog_message_alloc();
-        dialog_message_set_header(message, "Turn Off Device?", 64, 0, AlignCenter, AlignTop);
-        dialog_message_set_text(
-            message, "   I will be\nwaiting for\n you here...", 78, 14, AlignLeft, AlignTop);
-        dialog_message_set_icon(message, &I_dolph_cry_49x54, 14, 10);
-        dialog_message_set_buttons(message, "Cancel", NULL, "Power Off");
-        DialogMessageButton res = dialog_message_show(furi_record_open(RECORD_DIALOGS), message);
-        furi_record_close(RECORD_DIALOGS);
-        dialog_message_free(message);
-        if(res == DialogMessageButtonRight) {
-            Power* power = furi_record_open(RECORD_POWER);
-            power_off(power);
-            furi_record_close(RECORD_POWER);
-        }
-    }
-    return 0;
 }
 
 void desktop_set_stealth_mode_state(Desktop* desktop, bool enabled) {
@@ -556,8 +515,7 @@ int32_t desktop_srv(void* p) {
 
     scene_manager_next_scene(desktop->scene_manager, DesktopSceneMain);
 
-    if(desktop_pin_code_is_set() &&
-       (momentum_settings.lock_on_boot || furi_hal_rtc_is_flag_set(FuriHalRtcFlagLock))) {
+    if(momentum_settings.lock_on_boot || furi_hal_rtc_is_flag_set(FuriHalRtcFlagLock)) {
         desktop_lock(desktop, true);
     }
 

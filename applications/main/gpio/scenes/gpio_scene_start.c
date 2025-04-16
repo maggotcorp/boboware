@@ -92,9 +92,15 @@ bool gpio_scene_start_on_event(void* context, SceneManagerEvent event) {
 
     if(event.type == SceneManagerEventTypeCustom) {
         if(event.event == GpioStartEventOtgOn) {
+<<<<<<< HEAD
+            furi_hal_power_enable_otg();
+        } else if(event.event == GpioStartEventOtgOff) {
+            furi_hal_power_disable_otg();
+=======
             power_enable_otg(app->power, true);
         } else if(event.event == GpioStartEventOtgOff) {
             power_enable_otg(app->power, false);
+>>>>>>> deva
         } else if(event.event == GpioStartEventManualControl) {
             scene_manager_set_scene_state(app->scene_manager, GpioSceneStart, GpioItemTest);
             scene_manager_next_scene(app->scene_manager, GpioSceneTest);

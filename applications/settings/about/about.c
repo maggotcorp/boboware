@@ -165,7 +165,7 @@ static DialogMessageButton about_screen_fw_version(DialogsApp* dialogs, DialogMe
     buffer = furi_string_alloc();
     const Version* ver = furi_hal_version_get_firmware_version();
     const BleGlueC2Info* c2_ver = NULL;
-#if defined(SRV_BT) || defined(FAP_VERSION)
+#ifdef SRV_BT
     c2_ver = ble_glue_get_c2_info();
 #endif
 
@@ -217,7 +217,7 @@ const AboutDialogScreen about_screens[] = {
 };
 
 int32_t about_settings_app(void* p) {
-    bool about_battery = p && !strncmp(p, "about_battery", strlen("about_battery"));
+    UNUSED(p);
     DialogsApp* dialogs = furi_record_open(RECORD_DIALOGS);
     DialogMessage* message = dialog_message_alloc();
 
@@ -236,7 +236,7 @@ int32_t about_settings_app(void* p) {
     while(1) {
         if(screen_index >= COUNT_OF(about_screens) - 1) {
             dialog_message_set_buttons(message, "Prev.", NULL, NULL);
-        } else if(screen_index == 0 && !about_battery) {
+        } else if(screen_index == 0) {
             dialog_message_set_buttons(message, NULL, NULL, "Next");
         } else {
             dialog_message_set_buttons(message, "Prev.", NULL, "Next");

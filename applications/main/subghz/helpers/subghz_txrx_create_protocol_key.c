@@ -382,6 +382,8 @@ bool subghz_txrx_gen_secplus_v1_protocol(
     }
     return ret;
 }
+<<<<<<< HEAD
+=======
 
 void subghz_txrx_gen_serial_gangqi(uint64_t* result_key) {
     uint64_t randkey = (uint64_t)rand();
@@ -395,3 +397,4 @@ void subghz_txrx_gen_serial_gangqi(uint64_t* result_key) {
     // serial | const_and_button
     *result_key = (serial << 18) | (const_and_button << 10) | (bytesum << 2);
 }
+>>>>>>> deva
