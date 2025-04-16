@@ -146,10 +146,7 @@ void subghz_read_raw_stop_send(SubGhzReadRAW* instance) {
             case SubGhzReadRAWStatusLoadKeyTX:
                 model->status = SubGhzReadRAWStatusLoadKeyIDLE;
 <<<<<<< HEAD
-                break;*/
-=======
                 break;
->>>>>>> deva
             default:
                 FURI_LOG_W(TAG, "Continuous should be an option");
                 //model->status = SubGhzReadRAWStatusIDLE;

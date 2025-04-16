@@ -1,508 +1,67 @@
-<<<<<<< HEAD
-# stars #
-*~
-=======
-# stars
-*.DS_Store
-*.bak
-*.log
-*.out
-*.tmp
-*.temp
-*.obj
-*.bin
-*.hex
-*.elf
-*.map
-*.lst
-*.srec
->>>>>>> deva
-*.swp
-*.dump
-*.class
-*.iml
-
-# Visual Studio Code
-.vscode/
-*.vscode/
-/.vscode
-
-# Eclipse
-.metadata/
-bin/
-tmp/
-tmp2/
-*.old
-<<<<<<< HEAD
-*.bak
-*.backup
-*.orig
-*.rej
-*.log
-*.out
-*.dmp
-*.dump
-*.stackdump
-*.tmp
-*.temp
-=======
-*.backup
-*.orig
-*.rej
-*.dmp
-*.stackdump
->>>>>>> deva
-*.a
-*.la
-*.lo
-*.o
-<<<<<<< HEAD
-*.obj
-=======
->>>>>>> deva
-*.so
-*.exe
-*.dll
-*.class
-<<<<<<< HEAD
-*.elf
-*.hex
-*.bin
-*.map
-*.lst
-*.srec
-*.elf
-=======
->>>>>>> deva
-*.d
-*.pyc
-*.pyo
-*.pyd
-<<<<<<< HEAD
-*.dll
-=======
->>>>>>> deva
-*.lib
-*.pdb
-*.idb
-*.ilk
-*.exp
-*.suo
-*.user
-*.filter
-*.ncb
-*.plg
-*.opt
-*.bsc
-*.sbr
-*.aps
-*.pch
-*.res
-*.tlb
-*.tlh
-<<<<<<< HEAD
-*.bak
-*.cache
-*.log
-*.log.*
-*.tmp
-*.temp
-*.obj
-*.bin
-*.hex
-*.elf
-*.map
-*.lst
-*.srec
-*.bak
-*.swp
-*.bak
-*.dump
-*.log
-*.
-
-# Visual Studio Code
-.vscode/
-.vscode/
-.vscode/
-
-# Eclipse
-.metadata/
-bin/
-tmp/
-tmp2/
-*.tmp
-*.bak
-*.swp
-*.old
-*.bak
-*.backup
-*.orig
-*.rej
-*.log
-*.out
-*.dmp
-*.dump
-*.stackdump
-*.tmp
-*.temp
-*.a
-*.la
-*.lo
-*.o
-*.obj
-*.so
-*.exe
-*.dll
-*.class
-*.elf
-*.hex
-*.bin
-*.map
-*.lst
-*.srec
-*.elf
-*.d
-*.pyc
-*.pyo
-*.pyd
-*.dll
-*.lib
-*.pdb
-*.idb
-*.ilk
-*.exp
-*.suo
-*.user
-*.filter
-*.ncb
-*.plg
-*.opt
-*.bsc
-*.sbr
-*.aps
-*.pch
-*.res
-*.tlb
-*.tlh
-*.
-
-# JetBrains IDEs
-.idea/
-/.idea
-=======
-
-# JetBrains IDEs
-.idea/
-.idea
->>>>>>> deva
-
-# Sublime Text
-.sublime-project.sublime-workspace
-
-# Python VirtEnvironments
-.env
-.venv
-env/
-venv/
-
-# Python Byte-compiled / optimized files
-__pycache__/
-*.py[cod]
-*$py.class
-*.pickle
-
-.obj/
-bindings/
+# System files
 .DS_Store
-.mxproject
-Brewfile.lock.json
-
-# Kate
-.kateproject
-.kateconfig
-
-# kde
-.directory
-null.d
-
-# SCons
-.sconsign.dblite
-
-# external
-external/
-/external
-
-# CMake
-CMakeFiles/
-CMakeCache.txt
-<<<<<<< HEAD
-CMakeFiles/
-=======
->>>>>>> deva
-CMakeScripts/
-CMakeTmp/
-CMakeLists.txt.user
-CMakeSettings.json
-
-# Build
-<<<<<<< HEAD
-build/
-*.o
-*.d
-*.elf
-*.hex
-*.bin
-*.map
-*.lst
-*.srec
-*.bak
-*.swp
-*.bak
-*.dump
-*.log
-*.
-=======
-/build
-build/
->>>>>>> deva
-
-# bundle output
-/dist
-dist/
-<<<<<<< HEAD
-
-# SCons build dir
-/build
-build/
-=======
->>>>>>> deva
-
-# Toolchain
-/toolchain
-toolchain/
-
-# openocd output file
-<<<<<<< HEAD
-openocd.log
-
-# PVS Studio temporary files
-.PVS-Studio/
-PVS-Studio.log
-*.PVS-Studio.*
-
-.gdbinit
-
-/fbt_options_local.py
-
-# JS packages
-node_modules/
-*.
-
-# Windows
-Thumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-ehthumbs.db
-$RECYCLE.BIN/
-
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon
-._*
-.Spotlight
-.Trashes
-ehthumbs.db
-Thumbs.db
-`
-
-# Visual Studio Code
-.vscode/
-*.vscode/
-/.vscode
-
-# Eclipse
-.metadata/
-bin/
-tmp/
-tmp2/
-*.tmp
-*.bak
-*.swp
-*.old
-*.bak
-*.backup
-*.orig
-*.rej
-*.log
-*.out
-*.dmp
-*.dump
-*.stackdump
-*.tmp
-*.temp
-*.a
-*.la
-*.lo
-*.o
-*.obj
-*.so
-*.exe
-*.dll
-*.class
-*.elf
-*.hex
-*.bin
-*.map
-*.lst
-*.srec
-*.elf
-*.d
-*.pyc
-*.pyo
-*.pyd
-*.dll
-*.lib
-*.pdb
-*.idb
-*.ilk
-*.exp
-*.suo
-*.user
-*.filter
-*.ncb
-*.plg
-*.opt
-*.bsc
-*.sbr
-*.aps
-*.pch
-*.res
-*.tlb
-*.tlh
-*.
-
-# LSP
-.cache
-compile_commands.json
-
-# JetBrains IDEs
-.idea/
-.idea
-
-# Sublime Text
-.sublime-project.sublime-workspace
-
-# Python VirtEnvironments
-.env
-.venv
-env/
-venv/
-
-# Python Byte-compiled / optimized files
-__pycache__/
-*.py[cod]
-*$py.class
-*.pickle
-
-.obj/
-bindings/
-.DS_Store
-.mxproject
-Brewfile.lock.json
-
-# Kate
-.kateproject
-.kateconfig
-
-# kde
-.directory
-null.d
-
-# SCons
-.sconsign.dblite
-
-# external
-external/
-/external
-
-# CMake
-CMakeFiles/
-CMakeCache.txt
-CMakeFiles/
-CMakeScripts/
-CMakeTmp/
-CMakeLists.txt.user
-CMakeSettings.json
-
-# Build
-/build
-build/
-*.o
-*.d
-*.elf
-*.hex
-*.bin
-*.map
-*.lst
-*.srec
-*.bak
-*.swp
-*.bak
-*.dump
-*.log
-*.
-
-# bundle output
-/dist
-dist/
-
-# Toolchain
-/toolchain
-toolchain/
-=======
-*~
-*.swo
-*.gdb_history
-*.cache
-*.log.*
-
-# JetBrains IDEs
-/.idea
->>>>>>> deva
-
-# openocd output file
-openocd.log
-
-# PVS Studio temporary files
-.PVS-Studio/
-PVS-Studio.log
-*.PVS-Studio.*
-
-.gdbinit
-
-/fbt_options_local.py
-
-# JS packages
-node_modules/
-
-# Windows
 Thumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 ehthumbs.db
 
-# macOS
-.AppleDouble
-.LSOverride
-Icon
-._*
-.Spotlight
-.Trashes
-`
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.old
+*.log
+*.out
+*.dmp
+*.stackdump
+*.cache
 
-# LSP
-.cache
-compile_commands.json
+# Build artifacts
+*.o
+*.obj
+*.so
+*.dll
+*.exe
+*.lib
+*.a
+*.la
+*.lo
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+*.srec
+
+# Python files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env/
+.venv/
+
+# Node.js
+node_modules/
+
+# IDEs and editors
+.idea/
+.vscode/
+.sublime-project.sublime-workspace
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+CMakeScripts/
+CMakeTmp/
+CMakeLists.txt.user
+build/
+dist/
+
+# Miscellaneous
+.gdb_history
+.PVS-Studio/
+openocd.log
+.sconsign.dblite
+external/
