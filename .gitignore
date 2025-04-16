@@ -58,6 +58,7 @@ CMakeTmp/
 CMakeLists.txt.user
 build/
 dist/
+toolchain/
 
 # Miscellaneous
 .gdb_history
