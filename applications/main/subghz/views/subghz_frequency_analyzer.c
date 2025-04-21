@@ -11,8 +11,8 @@
 
 #define TAG "frequency_analyzer"
 
-#define RSSI_MIN     (-97.0f)
-#define RSSI_MAX     (-40.0f)
+#define RSSI_MIN     (-90.0f)
+#define RSSI_MAX     (-30.0f)
 #define RSSI_SCALE   2.3f
 #define TRIGGER_STEP 1
 #define MAX_HISTORY  4
@@ -75,7 +75,6 @@ static const uint32_t subghz_frequency_list[] = {
     345000000,
     348000000,
     350000000,
-
     /* 387 - 464 */
     387000000,
     390000000,
@@ -224,17 +223,6 @@ static const uint32_t subghz_frequency_list[] = {
 	466500000,
 	467000000,
     467750000,
-
-    /* 779 - 928 */
-    779000000,
-    868350000,
-    868400000,
-    868800000,
-    868950000,
-    906400000,
-    915000000,
-    925000000,
-    928000000,
 };
 
 typedef enum {
