@@ -17,9 +17,9 @@ static FuriHalRegion unlockedRegion = {
     .country_code = "FTW",
     .bands_count = 3,
     .bands = {
-        {.start = 299999755, .end = 348000000, .power_limit = 35, .duty_cycle = 50},
-        {.start = 386999938, .end = 470000000, .power_limit = 35, .duty_cycle = 50},
-        {.start = 778999847, .end = 2472000000, .power_limit = 35, .duty_cycle = 50},
+        {.start = 299999755, .end = 348000000, .power_limit = 38, .duty_cycle = 50},
+        {.start = 380999938, .end = 470000000, .power_limit = 38, .duty_cycle = 50},
+        {.start = 778999847, .end = 2472000000, .power_limit = 38, .duty_cycle = 50},
     },
 };
 
@@ -30,7 +30,7 @@ typedef struct {
 
 static const FrequencyBand valid_frequency_bands[] = {
     {300000000, 348000000},
-    {387000000, 470000000},
+    {380000000, 470000000},
     {779000000, 2472000000},
 };
 
@@ -150,7 +150,7 @@ JammerApp* jammer_app_alloc(void) {
 
     app->view_port = view_port_alloc();
     app->event_queue = furi_message_queue_alloc(8, sizeof(InputEvent));
-    app->frequency = 315000000;
+    app->frequency = 415000000;
     app->cursor_position = 0;
     app->running = true;
     app->tx_running = false;
