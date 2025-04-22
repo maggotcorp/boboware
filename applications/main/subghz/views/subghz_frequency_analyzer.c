@@ -11,7 +11,7 @@
 
 #define TAG "frequency_analyzer"
 
-#define RSSI_MIN     (-70.0f)
+#define RSSI_MIN     (-60.0f)
 #define RSSI_MAX     (-10.0f)
 #define RSSI_SCALE   2.3f
 #define TRIGGER_STEP 1
@@ -19,6 +19,244 @@
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 #endif
+
+static const uint32_t subghz_frequency_list[] = {
+    /* 300 - 348 */
+    300000000,
+    301000000,
+    302757000,
+    303875000,
+    303900000,
+    304250000,
+    304500000,
+    304800000,
+    305000000,
+    305500000,
+    305800000,
+    307000000,
+    307500000,
+    307800000,
+    309000000,
+    310000000,
+    310500000,
+    312000000,
+    312100000,
+    312200000,
+    313000000,
+    313850000,
+    314000000,
+    314350000,
+    314980000,
+    315000000,
+    318000000,
+    318500000,
+    319000000,
+    320000000,
+    320500000,
+    321000000,
+    321500000,
+    322000000,
+    322500000,
+    323000000,
+    323500000,
+    324000000,
+    324500000,
+    325000000,
+    325500000,
+    326000000,
+    326500000,
+    327000000,
+    327500000,
+    328000000,
+    328500000,
+    329000000,
+    329500000,
+    330000000,
+    345000000,
+    348000000,
+    350000000,
+    /* 387 - 464 */
+    375000000,
+    376000000,
+    377000000,
+    378000000,
+    379000000,
+    380000000,
+    381000000,
+    382000000,
+    383000000,
+    384000000,
+    385000000,
+    386000000,
+    387000000,
+    388000000,
+    389000000,
+    390000000,
+	400000000,
+	400500000,
+	401000000,
+	401500000,
+	402000000,
+	402500000,
+	403000000,
+	403500000,
+	404000000,
+	404500000,
+	405000000,
+	405500000,
+	406000000,
+	406500000,
+	406660000,
+	406800000,
+	407000000,
+	407500000,
+	408000000,
+	408500000,
+	409000000,
+	409500000,
+	410000000,
+	410500000,
+	411000000,
+	411500000,
+	412000000,
+	412500000,
+	413000000,
+	413500000,
+	414000000,
+	414500000,
+	415000000,
+	415500000,
+	416000000,
+	416500000,
+	417000000,
+    418000000,
+    418200000,
+    418300000,
+    418500000,
+    418800000,
+    419000000,
+    419500000,
+    420000000,
+    420500000,
+    421000000,
+    421500000,
+    422000000,
+    422500000,
+    423000000,
+    423500000,
+    424000000,
+    424500000,
+    425000000,
+    425500000,
+    426000000,
+    426500000,
+    427000000,
+    427500000,
+    428000000,
+    428500000,
+    429000000,
+    429500000,
+    430000000,
+    430200000,
+    430300000,
+    430400000,
+    430500000,
+    430600000,
+    431000000,
+    431100000,
+    431200000,
+    431500000,
+    431600000,
+    431700000,
+    431800000,
+    431900000,
+    432000000,
+    432500000,
+    433000000,
+    433050000,
+    433075000, /* LPD433 first */
+    433220000,
+    433420000,
+    433657070,
+    433889000,
+    433920000, /* LPD433 mid */
+    434075000,
+    434100000,
+    434176948,
+    434190000,
+    434390000,
+    434420000,
+    434620000,
+    434775000, /* LPD433 last channels */
+    434800000,
+    434900000,
+    435000000,
+    435050000,
+    435075000,
+    435100000,
+    435200000,
+    435300000,
+    436000000,
+    437000000,
+    437500000,
+    437800000,
+    438000000,
+    438900000,
+    439000000,
+    439500000,
+    440000000,
+    440100000,
+    440150000,
+    440160000,
+    440175000,
+    440200000,
+    440300000,
+    441000000,
+    441500000,
+    442000000,
+    442500000,
+    443000000,
+    443500000,
+    444000000,
+    444500000,
+    450000000,
+    450500000,
+    451000000,
+    451500000,
+    452000000,
+    452500000,
+    453000000,
+    453500000,
+    454000000,
+	454400000,
+	454500000,
+	454600000,
+	454700000,
+	454800000,
+	454900000,
+	455000000,
+	456000000,
+	457000000,
+	458000000,
+	459000000,
+	460000000,
+	461000000,
+	462000000,
+	463000000,
+    464000000,
+	464400000,
+	465000000,
+	465500000,
+	466000000,
+	466500000,
+	467000000,
+    467750000,
+    468000000,
+    468500000,
+    469000000,
+    469500000,
+    470000000,
+};
 
 typedef enum {
     SubGhzFrequencyAnalyzerStatusIDLE,
@@ -254,10 +492,8 @@ bool subghz_frequency_analyzer_input(InputEvent* event, void* context) {
             instance->selected_index = (instance->selected_index + 1) % instance->max_index;
             need_redraw = true;
         }
-    } else if(
-        (event->type == InputTypeShort || event->type == InputTypeLong) &&
-        event->key == InputKeyOk) {
-        need_redraw = false;
+    } else if(event->key == InputKeyOk) {
+        need_redraw = true;
         bool updated = false;
         uint32_t frequency_to_save;
         with_view_model(
@@ -273,8 +509,7 @@ bool subghz_frequency_analyzer_input(InputEvent* event, void* context) {
                 } else if(
                     (model->show_frame && model->signal) ||
                     (!model->show_frame && model->signal)) {
-                    frequency_candidate = subghz_frequency_analyzer_get_nearest_frequency(
-                        instance->worker, model->frequency);
+                    frequency_candidate = subghz_frequency_find_correct(model->frequency);
                 }
 
                 frequency_candidate = frequency_candidate == 0 ||
@@ -282,23 +517,24 @@ bool subghz_frequency_analyzer_input(InputEvent* event, void* context) {
                                                   instance->txrx, frequency_candidate) ||
                                               prev_freq_to_save == frequency_candidate ?
                                           0 :
-                                          subghz_frequency_analyzer_get_nearest_frequency(
-                                              instance->worker, frequency_candidate);
+                                          subghz_frequency_find_correct(frequency_candidate);
                 if(frequency_candidate > 0 && frequency_candidate != model->frequency_to_save) {
                     model->frequency_to_save = frequency_candidate;
-                    frequency_to_save = frequency_candidate;
                     updated = true;
                 }
             },
-            false);
+            true);
 
         if(updated) {
             instance->callback(SubGhzCustomEventViewFreqAnalOkShort, instance->context);
         }
 
-        // If it was a long press also send a second event
+        // First the device receives short, then when user release button we get long
         if(event->type == InputTypeLong && frequency_to_save > 0) {
-            // Worker stopped on app thread instead of GUI thread when switching scene in callback
+            // Stop worker
+            if(subghz_frequency_analyzer_worker_is_running(instance->worker)) {
+                subghz_frequency_analyzer_worker_stop(instance->worker);
+            }
 
             instance->callback(SubGhzCustomEventViewFreqAnalOkLong, instance->context);
         }
@@ -354,8 +590,7 @@ void subghz_frequency_analyzer_pair_callback(
             SubGhzFrequencyAnalyzerModel * model,
             {
                 bool in_array = false;
-                uint32_t normal_frequency = subghz_frequency_analyzer_get_nearest_frequency(
-                    instance->worker, model->frequency);
+                uint32_t normal_frequency = subghz_frequency_find_correct(model->frequency);
                 for(size_t i = 0; i < MAX_HISTORY; i++) {
                     if(model->history_frequency[i] == normal_frequency) {
                         in_array = true;
@@ -454,7 +689,7 @@ void subghz_frequency_analyzer_enter(void* context) {
         (SubGhzFrequencyAnalyzerWorkerPairCallback)subghz_frequency_analyzer_pair_callback,
         instance);
 
-    subghz_frequency_analyzer_worker_start(instance->worker);
+    subghz_frequency_analyzer_worker_start(instance->worker, instance->txrx);
 
     instance->rssi_last = 0;
     instance->selected_index = 0;
