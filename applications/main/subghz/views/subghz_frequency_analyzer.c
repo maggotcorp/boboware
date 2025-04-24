@@ -11,8 +11,8 @@
 
 #define TAG "frequency_analyzer"
 
-#define RSSI_MIN     (-60.0f)
-#define RSSI_MAX     (-10.0f)
+#define RSSI_MIN     (-90.0f)
+#define RSSI_MAX     (-20.0f)
 #define RSSI_SCALE   2.3f
 #define TRIGGER_STEP 1
 #define MAX_HISTORY  4
@@ -21,7 +21,7 @@
 #endif
 
 static const uint32_t subghz_frequency_list[] = {
-    /* 300 - 348 */
+    /* 300 - 350 */
     300000000,
     301000000,
     302757000,
@@ -75,7 +75,7 @@ static const uint32_t subghz_frequency_list[] = {
     345000000,
     348000000,
     350000000,
-    /* 387 - 464 */
+    /* 375 - 470 */
     375000000,
     376000000,
     377000000,
@@ -398,7 +398,7 @@ void subghz_frequency_analyzer_draw(Canvas* canvas, SubGhzFrequencyAnalyzerModel
     canvas_set_color(canvas, ColorBlack);
     canvas_set_font(canvas, FontSecondary);
 
-    //canvas_draw_str(canvas, 0, 7, model->is_ext_radio ? "Ext" : "Int");
+    canvas_draw_str(canvas, 0, 7, model->is_ext_radio ? "Ext" : "Int");
     canvas_draw_str(canvas, 20, 7, "Frequency Analyzer");
 
     // RSSI
@@ -449,6 +449,34 @@ void subghz_frequency_analyzer_draw(Canvas* canvas, SubGhzFrequencyAnalyzerModel
     canvas_set_font(canvas, FontSecondary);
     elements_button_left(canvas, "T-");
     elements_button_right(canvas, "+T");
+}
+
+uint32_t subghz_frequency_find_correct(uint32_t input) {
+    uint32_t prev_freq = 0;
+    uint32_t result = 0;
+    uint32_t current;
+
+    for(size_t i = 0; i < ARRAY_SIZE(subghz_frequency_list) - 1; i++) {
+        current = subghz_frequency_list[i];
+        if(current == 0) {
+            continue;
+        }
+        if(current == input) {
+            result = current;
+            break;
+        }
+        if(current > input && prev_freq < input) {
+            if(current - input < input - prev_freq) {
+                result = current;
+            } else {
+                result = prev_freq;
+            }
+            break;
+        }
+        prev_freq = current;
+    }
+
+    return result;
 }
 
 bool subghz_frequency_analyzer_input(InputEvent* event, void* context) {
