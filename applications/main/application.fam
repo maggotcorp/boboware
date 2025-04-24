@@ -13,7 +13,6 @@ App(
         "bad_kb",
         "u2f",
         "archive",
-        "booper_app",
         "main_apps_on_start",
     ],
 )

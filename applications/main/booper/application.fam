@@ -7,7 +7,7 @@ App(
     requires=["gui"],
     order=72,
     resources="icons",
-    icon="I_Modern_reader_18x34",
+    icon="I_FaceConfused_29x14",
     fap_description="Booper for Flipper Zero",
     fap_icon="jammer_icon.png",
     fap_category="Tools",

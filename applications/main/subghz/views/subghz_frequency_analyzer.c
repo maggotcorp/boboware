@@ -11,8 +11,8 @@
 
 #define TAG "frequency_analyzer"
 
-#define RSSI_MIN     (-60.0f)
-#define RSSI_MAX     (-10.0f)
+#define RSSI_MIN     (-90.0f)
+#define RSSI_MAX     (-20.0f)
 #define RSSI_SCALE   2.3f
 #define TRIGGER_STEP 1
 #define MAX_HISTORY  4
@@ -21,7 +21,7 @@
 #endif
 
 static const uint32_t subghz_frequency_list[] = {
-    /* 300 - 348 */
+    /* 300 - 350 */
     300000000,
     301000000,
     302757000,
@@ -75,7 +75,7 @@ static const uint32_t subghz_frequency_list[] = {
     345000000,
     348000000,
     350000000,
-    /* 387 - 464 */
+    /* 375 - 470 */
     375000000,
     376000000,
     377000000,
@@ -475,7 +475,6 @@ uint32_t subghz_frequency_find_correct(uint32_t input) {
         }
         prev_freq = current;
     }
-
     return result;
 }
 
