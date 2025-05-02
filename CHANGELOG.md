@@ -1,24 +1,10 @@
 ## Main changes
 - Current API: 86.0
-* iButton: TM01x Dallas write support (PR #899 | by @Leptopt1los)
-* SubGHz: Rename and extend Alarms ignore option (add Hollarm & GangQi)
-* SubGHz: V2 Phoenix show counter value
-* SubGHz: Add keeloq ironlogic (aka il100) smart clone cloners support (thanks to Vitaly for RAWs)
-* SubGHz: Fix CAME 24bit decoder
-* SubGHz: Add 462.750 MHz to default subghz freqs list
-* SubGHz: Tune holtek ht12x to decode holtek only and not conflict with came 12bit
-* SubGHz: Fix Rename scene bug, that was replacing file name with random name when Rename is opened then closed then opened again
-* Display: Backlight option "always on" and RGB bug removed (PR #900 | by @Dmitry422)
 * NFC: Ultralight C - Attempt of authentication with default key (PR #898 | by @mishamyte)
-* OFW PR 4210: Infrared: Add text scroll to remote buttons (by @956MB)
 * OFW PR 4205: fix sample durations when using external CC1101 (by @Aerosnail)
 * OFW PR 4206: Stop JS PWM on exit (by @portasynthinca3)
-* OFW PR 4212: Remove stupid "!" that broke subghz chat cli (by @GameLord2011)
 * Apps: **Check out more Apps updates and fixes by following** [this link](https://github.com/xMasterX/all-the-plugins/commits/dev)
 ## Other changes
-* Desktop: DEBUG - fix desktop anim switch override by favourite apps
-* CLI: Various fixes (by @WillyJL)
-* BadUSB: Fix key combos main keys being case sensitive (by @WillyJL)
 * System: log level none after update
 * Docs: Some updates on subghz remotes programming
 <br><br>
