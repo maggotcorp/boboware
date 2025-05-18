@@ -19,12 +19,11 @@
 #include "SK6805.h"
 #include <furi_hal.h>
 
-#define TAG "SK6805"
-
 /* Настройки */
-#define SK6805_LED_PIN &led_pin // LED connection port
+#define SK6805_LED_COUNT 3 //Количество светодиодов на плате подсветки
+#define SK6805_LED_PIN   &led_pin //Порт подключения светодиодов
 
-#if false
+#ifdef FURI_DEBUG
 #define DEBUG_PIN &gpio_ext_pa7
 #define DEBUG_INIT() \
     furi_hal_gpio_init(DEBUG_PIN, GpioModeOutputPushPull, GpioPullNo, GpioSpeedVeryHigh)
@@ -49,7 +48,6 @@ uint8_t SK6805_get_led_count(void) {
     return (const uint8_t)SK6805_LED_COUNT;
 }
 void SK6805_set_led_color(uint8_t led_index, uint8_t r, uint8_t g, uint8_t b) {
-    FURI_LOG_T(TAG, "led: %d, r: %d, g: %d, b: %d", led_index, r, g, b);
     furi_check(led_index < SK6805_LED_COUNT);
 
     led_buffer[led_index][0] = g;
@@ -58,15 +56,15 @@ void SK6805_set_led_color(uint8_t led_index, uint8_t r, uint8_t g, uint8_t b) {
 }
 
 void SK6805_update(void) {
-    FURI_LOG_T(TAG, "update");
     SK6805_init();
     FURI_CRITICAL_ENTER();
+    furi_delay_us(150);
     uint32_t end;
-    // Sequential sending LEDs
+    /* Последовательная отправка цветов светодиодов */
     for(uint8_t lednumber = 0; lednumber < SK6805_LED_COUNT; lednumber++) {
-        // Sequential sending colors
+        //Последовательная отправка цветов светодиода
         for(uint8_t color = 0; color < 3; color++) {
-            // Sequentially sending color bits
+            //Последовательная отправка битов цвета
             uint8_t i = 0b10000000;
             while(i != 0) {
                 if(led_buffer[lednumber][color] & (i)) {
