@@ -306,7 +306,7 @@ static void subghz_scene_receiver_config_set_starline(VariableItem* item) {
 }
 
 static void subghz_scene_receiver_config_set_auto_alarms(VariableItem* item) {
-    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFlag_Alarms);
+    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_Alarms);
 }
 
 static void subghz_scene_receiver_config_set_magellan(VariableItem* item) {
@@ -465,7 +465,7 @@ void subghz_scene_receiver_config_on_enter(void* context) {
             subghz);
 
         value_index = subghz_scene_receiver_config_ignore_filter_get_index(
-            subghz->ignore_filter, SubGhzProtocolFlag_Alarms);
+            subghz->ignore_filter, SubGhzProtocolFilter_Alarms);
         variable_item_set_current_value_index(item, value_index);
         variable_item_set_current_value_text(item, combobox_text[value_index]);
 
