@@ -2,6 +2,7 @@
 - Apps:
   - Sub-GHz: Sub-GHz Playlist Creator (by @coolerUA)
 - NFC: Ventra ULEV1 parser (by @hazardousvoltage)
+- Infrared: "Decode only" mode to ignore RAW signals, make buttons in learn scene more intuitive (by @WillyJL)
 - UL: Sub-GHz: Add keeloq ironlogic aka il100 smart clone cloners support (by @xMasterX & Vitaly)
 - UL: iButton: Add TM01x Dallas write support (by @Leptopt1los)
 - UL: Display: Backlight option "Always ON" (by @Dmitry422)
@@ -9,10 +10,12 @@
 ### Updated:
 - Apps:
   - Authenticator: New options to have space between groups of digits (by @akopachov)
+  - Blackhat: Fix NULL ptr scrolling menu suboptions, more wlan selectors and stop options (by @WillyJL)
   - Camera Suite: Handle 128x128 image, fix image rotation bug (by @rnadyrshin)
   - Combo Cracker: Many usability improvements (by @CharlesTheGreat77)
-  - ESP Flasher: Bump Marauder 1.6.2 (by @justcallmekoko), FlipperHTTP 2.0 (by @jblanked)
+  - ESP Flasher: Bump Marauder 1.7.0 (by @justcallmekoko), FlipperHTTP 2.0 (by @jblanked)
   - Flame RNG: New App Icon (by @Kuronons), Improved the RNG using the hardware RNG and some bit mixing (by @OrionW06)
+  - FlipDownloader: Add Picoware (by @jblanked)
   - FlipWiFi: Added Deauthentication mode (by @jblanked)
   - Passy: Capitalize document number (by @bettse)
   - Picopass: Bugfixes and refactoring (by @bettse)
