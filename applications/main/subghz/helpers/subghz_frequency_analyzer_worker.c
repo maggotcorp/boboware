@@ -27,10 +27,8 @@ struct SubGhzFrequencyAnalyzerWorker {
     uint8_t sample_hold_counter;
     FrequencyRSSI frequency_rssi_buf;
     SubGhzSetting* setting;
-
     float filVal;
     float trigger_level;
-
     SubGhzFrequencyAnalyzerWorkerPairCallback pair_callback;
     void* context;
 };
@@ -295,11 +293,13 @@ void subghz_frequency_analyzer_worker_set_pair_callback(
     instance->context = context;
 }
 
-void subghz_frequency_analyzer_worker_start(SubGhzFrequencyAnalyzerWorker* instance) {
+void subghz_frequency_analyzer_worker_start(SubGhzFrequencyAnalyzerWorker* instance,
+                                            SubGhzTxRx* txrx) {
     furi_assert(instance);
     furi_assert(!instance->worker_running);
-
+    furi_assert(txrx);
     instance->worker_running = true;
+    //txrx temp = instance;
 
     furi_thread_start(instance->thread);
 }
