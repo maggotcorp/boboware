@@ -65,7 +65,7 @@ const SubGhzProtocol subghz_protocol_hollarm = {
     .type = SubGhzProtocolTypeStatic,
     .flag = SubGhzProtocolFlag_433 | SubGhzProtocolFlag_AM | SubGhzProtocolFlag_Decodable |
             SubGhzProtocolFlag_Load | SubGhzProtocolFlag_Save | SubGhzProtocolFlag_Send |
-            SubGhzProtocolFlag_Alarms,
+            SubGhzProtocolFilter_Alarms,
 
     .decoder = &subghz_protocol_hollarm_decoder,
     .encoder = &subghz_protocol_hollarm_encoder,
