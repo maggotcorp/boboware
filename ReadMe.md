@@ -1,10 +1,10 @@
-# bobo-ware
+# -ware
 
 <h2 align="center">Build eet yourself:</h2>
 
 ```bash
 To download the repository:
-$ git clone --recursive --jobs 8 https://github.com/timotheuzi/Timo-firmware.git
+$ git clone --recursive --jobs 8 https://github.com/Next-Flip/Momentum-Firmware.git
 $ cd Momentum-Firmware/
 
 To flash directly to the Flipper (Needs to be connected via USB, qFlipper closed)
@@ -15,6 +15,5 @@ $ ./fbt updater_package
 
 To build and launch a single app:
 $ ./fbt launch APPSRC=your_appid
-_
 ...
 ```
