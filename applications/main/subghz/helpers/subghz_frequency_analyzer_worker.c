@@ -295,7 +295,8 @@ void subghz_frequency_analyzer_worker_set_pair_callback(
     instance->context = context;
 }
 
-void subghz_frequency_analyzer_worker_start(SubGhzFrequencyAnalyzerWorker* instance) {
+void subghz_frequency_analyzer_worker_start(SubGhzFrequencyAnalyzerWorker* instance, SubGhzTxRx* txrx) {
+    txrx = txrx; // To avoid unused variable warning
     furi_assert(instance);
     furi_assert(!instance->worker_running);
 
