@@ -5,14 +5,13 @@
 #include <notification/notification_messages.h>
 #include <gui/elements.h>
 #include "../helpers/subghz_frequency_analyzer_worker.h"
-
 #include <assets_icons.h>
 #include <float_tools.h>
 
 #define TAG "frequency_analyzer"
 
-#define RSSI_MIN     (-90.0f)
-#define RSSI_MAX     (-20.0f)
+#define RSSI_MIN     (-97.0f)
+#define RSSI_MAX     (-50.0f)
 #define RSSI_SCALE   2.3f
 #define TRIGGER_STEP 1
 #define MAX_HISTORY  4
@@ -398,7 +397,7 @@ void subghz_frequency_analyzer_draw(Canvas* canvas, SubGhzFrequencyAnalyzerModel
     canvas_set_color(canvas, ColorBlack);
     canvas_set_font(canvas, FontSecondary);
 
-    canvas_draw_str(canvas, 0, 7, model->is_ext_radio ? "Ext" : "Int");
+    //canvas_draw_str(canvas, 0, 7, model->is_ext_radio ? "Ext" : "Int");
     canvas_draw_str(canvas, 20, 7, "Frequency Analyzer");
 
     // RSSI

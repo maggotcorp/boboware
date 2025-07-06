@@ -412,7 +412,7 @@ static inline bool subghz_scene_receiver_config_ignore_filter_get_index(
 }
 
 static void subghz_scene_receiver_config_set_starline(VariableItem* item) {
-    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_StarLine);
+    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_Alarms);
 }
 
 static void subghz_scene_receiver_config_set_auto_alarms(VariableItem* item) {
@@ -420,22 +420,22 @@ static void subghz_scene_receiver_config_set_auto_alarms(VariableItem* item) {
 }
 
 static void subghz_scene_receiver_config_set_magellan(VariableItem* item) {
-    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_Magellan);
+    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_Alarms);
 }
 
 static void subghz_scene_receiver_config_set_princeton(VariableItem* item) {
-    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_Princeton);
+    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_Alarms);
 }
 
 static void subghz_scene_receiver_config_set_niceflors(VariableItem* item) {
-    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_NiceFlorS);
+    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_Alarms);
 }
 
 static void subghz_scene_receiver_config_set_weather(VariableItem* item) {
-    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_Weather);
+    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_Alarms);
 }
 static void subghz_scene_receiver_config_set_tpms(VariableItem* item) {
-    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_TPMS);
+    subghz_scene_receiver_config_set_ignore_filter(item, SubGhzProtocolFilter_Alarms);
 }
 
 static void subghz_scene_receiver_config_var_list_enter_callback(void* context, uint32_t index) {
@@ -612,7 +612,7 @@ void subghz_scene_receiver_config_on_enter(void* context) {
             subghz);
 
         value_index = subghz_scene_receiver_config_ignore_filter_get_index(
-            subghz->ignore_filter, SubGhzProtocolFilter_StarLine);
+            subghz->ignore_filter, SubGhzProtocolFilter_Alarms);
         variable_item_set_current_value_index(item, value_index);
         variable_item_set_current_value_text(item, combobox_text[value_index]);
 
@@ -636,7 +636,7 @@ void subghz_scene_receiver_config_on_enter(void* context) {
             subghz);
 
         value_index = subghz_scene_receiver_config_ignore_filter_get_index(
-            subghz->ignore_filter, SubGhzProtocolFilter_Magellan);
+            subghz->ignore_filter, SubGhzProtocolFilter_Alarms);
         variable_item_set_current_value_index(item, value_index);
         variable_item_set_current_value_text(item, combobox_text[value_index]);
 
@@ -648,7 +648,7 @@ void subghz_scene_receiver_config_on_enter(void* context) {
             subghz);
 
         value_index = subghz_scene_receiver_config_ignore_filter_get_index(
-            subghz->ignore_filter, SubGhzProtocolFilter_Princeton);
+            subghz->ignore_filter, SubGhzProtocolFilter_Alarms);
         variable_item_set_current_value_index(item, value_index);
         variable_item_set_current_value_text(item, combobox_text[value_index]);
 
@@ -660,7 +660,7 @@ void subghz_scene_receiver_config_on_enter(void* context) {
             subghz);
 
         value_index = subghz_scene_receiver_config_ignore_filter_get_index(
-            subghz->ignore_filter, SubGhzProtocolFilter_NiceFlorS);
+            subghz->ignore_filter, SubGhzProtocolFilter_Alarms);
         variable_item_set_current_value_index(item, value_index);
         variable_item_set_current_value_text(item, combobox_text[value_index]);
 
@@ -672,7 +672,7 @@ void subghz_scene_receiver_config_on_enter(void* context) {
             subghz);
 
         value_index = subghz_scene_receiver_config_ignore_filter_get_index(
-            subghz->ignore_filter, SubGhzProtocolFilter_Weather);
+            subghz->ignore_filter, SubGhzProtocolFilter_Alarms);
         variable_item_set_current_value_index(item, value_index);
         variable_item_set_current_value_text(item, combobox_text[value_index]);
 
@@ -684,7 +684,7 @@ void subghz_scene_receiver_config_on_enter(void* context) {
             subghz);
 
         value_index = subghz_scene_receiver_config_ignore_filter_get_index(
-            subghz->ignore_filter, SubGhzProtocolFilter_TPMS);
+            subghz->ignore_filter, SubGhzProtocolFilter_Alarms);
         variable_item_set_current_value_index(item, value_index);
         variable_item_set_current_value_text(item, combobox_text[value_index]);
     }
