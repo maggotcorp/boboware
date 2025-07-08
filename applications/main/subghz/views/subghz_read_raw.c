@@ -110,31 +110,18 @@ void subghz_read_raw_update_sample_write(SubGhzReadRAW* instance, size_t sample)
 }
 
 void subghz_read_raw_stop_send(SubGhzReadRAW* instance) {
-    furi_assert(instance);
+        furi_assert(instance);
 
-    with_view_model(
-        instance->view,
-        SubGhzReadRAWModel * model,
-        {
-            switch(model->status) {
-            case SubGhzReadRAWStatusTXRepeat:
-            case SubGhzReadRAWStatusLoadKeyTXRepeat:
+        with_view_model(
+            instance->view,
+            SubGhzReadRAWModel* model,
+            {
+                if(model->status < SubGhzReadRAWStatusTXRepeat) {
+                    FURI_LOG_W(TAG, "Continuous");
+                }
                 instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
-                break;
-            case SubGhzReadRAWStatusTX:
-                model->status = SubGhzReadRAWStatusIDLE;
-                break;
-            case SubGhzReadRAWStatusLoadKeyTX:
-                model->status = SubGhzReadRAWStatusLoadKeyIDLE;
-                break;
-
-            default:
-                FURI_LOG_W(TAG, "unknown status");
-                model->status = SubGhzReadRAWStatusIDLE;
-                break;
-            }
-        },
-        true);
+            },
+            true);
 }
 
 void subghz_read_raw_update_sin(SubGhzReadRAW* instance) {
@@ -393,17 +380,21 @@ bool subghz_read_raw_input(InputEvent* event, void* context) {
                     break;
                 case SubGhzReadRAWStatusTX:
                     // Start TXRepeat
+                    instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
                     model->status = SubGhzReadRAWStatusTXRepeat;
+                    ret = true;
                     break;
                 case SubGhzReadRAWStatusLoadKeyIDLE:
                     // Start Load Key TX
                     instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
-                    model->status = SubGhzReadRAWStatusLoadKeyTXRepeat;
+                    model->status = SubGhzReadRAWStatusTXRepeat;
                     ret = true;
                     break;
                 case SubGhzReadRAWStatusLoadKeyTX:
                     // Start Load Key TXRepeat
-                    model->status = SubGhzReadRAWStatusLoadKeyTXRepeat;
+                    instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
+                    model->status = SubGhzReadRAWStatusTXRepeat;
+                    ret = true;
                     break;
 
                 default:
