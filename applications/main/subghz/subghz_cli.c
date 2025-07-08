@@ -28,7 +28,7 @@
 #include <lib/subghz/blocks/custom_btn.h>
 
 #define SUBGHZ_FREQUENCY_RANGE_STR \
-    "299999755...348000000 or 386999938...474000000"
+    "299999755...350000000 or 400000000...470000000 or 778999847...928000000"
 
 // Tx/Rx Carrier | only internal module
 // Tx/Rx command | both
