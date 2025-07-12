@@ -28,7 +28,7 @@
 #include <lib/subghz/blocks/custom_btn.h>
 
 #define SUBGHZ_FREQUENCY_RANGE_STR \
-    "299999755...350000000 or 400000000...470000000 or 778999847...928000000"
+    "299999755...348000000 or 380999938...470000000 or 778999847...928000000"
 
 // Tx/Rx Carrier | only internal module
 // Tx/Rx command | both
@@ -175,7 +175,7 @@ static const SubGhzDevice* subghz_cli_command_get_device(uint32_t* device_ind) {
 
 void subghz_cli_command_tx(PipeSide* pipe, FuriString* args, void* context) {
     UNUSED(context);
-    uint32_t frequency = 406770000;
+    uint32_t frequency = 433920000;
     uint32_t key = 0x0074BADE;
     uint32_t repeat = 10;
     uint32_t te = 403;
