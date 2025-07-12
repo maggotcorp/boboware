@@ -290,7 +290,7 @@ bool subghz_scene_read_raw_on_event(void* context, SceneManagerEvent event) {
             furi_string_free(temp_str);
 
             if(spl_count > 0) {
-                notification_message(subghz->notifications, &sequence_set_red_255);
+                notification_message(subghz->notifications, &sequence_set_green_255);
             } else {
                 notification_message(subghz->notifications, &sequence_reset_rgb);
             }
@@ -341,7 +341,7 @@ bool subghz_scene_read_raw_on_event(void* context, SceneManagerEvent event) {
     } else if(event.type == SceneManagerEventTypeTick) {
         switch(subghz->state_notifications) {
         case SubGhzNotificationStateRx:
-            notification_message(subghz->notifications, &sequence_blink_white_100);
+            notification_message(subghz->notifications, &sequence_blink_cyan_10);
 
             subghz_read_raw_update_sample_write(
                 subghz->subghz_read_raw, subghz_protocol_raw_get_sample_write(decoder_raw));

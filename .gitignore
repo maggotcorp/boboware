@@ -11,6 +11,8 @@ compile_commands.json
 
 # JetBrains IDEs
 .idea/
+# Visual Studio Code
+.vscode/
 
 # Sublime Text
 .sublime-project.sublime-workspace

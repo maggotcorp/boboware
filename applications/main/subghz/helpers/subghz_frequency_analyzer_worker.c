@@ -6,7 +6,7 @@
 
 #define TAG "SubghzFrequencyAnalyzerWorker"
 
-#define SUBGHZ_FREQUENCY_ANALYZER_THRESHOLD -97.0f
+#define SUBGHZ_FREQUENCY_ANALYZER_THRESHOLD -100.0f
 
 static const uint8_t subghz_preset_ook_58khz[][2] = {
     {CC1101_MDMCFG4, 0b11110111}, // Rx BW filter is 58.035714kHz
@@ -117,10 +117,10 @@ static int32_t subghz_frequency_analyzer_worker_thread(void* context) {
         // First stage: coarse scan
         for(size_t i = 0; i < subghz_setting_get_frequency_count(instance->setting); i++) {
             uint32_t current_frequency = subghz_setting_get_frequency(instance->setting, i);
-            if(furi_hal_subghz_is_frequency_valid(current_frequency) &&
-               (((current_frequency != 462750000) && (current_frequency != 467750000) &&
+            if(furi_hal_subghz_is_frequency_valid(current_frequency) && (current_frequency <= 700000000))
+               /*(((current_frequency != 462750000) && (current_frequency != 467750000) &&
                  (current_frequency != 464000000)) &&
-                (current_frequency <= 920000000))) {
+                (current_frequency <= 700000000)))*/ {
                 furi_hal_spi_acquire(&furi_hal_spi_bus_handle_subghz);
                 cc1101_switch_to_idle(&furi_hal_spi_bus_handle_subghz);
                 frequency = cc1101_set_frequency(
@@ -295,8 +295,7 @@ void subghz_frequency_analyzer_worker_set_pair_callback(
     instance->context = context;
 }
 
-void subghz_frequency_analyzer_worker_start(SubGhzFrequencyAnalyzerWorker* instance, SubGhzTxRx* txrx) {
-    txrx = txrx; // To avoid unused variable warning
+void subghz_frequency_analyzer_worker_start(SubGhzFrequencyAnalyzerWorker* instance) {
     furi_assert(instance);
     furi_assert(!instance->worker_running);
 
