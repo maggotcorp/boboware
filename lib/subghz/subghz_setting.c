@@ -245,9 +245,9 @@ static const uint32_t subghz_frequency_list[] = {
     468500000,
     469000000,
     469500000,
-    470000000
+    470000000,
 
-    /* 779 - 928
+    /* 779 - 928 */
     779000000,
     868350000,
     868400000,
@@ -256,7 +256,7 @@ static const uint32_t subghz_frequency_list[] = {
     906400000,
     915000000,
     925000000,
-    928000000,*/
+    928000000,
 };
 
 static const uint32_t subghz_hopper_frequency_list[] = {
@@ -467,9 +467,9 @@ static const uint32_t subghz_hopper_frequency_list[] = {
     468500000,
     469000000,
     469500000,
-    470000000
+    470000000,
 
-    /* 779 - 928
+    /* 779 - 928 */
     779000000,
     868350000,
     868400000,
@@ -479,7 +479,7 @@ static const uint32_t subghz_hopper_frequency_list[] = {
     906400000,
     915000000,
     925000000,
-    928000000,*/
+    928000000,
 };
 
 typedef struct {
