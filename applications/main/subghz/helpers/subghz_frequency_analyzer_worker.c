@@ -105,19 +105,19 @@ static int32_t subghz_frequency_analyzer_worker_thread(void* context) {
     while(instance->worker_running) {
         furi_delay_ms(10);
 
-        float rssi_min = 26.0f;
+        float rssi_min = 60.0f;
         float rssi_avg = 0;
         size_t rssi_avg_samples = 0;
 
-        frequency_rssi.rssi_coarse = -127.0f;
-        frequency_rssi.rssi_fine = -127.0f;
+        frequency_rssi.rssi_coarse = -105.0f;
+        frequency_rssi.rssi_fine = -105.0f;
         furi_hal_subghz_idle();
         subghz_frequency_analyzer_worker_load_registers(subghz_preset_ook_650khz);
 
         // First stage: coarse scan
         for(size_t i = 0; i < subghz_setting_get_frequency_count(instance->setting); i++) {
             uint32_t current_frequency = subghz_setting_get_frequency(instance->setting, i);
-            if(furi_hal_subghz_is_frequency_valid(current_frequency) && (current_frequency <= 700000000))
+            if(furi_hal_subghz_is_frequency_valid(current_frequency) && (current_frequency <= 900000000))
                /*(((current_frequency != 462750000) && (current_frequency != 467750000) &&
                  (current_frequency != 464000000)) &&
                 (current_frequency <= 700000000)))*/ {
