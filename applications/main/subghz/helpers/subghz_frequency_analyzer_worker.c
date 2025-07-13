@@ -6,7 +6,7 @@
 
 #define TAG "SubghzFrequencyAnalyzerWorker"
 
-#define SUBGHZ_FREQUENCY_ANALYZER_THRESHOLD -100.0f
+#define SUBGHZ_FREQUENCY_ANALYZER_THRESHOLD -97.0f
 
 static const uint8_t subghz_preset_ook_58khz[][2] = {
     {CC1101_MDMCFG4, 0b11110111}, // Rx BW filter is 58.035714kHz
