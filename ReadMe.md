@@ -1,7 +1,5 @@
 # bobo-ware
 
-<h2 align="center">Build eet yourself:</h2>
-
 ```bash
 To download the repository:
 $ git clone --recursive --jobs 8 https://github.com/Next-Flip/Momentum-Firmware.git

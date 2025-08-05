@@ -1,20 +1,17 @@
 #include "subghz_setting.h"
 #include "types.h" // IWYU pragma: keep
-
 #include <furi.h>
 #include <lib/subghz/devices/cc1101_configs.h>
-
 #define TAG "SubGhzSetting"
-
 #define FREQUENCY_FLAG_DEFAULT (1 << 31)
 #define FREQUENCY_MASK         (0xFFFFFFFF ^ FREQUENCY_FLAG_DEFAULT)
-
 /* my precious */
 static const uint32_t subghz_frequency_list[] = {
     /* 300 - 348 */
     300000000,
     301000000,
     302757000,
+    303000000,
     303875000,
     303900000,
     304250000,
@@ -251,6 +248,7 @@ static const uint32_t subghz_frequency_list[] = {
     779000000,
     868350000,
     868400000,
+    868460000,
     868800000,
     868950000,
     906400000,
@@ -314,7 +312,6 @@ static const uint32_t subghz_hopper_frequency_list[] = {
     345000000,
     348000000,
     350000000,
-
     /* 387 - 464 */
     387000000,
     390000000,
@@ -768,7 +765,7 @@ bool subghz_setting_load_custom_preset(
             FURI_LOG_E(TAG, "Integrity error Custom_preset_data");
             break;
         }
-        item->custom_preset_data_size = sizeof(uint8_t) * temp_data32;
+        item->custom_preset_data_size = sizeof(uint8_t) * temp_data32;co
         item->custom_preset_data = malloc(item->custom_preset_data_size);
         if(!flipper_format_read_hex(
                fff_data_file,
