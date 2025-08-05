@@ -1,20 +1,17 @@
 #include "subghz_setting.h"
 #include "types.h" // IWYU pragma: keep
-
 #include <furi.h>
 #include <lib/subghz/devices/cc1101_configs.h>
-
 #define TAG "SubGhzSetting"
-
 #define FREQUENCY_FLAG_DEFAULT (1 << 31)
 #define FREQUENCY_MASK         (0xFFFFFFFF ^ FREQUENCY_FLAG_DEFAULT)
-
 /* my precious */
 static const uint32_t subghz_frequency_list[] = {
     /* 300 - 348 */
     300000000,
     301000000,
     302757000,
+    303000000,
     303875000,
     303900000,
     304250000,
@@ -241,11 +238,17 @@ static const uint32_t subghz_frequency_list[] = {
 	466500000,
 	467000000,
     467750000,
+    468000000,
+    468500000,
+    469000000,
+    469500000,
+    470000000,
 
     /* 779 - 928 */
     779000000,
     868350000,
     868400000,
+    868460000,
     868800000,
     868950000,
     906400000,
@@ -309,7 +312,6 @@ static const uint32_t subghz_hopper_frequency_list[] = {
     345000000,
     348000000,
     350000000,
-
     /* 387 - 464 */
     387000000,
     390000000,
@@ -458,6 +460,11 @@ static const uint32_t subghz_hopper_frequency_list[] = {
 	466500000,
 	467000000,
     467750000,
+    468000000,
+    468500000,
+    469000000,
+    469500000,
+    470000000,
 
     /* 779 - 928 */
     779000000,

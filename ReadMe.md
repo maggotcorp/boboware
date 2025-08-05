@@ -1,6 +1,4 @@
-# -ware
-
-<h2 align="center">Build eet yourself:</h2>
+# bobo-ware
 
 ```bash
 To download the repository:
