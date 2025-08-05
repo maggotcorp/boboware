@@ -1,4 +1,4 @@
-# -ware
+# bobo-ware
 
 <h2 align="center">Build eet yourself:</h2>
 
