@@ -1,4 +1,4 @@
-# bobo-ware yo yo
+# bobo-ware yo
 
 ```bash
 To download the repository:
