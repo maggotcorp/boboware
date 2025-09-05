@@ -53,18 +53,10 @@ void subghz_history_free(SubGhzHistory* instance) {
     furi_string_free(instance->tmp_string);
     for
         M_EACH(item, instance->history->data, SubGhzHistoryItemArray_t) {
-            if(item->item_str) {
-                furi_string_free(item->item_str);
-            }
-            if(item->preset) {
-                if(item->preset->name) {
-                    furi_string_free(item->preset->name);
-                }
-                free(item->preset);
-            }
-            if(item->flipper_string) {
-                flipper_format_free(item->flipper_string);
-            }
+            furi_string_free(item->item_str);
+            furi_string_free(item->preset->name);
+            free(item->preset);
+            flipper_format_free(item->flipper_string);
             item->type = 0;
         }
     SubGhzHistoryItemArray_clear(instance->history->data);
@@ -93,15 +85,7 @@ uint16_t subghz_history_get_repeats(SubGhzHistory* instance, uint16_t idx) {
 
 uint32_t subghz_history_get_frequency(SubGhzHistory* instance, uint16_t idx) {
     furi_assert(instance);
-    if(idx >= SubGhzHistoryItemArray_size(instance->history->data)) {
-        FURI_LOG_E(TAG, "Invalid index %u for frequency access", idx);
-        return 0;
-    }
     SubGhzHistoryItem* item = SubGhzHistoryItemArray_get(instance->history->data, idx);
-    if(!item || !item->preset) {
-        FURI_LOG_E(TAG, "Invalid item or preset at index %u", idx);
-        return 0;
-    }
     return item->preset->frequency;
 }
 
@@ -113,15 +97,7 @@ SubGhzRadioPreset* subghz_history_get_radio_preset(SubGhzHistory* instance, uint
 
 const char* subghz_history_get_preset(SubGhzHistory* instance, uint16_t idx) {
     furi_assert(instance);
-    if(idx >= SubGhzHistoryItemArray_size(instance->history->data)) {
-        FURI_LOG_E(TAG, "Invalid index %u for preset access", idx);
-        return "";
-    }
     SubGhzHistoryItem* item = SubGhzHistoryItemArray_get(instance->history->data, idx);
-    if(!item || !item->preset || !item->preset->name) {
-        FURI_LOG_E(TAG, "Invalid item, preset, or preset name at index %u", idx);
-        return "";
-    }
     return furi_string_get_cstr(item->preset->name);
 }
 
@@ -142,18 +118,10 @@ void subghz_history_reset(SubGhzHistory* instance) {
     furi_string_reset(instance->tmp_string);
     for
         M_EACH(item, instance->history->data, SubGhzHistoryItemArray_t) {
-            if(item->item_str) {
-                furi_string_free(item->item_str);
-            }
-            if(item->preset) {
-                if(item->preset->name) {
-                    furi_string_free(item->preset->name);
-                }
-                free(item->preset);
-            }
-            if(item->flipper_string) {
-                flipper_format_free(item->flipper_string);
-            }
+            furi_string_free(item->item_str);
+            furi_string_free(item->preset->name);
+            free(item->preset);
+            flipper_format_free(item->flipper_string);
             item->type = 0;
         }
     SubGhzHistoryItemArray_reset(instance->history->data);
@@ -166,18 +134,10 @@ void subghz_history_delete_item(SubGhzHistory* instance, uint16_t idx) {
 
     if(idx < SubGhzHistoryItemArray_size(instance->history->data)) {
         SubGhzHistoryItem* item = SubGhzHistoryItemArray_get(instance->history->data, idx);
-        if(item->item_str) {
-            furi_string_free(item->item_str);
-        }
-        if(item->preset) {
-            if(item->preset->name) {
-                furi_string_free(item->preset->name);
-            }
-            free(item->preset);
-        }
-        if(item->flipper_string) {
-            flipper_format_free(item->flipper_string);
-        }
+        furi_string_free(item->item_str);
+        furi_string_free(item->preset->name);
+        free(item->preset);
+        flipper_format_free(item->flipper_string);
         item->type = 0;
         SubGhzHistoryItemArray_remove_v(instance->history->data, idx, idx + 1);
         instance->last_index_write--;
