@@ -11,9 +11,9 @@
 
 #define TAG "frequency_analyzer"
 
-#define RSSI_MIN     (-80.0f)
-#define RSSI_MAX     (-40.0f)
-#define RSSI_SCALE   2.0f
+#define RSSI_MIN     (-97.0f)
+#define RSSI_MAX     (-60.0f)
+#define RSSI_SCALE   2.3f
 #define TRIGGER_STEP 1
 #define MAX_HISTORY  4
 #ifndef ARRAY_SIZE

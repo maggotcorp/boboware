@@ -110,18 +110,31 @@ void subghz_read_raw_update_sample_write(SubGhzReadRAW* instance, size_t sample)
 }
 
 void subghz_read_raw_stop_send(SubGhzReadRAW* instance) {
-        furi_assert(instance);
+    furi_assert(instance);
 
-        with_view_model(
-            instance->view,
-            SubGhzReadRAWModel* model,
-            {
-                if(model->status < SubGhzReadRAWStatusTXRepeat) {
-                    FURI_LOG_W(TAG, "Continuous");
-                }
+    with_view_model(
+        instance->view,
+        SubGhzReadRAWModel * model,
+        {
+            switch(model->status) {
+            case SubGhzReadRAWStatusTXRepeat:
+            case SubGhzReadRAWStatusLoadKeyTXRepeat:
                 instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
-            },
-            true);
+                break;
+            case SubGhzReadRAWStatusTX:
+                model->status = SubGhzReadRAWStatusIDLE;
+                break;
+            case SubGhzReadRAWStatusLoadKeyTX:
+                model->status = SubGhzReadRAWStatusLoadKeyIDLE;
+                break;
+
+            default:
+                FURI_LOG_W(TAG, "unknown status");
+                model->status = SubGhzReadRAWStatusIDLE;
+                break;
+            }
+        },
+        true);
 }
 
 void subghz_read_raw_update_sin(SubGhzReadRAW* instance) {
