@@ -41,6 +41,7 @@ env = ENV.Clone(
         "#/furi",
         *(f"#/{app_dir[0]}" for app_dir in ENV["APPDIRS"] if app_dir[1]),
         "#/targets/furi_hal_include",
+        "${BUILD_DIR}/assets/compiled",
     ],
     # Specific flags for building libraries - always do optimized builds
     FW_LIB_OPTS={

@@ -138,11 +138,15 @@ static void button_menu_view_draw_callback(Canvas* canvas, void* _model) {
     const size_t max_screen = items_size ? (items_size - 1) / BUTTONS_PER_SCREEN : 0;
 
     if(active_screen > 0) {
+#ifndef FURI_RAM_EXEC
         canvas_draw_icon(canvas, 28, 1, &I_InfraredArrowUp_4x8);
+#endif
     }
 
     if(max_screen > active_screen) {
+#ifndef FURI_RAM_EXEC
         canvas_draw_icon(canvas, 28, 123, &I_InfraredArrowDown_4x8);
+#endif
     }
 
     if(model->header) {

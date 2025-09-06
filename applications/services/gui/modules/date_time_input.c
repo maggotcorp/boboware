@@ -61,8 +61,10 @@ static inline void date_time_input_draw_block(
     canvas_set_color(canvas, ColorBlack);
     if(state != EditStateNone) {
         if(state == EditStateActiveEditing) {
+#ifndef FURI_RAM_EXEC
             canvas_draw_icon(canvas, x + w / 2 - 2, y - 1 - 3, &I_SmallArrowUp_3x5);
             canvas_draw_icon(canvas, x + w / 2 - 2, y + h + 1, &I_SmallArrowDown_3x5);
+#endif
         }
         canvas_draw_rbox(canvas, x, y, w, h, 1);
         canvas_set_color(canvas, ColorWhite);
