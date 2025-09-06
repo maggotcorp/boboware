@@ -109,30 +109,21 @@ void subghz_read_raw_update_sample_write(SubGhzReadRAW* instance, size_t sample)
         false);
 }
 
+//todo should have a continous option
 void subghz_read_raw_stop_send(SubGhzReadRAW* instance) {
     furi_assert(instance);
 
     with_view_model(
         instance->view,
-        SubGhzReadRAWModel * model,
+        SubGhzReadRAWModel* model,
         {
-            switch(model->status) {
-            case SubGhzReadRAWStatusTXRepeat:
-            case SubGhzReadRAWStatusLoadKeyTXRepeat:
-                instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
-                break;
-            case SubGhzReadRAWStatusTX:
-                model->status = SubGhzReadRAWStatusIDLE;
-                break;
-            case SubGhzReadRAWStatusLoadKeyTX:
-                model->status = SubGhzReadRAWStatusLoadKeyIDLE;
-                break;
-
-            default:
-                FURI_LOG_W(TAG, "unknown status");
-                model->status = SubGhzReadRAWStatusIDLE;
-                break;
+            // Only check if we're not in a repeat mode, otherwise always send start event
+            if(model->status != SubGhzReadRAWStatusTXRepeat &&
+               model->status != SubGhzReadRAWStatusLoadKeyTXRepeat) {
+                FURI_LOG_W(TAG, "Continuous should be an option");
             }
+            // Send start event regardless of current status
+            instance->callback(SubGhzCustomEventViewReadRAWSendStart, instance->context);
         },
         true);
 }
