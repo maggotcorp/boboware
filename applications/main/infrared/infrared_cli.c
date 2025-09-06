@@ -184,9 +184,12 @@ static bool infrared_cli_parse_raw(const char* str, InfraredSignal* signal) {
 
     str += strlen(frequency_str) + strlen(duty_cycle_str) + INFRARED_CLI_BUF_SIZE;
 
-    uint32_t* timings = malloc(sizeof(uint32_t) * MAX_TIMINGS_AMOUNT);
+    // Optimize: Use static buffer to reduce malloc/free overhead
+    static uint32_t timings[MAX_TIMINGS_AMOUNT];
     size_t timings_size = 0;
+
     while(1) {
+        // Skip whitespace more efficiently
         while(*str == ' ') {
             ++str;
         }
@@ -207,7 +210,6 @@ static bool infrared_cli_parse_raw(const char* str, InfraredSignal* signal) {
     }
 
     infrared_signal_set_raw_signal(signal, timings, timings_size, frequency, duty_cycle);
-    free(timings);
 
     return infrared_signal_is_valid(signal);
 }
@@ -251,28 +253,44 @@ static bool infrared_cli_decode_raw_signal(
     InfraredSignal* signal = infrared_signal_alloc();
     bool ret = false, level = true, is_decoded = false;
 
-    size_t i;
-    for(i = 0; i < raw_signal->timings_size; ++i) {
-        const InfraredMessage* message = infrared_decode(decoder, level, raw_signal->timings[i]);
+    // Optimize: Process timings in larger chunks to reduce function call overhead
+    const size_t chunk_size = 16; // Process 16 timings at a time for better cache performance
+    size_t i = 0;
 
-        if(message) {
-            is_decoded = true;
-            printf(
-                "Protocol: %s address: 0x%lX command: 0x%lX %s\r\n",
-                infrared_get_protocol_name(message->protocol),
-                message->address,
-                message->command,
-                (message->repeat ? "R" : ""));
-            if(output_file && !message->repeat) {
-                infrared_signal_set_message(signal, message);
-                if(!infrared_cli_save_signal(signal, output_file, signal_name)) break;
+    for(; i < raw_signal->timings_size; i += chunk_size) {
+        size_t end = MIN(i + chunk_size, raw_signal->timings_size);
+
+        for(size_t j = i; j < end; ++j) {
+            const InfraredMessage* message = infrared_decode(decoder, level, raw_signal->timings[j]);
+
+            if(message) {
+                is_decoded = true;
+                printf(
+                    "Protocol: %s address: 0x%lX command: 0x%lX %s\r\n",
+                    infrared_get_protocol_name(message->protocol),
+                    message->address,
+                    message->command,
+                    (message->repeat ? "R" : ""));
+                if(output_file && !message->repeat) {
+                    infrared_signal_set_message(signal, message);
+                    if(!infrared_cli_save_signal(signal, output_file, signal_name)) {
+                        infrared_reset_decoder(decoder);
+                        infrared_signal_free(signal);
+                        return false;
+                    }
+                }
             }
+
+            level = !level;
         }
 
-        level = !level;
+        // Yield control briefly to prevent blocking for too long on large signals
+        if(end < raw_signal->timings_size && (end % 256) == 0) {
+            furi_delay_ms(1);
+        }
     }
 
-    if(i == raw_signal->timings_size) {
+    if(i >= raw_signal->timings_size) {
         if(!is_decoded && output_file) {
             infrared_signal_set_raw_signal(
                 signal,

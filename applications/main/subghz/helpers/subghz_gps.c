@@ -214,7 +214,7 @@ static void subghz_gps_init(SubGhzGPS* subghz_gps, uint32_t baudrate) {
     subghz_gps->rx_stream = furi_stream_buffer_alloc(RX_BUF_SIZE, 1);
 
     subghz_gps->thread =
-        furi_thread_alloc_ex("SubGhzGPSWorker", 1024, subghz_gps_uart_worker, subghz_gps);
+        furi_thread_alloc_ex("SubGhzGPSWorker", 2048, subghz_gps_uart_worker, subghz_gps);
     furi_thread_start(subghz_gps->thread);
 
     subghz_gps->serial_handle = furi_hal_serial_control_acquire(UART_CH);

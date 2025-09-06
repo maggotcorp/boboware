@@ -184,6 +184,10 @@ static InfraredApp* infrared_alloc(void) {
     infrared->current_signal = infrared_signal_alloc();
     infrared->brute_force = infrared_brute_force_alloc();
 
+    // Optimize worker settings for better decode performance
+    infrared_worker_rx_enable_signal_decoding(infrared->worker, true);
+    infrared_worker_rx_enable_blink_on_receiving(infrared->worker, false); // Reduce overhead
+
     infrared->submenu = submenu_alloc();
     view_dispatcher_add_view(
         view_dispatcher, InfraredViewSubmenu, submenu_get_view(infrared->submenu));
@@ -538,19 +542,25 @@ void infrared_signal_received_callback(void* context, InfraredWorkerSignal* rece
     furi_assert(context);
     InfraredApp* infrared = context;
 
+    // Optimize: Only process if we have a valid signal to reduce overhead
     if(infrared_worker_signal_is_decoded(received_signal)) {
-        infrared_signal_set_message(
-            infrared->current_signal, infrared_worker_get_decoded_signal(received_signal));
+        const InfraredMessage* message = infrared_worker_get_decoded_signal(received_signal);
+        if(message) { // Additional check for valid decoded message
+            infrared_signal_set_message(infrared->current_signal, message);
+        }
     } else {
         const uint32_t* timings;
         size_t timings_size;
         infrared_worker_get_raw_signal(received_signal, &timings, &timings_size);
-        infrared_signal_set_raw_signal(
-            infrared->current_signal,
-            timings,
-            timings_size,
-            INFRARED_COMMON_CARRIER_FREQUENCY,
-            INFRARED_COMMON_DUTY_CYCLE);
+        // Optimize: Only process signals with reasonable timing counts
+        if(timings_size > 0 && timings_size <= MAX_TIMINGS_AMOUNT) {
+            infrared_signal_set_raw_signal(
+                infrared->current_signal,
+                timings,
+                timings_size,
+                INFRARED_COMMON_CARRIER_FREQUENCY,
+                INFRARED_COMMON_DUTY_CYCLE);
+        }
     }
 
     view_dispatcher_send_custom_event(

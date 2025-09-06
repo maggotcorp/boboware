@@ -1,5 +1,5 @@
 entry,status,name,type,params
-Version,+,86.1,,
+Version,+,86.0,,
 Header,+,applications/drivers/subghz/cc1101_ext/cc1101_ext_interconnect.h,,
 Header,+,applications/main/archive/helpers/archive_helpers_ext.h,,
 Header,+,applications/main/subghz/subghz_fap.h,,
@@ -17,6 +17,7 @@ Header,+,applications/services/gui/icon_i.h,,
 Header,+,applications/services/gui/modules/button_menu.h,,
 Header,+,applications/services/gui/modules/button_panel.h,,
 Header,+,applications/services/gui/modules/byte_input.h,,
+Header,+,applications/services/gui/modules/date_time_input.h,,
 Header,+,applications/services/gui/modules/dialog_ex.h,,
 Header,+,applications/services/gui/modules/empty_screen.h,,
 Header,+,applications/services/gui/modules/file_browser.h,,
@@ -953,6 +954,11 @@ Function,+,crypto1_reset,void,Crypto1*
 Function,+,crypto1_word,uint32_t,"Crypto1*, uint32_t, int"
 Function,-,ctermid,char*,char*
 Function,-,cuserid,char*,char*
+Function,+,date_time_input_alloc,DateTimeInput*,
+Function,+,date_time_input_free,void,DateTimeInput*
+Function,+,date_time_input_get_view,View*,DateTimeInput*
+Function,+,date_time_input_set_header_text,void,"DateTimeInput*, const char*"
+Function,+,date_time_input_set_result_callback,void,"DateTimeInput*, DateTimeChangedCallback, DateTimeDoneCallback, void*, DateTime*"
 Function,+,datetime_datetime_to_timestamp,uint32_t,DateTime*
 Function,+,datetime_get_days_per_month,uint8_t,"_Bool, uint8_t"
 Function,+,datetime_get_days_per_year,uint16_t,uint16_t
@@ -2792,7 +2798,6 @@ Function,+,mf_ultralight_is_equal,_Bool,"const MfUltralightData*, const MfUltral
 Function,+,mf_ultralight_is_page_pwd_or_pack,_Bool,"MfUltralightType, uint16_t"
 Function,+,mf_ultralight_load,_Bool,"MfUltralightData*, FlipperFormat*, uint32_t"
 Function,+,mf_ultralight_poller_auth_pwd,MfUltralightError,"MfUltralightPoller*, MfUltralightPollerAuthContext*"
-Function,+,mf_ultralight_poller_auth_tdes,MfUltralightError,"MfUltralightPoller*, MfUltralightPollerAuthContext*"
 Function,+,mf_ultralight_poller_authenticate_end,MfUltralightError,"MfUltralightPoller*, const uint8_t*, const uint8_t*, uint8_t*"
 Function,+,mf_ultralight_poller_authenticate_start,MfUltralightError,"MfUltralightPoller*, const uint8_t*, uint8_t*"
 Function,+,mf_ultralight_poller_read_counter,MfUltralightError,"MfUltralightPoller*, uint8_t, MfUltralightCounter*"
@@ -4122,8 +4127,11 @@ Variable,+,I_Percent_10x14,const Icon,
 Variable,+,I_Pin_arrow_up_7x9,const Icon,
 Variable,+,I_Pin_attention_dpad_29x29,const Icon,
 Variable,+,I_Pin_back_arrow_10x8,const Icon,
+Variable,+,I_Pin_cell_13x13,const Icon,
 Variable,+,I_Pin_pointer_5x3,const Icon,
 Variable,+,I_Pin_star_7x7,const Icon,
+Variable,+,I_Play_25x27,const Icon,
+Variable,+,I_Play_hvr_25x27,const Icon,
 Variable,+,I_Pressed_Button_13x13,const Icon,
 Variable,+,I_Quest_7x8,const Icon,
 Variable,+,I_RFIDDolphinReceive_97x61,const Icon,
@@ -4163,6 +4171,7 @@ Variable,+,I_back_10px,const Icon,
 Variable,+,I_badusb_10px,const Icon,
 Variable,+,I_blue_19x20,const Icon,
 Variable,+,I_blue_hover_19x20,const Icon,
+Variable,+,I_bright_text_30x30,const Icon,
 Variable,+,I_brightness_text_40x5,const Icon,
 Variable,+,I_celsius_24x23,const Icon,
 Variable,+,I_celsius_hover_24x23,const Icon,
@@ -4202,10 +4211,20 @@ Variable,+,I_fast_f_19x20,const Icon,
 Variable,+,I_fast_f_hover_19x20,const Icon,
 Variable,+,I_fast_f_text_19x6,const Icon,
 Variable,+,I_file_10px,const Icon,
+Variable,+,I_flash_19x20,const Icon,
+Variable,+,I_flash_hover_19x20,const Icon,
+Variable,+,I_flash_text_21x5,const Icon,
 Variable,+,I_floppydisk_10px,const Icon,
 Variable,+,I_green_19x20,const Icon,
 Variable,+,I_green_hover_19x20,const Icon,
 Variable,+,I_heat_30x51,const Icon,
+Variable,+,I_hourglass0_24x24,const Icon,
+Variable,+,I_hourglass1_24x24,const Icon,
+Variable,+,I_hourglass2_24x24,const Icon,
+Variable,+,I_hourglass3_24x24,const Icon,
+Variable,+,I_hourglass4_24x24,const Icon,
+Variable,+,I_hourglass5_24x24,const Icon,
+Variable,+,I_hourglass6_24x24,const Icon,
 Variable,+,I_iButtonDolphinVerySuccess_92x55,const Icon,
 Variable,+,I_iButtonKey_49x44,const Icon,
 Variable,+,I_ibutt_10px,const Icon,
@@ -4582,7 +4601,6 @@ Variable,+,sequence_set_only_green_255,const NotificationSequence,
 Variable,+,sequence_set_only_red_255,const NotificationSequence,
 Variable,+,sequence_set_red_255,const NotificationSequence,
 Variable,+,sequence_set_vibro_on,const NotificationSequence,
-Variable,+,sequence_set_white_255,const NotificationSequence,
 Variable,+,sequence_single_vibro,const NotificationSequence,
 Variable,+,sequence_solid_yellow,const NotificationSequence,
 Variable,+,sequence_success,const NotificationSequence,

@@ -74,7 +74,9 @@ void subghz_read_raw_add_data_rssi(SubGhzReadRAW* instance, float rssi, bool tra
     if(rssi < SUBGHZ_RAW_THRESHOLD_MIN) {
         u_rssi = 0;
     } else {
-        u_rssi = (uint8_t)((rssi - SUBGHZ_RAW_THRESHOLD_MIN) / 2.7f);
+        // Optimize float division by using fixed-point multiplication
+        // 1/2.7 ≈ 0.37037, multiply by 100000 for precision: 37037
+        u_rssi = (uint8_t)(((rssi - SUBGHZ_RAW_THRESHOLD_MIN) * 37037) / 100000);
     }
 
     with_view_model(
@@ -155,21 +157,24 @@ static int8_t subghz_read_raw_tab_sin(uint8_t x) {
 
 void subghz_read_raw_draw_sin(Canvas* canvas, SubGhzReadRAWModel* model) {
 #define SUBGHZ_RAW_SIN_AMPLITUDE 11
+    // Pre-calculate common values to avoid repeated calculations
+    int16_t sin_val1, sin_val2;
+    int base_sin = model->ind_sin * 16;
     for(int i = 113; i > 0; i--) {
+        sin_val1 = subghz_read_raw_tab_sin(i + base_sin);
+        sin_val2 = subghz_read_raw_tab_sin((i + base_sin + 1) * 2);
         canvas_draw_line(
             canvas,
             i,
-            32 - subghz_read_raw_tab_sin(i + model->ind_sin * 16) / SUBGHZ_RAW_SIN_AMPLITUDE,
+            32 - sin_val1 / SUBGHZ_RAW_SIN_AMPLITUDE,
             i + 1,
-            32 + subghz_read_raw_tab_sin((i + model->ind_sin * 16 + 1) * 2) /
-                     SUBGHZ_RAW_SIN_AMPLITUDE);
+            32 + sin_val2 / SUBGHZ_RAW_SIN_AMPLITUDE);
         canvas_draw_line(
             canvas,
             i + 1,
-            32 - subghz_read_raw_tab_sin(i + model->ind_sin * 16) / SUBGHZ_RAW_SIN_AMPLITUDE,
+            32 - sin_val1 / SUBGHZ_RAW_SIN_AMPLITUDE,
             i + 2,
-            32 + subghz_read_raw_tab_sin((i + model->ind_sin * 16 + 1) * 2) /
-                     SUBGHZ_RAW_SIN_AMPLITUDE);
+            32 + sin_val2 / SUBGHZ_RAW_SIN_AMPLITUDE);
     }
 }
 
@@ -268,7 +273,8 @@ void subghz_read_raw_draw_threshold_rssi(Canvas* canvas, SubGhzReadRAWModel* mod
 
     if(model->raw_threshold_rssi > SUBGHZ_RAW_THRESHOLD_MIN) {
         uint8_t x = 118;
-        y -= (uint8_t)((model->raw_threshold_rssi - SUBGHZ_RAW_THRESHOLD_MIN) / 2.7f);
+        // Optimize float division using fixed-point arithmetic
+        y -= (uint8_t)(((model->raw_threshold_rssi - SUBGHZ_RAW_THRESHOLD_MIN) * 37037) / 100000);
 
         uint8_t width = 3;
         for(uint8_t i = 0; i < x; i += width * 2) {

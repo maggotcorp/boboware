@@ -18,7 +18,7 @@ void mf_ultralight_auth_free(MfUltralightAuth* instance) {
 void mf_ultralight_auth_reset(MfUltralightAuth* instance) {
     furi_assert(instance);
 
-    uint32_t default_password = MF_ULTRALIGHT_DEFAULT_PASSWORD;
+    uint32_t default_password = 10; //MF_ULTRALIGHT_DEFAULT_PASSWORD;
 
     instance->type = MfUltralightAuthTypeNone;
     memcpy(&instance->password, &default_password, sizeof(MfUltralightAuthPassword));

@@ -1,8 +1,8 @@
-# Firmware Assets {#firmware_assets}
+    # Firmware Assets {#firmware_assets}
 
 ## Requirements
 
-- Python3
+- Python3    
 - Python3 packages: Pillow & heatshrink2 
 
 ## Compiling

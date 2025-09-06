@@ -41,7 +41,7 @@ bool subghz_scene_frequency_analyzer_on_event(void* context, SceneManagerEvent e
                 SubGHzFrequencyAnalyzerFeedbackLevelAll,
                 false)) {
             case SubGHzFrequencyAnalyzerFeedbackLevelAll:
-                notification_message(subghz->notifications, &sequence_success);
+                notification_message(subghz->notifications, &sequence_set_blue_255);
                 break;
             case SubGHzFrequencyAnalyzerFeedbackLevelVibro:
                 notification_message(subghz->notifications, &sequence_single_vibro);

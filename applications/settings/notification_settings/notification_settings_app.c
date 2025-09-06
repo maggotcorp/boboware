@@ -129,11 +129,6 @@ static void screen_changed(VariableItem* item) {
 
     variable_item_set_current_value_text(item, delay_text[index]);
     app->notification->settings.display_off_delay_ms = delay_value[index];
-
-    // Switch off current backlight delay timer if user choose "Always ON"
-    if((delay_value[index] == 0) & (furi_timer_is_running(app->notification->display_timer))) {
-        furi_timer_stop(app->notification->display_timer);
-    }
     notification_message(app->notification, &sequence_display_backlight_on);
 }
 
