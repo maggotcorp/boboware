@@ -1,6 +1,6 @@
 #include "submenu.h"
 
-#include <assets_icons.h>
+#include <build/icons/assets_icons.h>
 #include <gui/elements.h>
 #include <furi.h>
 #include <m-array.h>

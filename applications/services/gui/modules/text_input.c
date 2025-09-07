@@ -1,6 +1,6 @@
 #include "text_input.h"
 #include <gui/elements.h>
-#include <assets_icons.h>
+#include <build/icons/assets_icons.h>
 #include <furi.h>
 
 struct TextInput {

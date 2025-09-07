@@ -1,4 +1,4 @@
-#include "file_browser.h"
+c#include "file_browser.h"
 #include "file_browser_worker.h"
 
 #include <gui/elements.h>
@@ -150,10 +150,17 @@ typedef struct {
 } FileBrowserModel;
 
 static const Icon* BrowserItemIcons[] = {
+#ifndef FURI_RAM_EXEC
     [BrowserItemTypeLoading] = &I_loading_10px,
     [BrowserItemTypeBack] = &I_back_10px,
     [BrowserItemTypeFolder] = &I_dir_10px,
     [BrowserItemTypeFile] = &I_unknown_10px,
+#else
+    [BrowserItemTypeLoading] = NULL,
+    [BrowserItemTypeBack] = NULL,
+    [BrowserItemTypeFolder] = NULL,
+    [BrowserItemTypeFile] = NULL,
+#endif
 };
 
 static void file_browser_view_draw_callback(Canvas* canvas, void* _model);
@@ -549,11 +556,16 @@ static void browser_draw_frame(Canvas* canvas, uint16_t idx, bool scrollbar) {
 
 static void browser_draw_loading(Canvas* canvas, FileBrowserModel* model) {
     UNUSED(model);
+    UNUSED(canvas);
 
     uint8_t x = 128 / 2 - 24 / 2;
     uint8_t y = 64 / 2 - 24 / 2;
+    UNUSED(x);
+    UNUSED(y);
 
+#ifndef FURI_RAM_EXEC
     canvas_draw_icon(canvas, x, y, &A_Loading_24);
+#endif
 }
 
 static void browser_draw_list(Canvas* canvas, FileBrowserModel* model) {

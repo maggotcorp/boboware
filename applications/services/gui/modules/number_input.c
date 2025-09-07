@@ -2,7 +2,7 @@
 
 #include <gui/elements.h>
 #include <furi.h>
-#include <assets_icons.h>
+#include <build/icons/assets_icons.h>
 #include <lib/toolbox/strint.h>
 
 struct NumberInput {
@@ -261,31 +261,39 @@ static void number_input_view_draw_callback(Canvas* canvas, void* _model) {
                 if(is_number_too_small(model) || is_number_too_large(model)) {
                     //in some cases you need to be able to type a number smaller/larger than the limits (expl. min = 50, clear all and editor must allow to type 9 and later 0 for 90)
                     if(model->selected_row == row && model->selected_column == column) {
+#ifndef FURI_RAM_EXEC
                         canvas_draw_icon(
                             canvas,
                             keyboard_origin_x + keys[column].x,
                             keyboard_origin_y + keys[column].y,
                             &I_KeySaveBlockedSelected_22x11);
+#endif
                     } else {
+#ifndef FURI_RAM_EXEC
                         canvas_draw_icon(
                             canvas,
                             keyboard_origin_x + keys[column].x,
                             keyboard_origin_y + keys[column].y,
                             &I_KeySaveBlocked_22x11);
+#endif
                     }
                 } else {
                     if(model->selected_row == row && model->selected_column == column) {
+#ifndef FURI_RAM_EXEC
                         canvas_draw_icon(
                             canvas,
                             keyboard_origin_x + keys[column].x,
                             keyboard_origin_y + keys[column].y,
                             &I_KeySaveSelected_22x11);
+#endif
                     } else {
+#ifndef FURI_RAM_EXEC
                         canvas_draw_icon(
                             canvas,
                             keyboard_origin_x + keys[column].x,
                             keyboard_origin_y + keys[column].y,
                             &I_KeySave_22x11);
+#endif
                     }
                 }
             } else if(keys[column].text == backspace_symbol) {
