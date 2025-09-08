@@ -1,12 +1,7 @@
 #include "archive_files.h"
 #include "archive_apps.h"
 #include "archive_browser.h"
-#include <applications/external/subghz_playlist/playlist_file.h>
-#include <applications/external/subghz_remote/subghz_remote_app_i.h>
-#include <applications/external/ir_remote/infrared_remote.h>
-
 #define TAG "Archive"
-
 #define ASSETS_DIR "assets"
 
 void archive_set_file_type(ArchiveFile_t* file, const char* path, bool is_folder, bool is_app) {
@@ -25,15 +20,6 @@ void archive_set_file_type(ArchiveFile_t* file, const char* path, bool is_folder
                 if(strcmp(known_ext[i], ".txt") == 0) {
                     const char* txt_path = NULL;
                     switch(i) {
-                    case ArchiveFileTypeSubghzPlaylist:
-                        txt_path = PLAYLIST_FOLDER;
-                        break;
-                    case ArchiveFileTypeSubghzRemote:
-                        txt_path = SUBREM_APP_FOLDER;
-                        break;
-                    case ArchiveFileTypeInfraredRemote:
-                        txt_path = IR_REMOTE_PATH;
-                        break;
                     case ArchiveFileTypeBadUsb:
                         txt_path = archive_get_default_path(ArchiveTabBadUsb);
                         break;

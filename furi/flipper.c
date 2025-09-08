@@ -175,7 +175,7 @@ void flipper_init(void) {
     Canvas* canvas = canvas_init();
     canvas_draw_icon(canvas, 33, 16, &I_Updating_Logo_62x15);
     if(furi_hal_is_normal_boot()) {
-        canvas_draw_icon(canvas, 19, 44, &I_SDcardMounted_11x8);
+        // canvas_draw_icon(canvas, 19, 44, &I_SDcardMounted_11x8);
     }
     canvas_commit(canvas);
 #endif
@@ -194,20 +194,20 @@ void flipper_init(void) {
             // Workaround to avoid double load on boot but also have animated boot screen
             skip_double_mount = true;
 
-            canvas_draw_icon(canvas, 39, 43, &I_dir_10px);
+            // canvas_draw_icon(canvas, 39, 43, &I_dir_10px);
             canvas_commit(canvas);
             flipper_migrate_files();
 
-            canvas_draw_icon(canvas, 59, 42, &I_Apps_10px);
+            // canvas_draw_icon(canvas, 59, 42, &I_Apps_10px);
             canvas_commit(canvas);
             namespoof_init();
 
-            canvas_draw_icon(canvas, 79, 44, &I_Rpc_active_7x8);
+            // canvas_draw_icon(canvas, 79, 44, &I_Rpc_active_7x8);
             canvas_commit(canvas);
             momentum_settings_load();
 
             furi_hal_light_sequence("rgb RB");
-            canvas_draw_icon(canvas, 99, 44, &I_Hidden_window_9x8);
+            // canvas_draw_icon(canvas, 99, 44, &I_Hidden_window_9x8);
             canvas_commit(canvas);
             asset_packs_init();
         }

@@ -189,7 +189,13 @@ class Main(App):
                 self.logger.debug("Folder contains animation")
                 icon_name = "A_" + os.path.split(dirpath)[1].replace("-", "_")
                 icon_in_api = api_has_icon(icon_name)
-                if not self.args.fw_bundle and icon_in_api:
+                # For updater builds, include essential GUI icons even if they're in API
+                updater_essential_icons = {
+                    'I_ButtonLeft_4x7', 'I_ButtonRight_4x7', 'I_ButtonUp_7x4',
+                    'I_ButtonDown_7x4', 'I_ButtonCenter_7x7', 'I_Background_128x11',
+                    'I_Hidden_window_9x8', 'I_SDcardMounted_11x8'
+                }
+                if not self.args.fw_bundle and icon_in_api and icon_name not in updater_essential_icons:
                     self.logger.info(
                         f"{self.args.filename}: ignoring duplicate icon {icon_name}"
                     )
@@ -241,7 +247,13 @@ class Main(App):
                         "-", "_"
                     )
                     icon_in_api = api_has_icon(icon_name)
-                    if not self.args.fw_bundle and icon_in_api:
+                    # For updater builds, include essential GUI icons even if they're in API
+                    updater_essential_icons = {
+                        'I_ButtonLeft_4x7', 'I_ButtonRight_4x7', 'I_ButtonUp_7x4',
+                        'I_ButtonDown_7x4', 'I_ButtonCenter_7x7', 'I_Background_128x11',
+                        'I_Hidden_window_9x8', 'I_SDcardMounted_11x8'
+                    }
+                    if not self.args.fw_bundle and icon_in_api and icon_name not in updater_essential_icons:
                         self.logger.info(
                             f"{self.args.filename}: ignoring duplicate icon {icon_name}"
                         )

@@ -75,11 +75,21 @@ static void menu_centered_icon(
     size_t y,
     size_t width,
     size_t height) {
-    canvas_draw_icon_animation(
-        canvas,
-        x + (width - item->icon->icon->width) / 2,
-        y + (height - item->icon->icon->height) / 2,
-        item->icon);
+    UNUSED(canvas);
+    UNUSED(item);
+    UNUSED(x);
+    UNUSED(y);
+    UNUSED(width);
+    UNUSED(height);
+#ifndef FURI_RAM_EXEC
+    if(item->icon) {
+        canvas_draw_icon_animation(
+            canvas,
+            x + (width - item->icon->icon->width) / 2,
+            y + (height - item->icon->icon->height) / 2,
+            item->icon);
+    }
+#endif
 }
 
 static void menu_centered_icon_scaled(
@@ -91,13 +101,25 @@ static void menu_centered_icon_scaled(
     size_t height,
     size_t width_scale,
     size_t height_scale) {
-    canvas_draw_icon_animation_ex(
-        canvas,
-        x + (width - item->icon->icon->width) / 2,
-        y + (height - item->icon->icon->height) / 2,
-        width_scale,
-        height_scale,
-        item->icon);
+    UNUSED(canvas);
+    UNUSED(item);
+    UNUSED(x);
+    UNUSED(y);
+    UNUSED(width);
+    UNUSED(height);
+    UNUSED(width_scale);
+    UNUSED(height_scale);
+#ifndef FURI_RAM_EXEC
+    if(item->icon) {
+        canvas_draw_icon_animation_ex(
+            canvas,
+            x + (width - item->icon->icon->width) / 2,
+            y + (height - item->icon->icon->height) / 2,
+            width_scale,
+            height_scale,
+            item->icon);
+    }
+#endif
 }
 
 static size_t menu_scroll_counter(MenuModel* model, bool selected) {
@@ -388,7 +410,9 @@ static void menu_draw_callback(Canvas* canvas, void* _model) {
         }
         case MenuStyleMNTM: {
             canvas_set_font(canvas, FontPrimary);
+#ifndef FURI_RAM_EXEC
             canvas_draw_icon(canvas, 62, 4, &I_Release_arrow_18x15);
+#endif
             canvas_draw_line(canvas, 5, 15, 59, 15);
             canvas_draw_line(canvas, 7, 17, 61, 17);
             canvas_draw_line(canvas, 10, 19, 63, 19);
@@ -431,7 +455,9 @@ static void menu_draw_callback(Canvas* canvas, void* _model) {
 
             // Display charge state icon
             if(charge_state) {
+#ifndef FURI_RAM_EXEC
                 canvas_draw_icon(canvas, 28, 33, &I_Voltage_16x16);
+#endif
             }
 
             // Display OTG state
@@ -635,7 +661,10 @@ static void menu_enter(void* context) {
         {
             if(MenuItemArray_size(model->items)) {
                 MenuItem* item = MenuItemArray_get(model->items, model->position);
+                UNUSED(item);
+#ifndef FURI_RAM_EXEC
                 icon_animation_start(item->icon);
+#endif
             }
             model->scroll_counter = 0;
         },
@@ -651,7 +680,10 @@ static void menu_exit(void* context) {
         {
             if(MenuItemArray_size(model->items)) {
                 MenuItem* item = MenuItemArray_get(model->items, model->position);
+                UNUSED(item);
+#ifndef FURI_RAM_EXEC
                 icon_animation_stop(item->icon);
+#endif
             }
         },
         false);
@@ -715,7 +747,11 @@ void menu_add_item(
         {
             item = MenuItemArray_push_new(model->items);
             item->label = label;
+#ifndef FURI_RAM_EXEC
             item->icon = icon ? icon_animation_alloc(icon) : icon_animation_alloc(&A_Plugins_14);
+#else
+            item->icon = icon ? icon_animation_alloc(icon) : NULL;
+#endif
             view_tie_icon_animation(menu->view, item->icon);
             item->index = index;
             item->callback = callback;
@@ -732,8 +768,11 @@ void menu_reset(Menu* menu) {
         {
             for
                 M_EACH(item, model->items, MenuItemArray_t) {
+                    UNUSED(item);
+#ifndef FURI_RAM_EXEC
                     icon_animation_stop(item->icon);
                     icon_animation_free(item->icon);
+#endif
                 }
 
             MenuItemArray_reset(model->items);
@@ -753,10 +792,16 @@ static void menu_set_position(Menu* menu, uint32_t position) {
                 model->scroll_counter = 0;
 
                 MenuItem* item = MenuItemArray_get(model->items, model->position);
+                UNUSED(item);
+#ifndef FURI_RAM_EXEC
                 icon_animation_stop(item->icon);
+#endif
 
                 item = MenuItemArray_get(model->items, position);
+                UNUSED(item);
+#ifndef FURI_RAM_EXEC
                 icon_animation_start(item->icon);
+#endif
 
                 model->position = position;
             }

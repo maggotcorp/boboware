@@ -28,7 +28,7 @@
 #include <lib/subghz/blocks/custom_btn.h>
 
 #define SUBGHZ_FREQUENCY_RANGE_STR \
-    "299999755...348000000 or 380999938...470000000 or 778999847...928000000"
+    "299999755...348000000 or 386999938...464000000 or 778999847...928000000"
 
 // Tx/Rx Carrier | only internal module
 // Tx/Rx command | both
@@ -231,13 +231,6 @@ void subghz_cli_command_tx(PipeSide* pipe, FuriString* args, void* context) {
     stream_write_cstring(stream, furi_string_get_cstr(flipper_format_string));
 
     SubGhzEnvironment* environment = subghz_environment_alloc();
-    if(!environment) {
-        printf("Failed to allocate environment\r\n");
-        flipper_format_free(flipper_format);
-        subghz_devices_deinit();
-        subghz_cli_radio_device_power_off();
-        return;
-    }
     subghz_environment_set_protocol_registry(environment, (void*)&subghz_protocol_registry);
 
     SubGhzTransmitter* transmitter = subghz_transmitter_alloc_init(environment, "Princeton");
@@ -342,12 +335,6 @@ void subghz_cli_command_rx(PipeSide* pipe, FuriString* args, void* context) {
         furi_stream_buffer_alloc(sizeof(LevelDuration) * 1024, sizeof(LevelDuration));
 
     SubGhzEnvironment* environment = subghz_cli_environment_init();
-    if(!environment) {
-        printf("Failed to initialize environment\r\n");
-        subghz_devices_deinit();
-        subghz_cli_radio_device_power_off();
-        return;
-    }
 
     SubGhzReceiver* receiver = subghz_receiver_alloc_init(environment);
     subghz_receiver_set_filter(receiver, SubGhzProtocolFlag_Decodable);
@@ -528,11 +515,6 @@ void subghz_cli_command_decode_raw(PipeSide* pipe, FuriString* args, void* conte
         SubGhzCliCommandRx* instance = malloc(sizeof(SubGhzCliCommandRx));
 
         SubGhzEnvironment* environment = subghz_cli_environment_init();
-    if(!environment) {
-        printf("subghz decode_raw: \033[0;31mFailed to initialize environment\033[0m\r\n");
-        furi_string_free(file_name);
-        return;
-    }
 
         SubGhzReceiver* receiver = subghz_receiver_alloc_init(environment);
         subghz_receiver_set_filter(receiver, SubGhzProtocolFlag_Decodable);
@@ -597,14 +579,17 @@ static FuriHalSubGhzPreset subghz_cli_get_preset_name(const char* preset_name) {
 
 void subghz_cli_command_tx_from_file(PipeSide* pipe, FuriString* args, void* context) { // -V524
     UNUSED(context);
-    FuriString* file_name = NULL;
+    FuriString* file_name;
+    file_name = furi_string_alloc();
+    furi_string_set(file_name, EXT_PATH("subghz/test.sub"));
     uint32_t repeat = 10;
     uint32_t device_ind = 0; // 0 - CC1101_INT, 1 - CC1101_EXT
 
-    Storage* storage = NULL;
-    FlipperFormat* fff_data_file = NULL;
-    FlipperFormat* fff_data_raw = NULL;
-    FuriString* temp_str = NULL;
+    Storage* storage = furi_record_open(RECORD_STORAGE);
+    FlipperFormat* fff_data_file = flipper_format_file_alloc(storage);
+    FlipperFormat* fff_data_raw = flipper_format_string_alloc();
+    FuriString* temp_str;
+    temp_str = furi_string_alloc();
     uint32_t temp_data32;
     bool check_file = false;
     const SubGhzDevice* device = NULL;
@@ -612,45 +597,9 @@ void subghz_cli_command_tx_from_file(PipeSide* pipe, FuriString* args, void* con
     uint32_t frequency = 0;
     SubGhzTransmitter* transmitter = NULL;
 
-    // Initialize resources with error checking
-    file_name = furi_string_alloc();
-    if(!file_name) {
-        printf("subghz tx_from_file: \033[0;31mMemory allocation failed\033[0m\r\n");
-        goto cleanup;
-    }
-    furi_string_set(file_name, EXT_PATH("subghz/test.sub"));
-
-    temp_str = furi_string_alloc();
-    if(!temp_str) {
-        printf("subghz tx_from_file: \033[0;31mMemory allocation failed\033[0m\r\n");
-        goto cleanup;
-    }
-
-    storage = furi_record_open(RECORD_STORAGE);
-    if(!storage) {
-        printf("subghz tx_from_file: \033[0;31mFailed to open storage\033[0m\r\n");
-        goto cleanup;
-    }
-
-    fff_data_file = flipper_format_file_alloc(storage);
-    if(!fff_data_file) {
-        printf("subghz tx_from_file: \033[0;31mFailed to allocate flipper format\033[0m\r\n");
-        goto cleanup;
-    }
-
-    fff_data_raw = flipper_format_string_alloc();
-    if(!fff_data_raw) {
-        printf("subghz tx_from_file: \033[0;31mFailed to allocate flipper format string\033[0m\r\n");
-        goto cleanup;
-    }
-
     subghz_devices_init();
 
     SubGhzEnvironment* environment = subghz_cli_environment_init();
-    if(!environment) {
-        printf("subghz tx_from_file: \033[0;31mFailed to initialize environment\033[0m\r\n");
-        goto cleanup;
-    }
 
     do {
         if(furi_string_size(args)) {
@@ -866,26 +815,10 @@ void subghz_cli_command_tx_from_file(PipeSide* pipe, FuriString* args, void* con
     furi_string_free(temp_str);
     subghz_devices_deinit();
     // Reset custom settings
-    if(environment) {
-        subghz_environment_reset_keeloq(environment);
-        subghz_custom_btns_reset();
-        // Free environment
-        subghz_environment_free(environment);
-    }
-
-cleanup:
-    // Cleanup resources in case of early exit
-    if(fff_data_raw) flipper_format_free(fff_data_raw);
-    if(fff_data_file) flipper_format_free(fff_data_file);
-    if(storage) furi_record_close(RECORD_STORAGE);
-    if(temp_str) furi_string_free(temp_str);
-    if(file_name) furi_string_free(file_name);
-    if(environment) {
-        subghz_environment_reset_keeloq(environment);
-        subghz_custom_btns_reset();
-        subghz_environment_free(environment);
-    }
-    subghz_devices_deinit();
+    subghz_environment_reset_keeloq(environment);
+    subghz_custom_btns_reset();
+    // Free environment
+    subghz_environment_free(environment);
 }
 
 static void subghz_cli_command_print_usage(void) {

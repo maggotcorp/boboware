@@ -28,7 +28,9 @@ static void loading_draw_callback(Canvas* canvas, void* _model) {
     uint8_t x = canvas_width(canvas) / 2 - 24 / 2;
     uint8_t y = canvas_height(canvas) / 2 - 24 / 2;
 
+#ifndef FURI_RAM_EXEC
     canvas_draw_icon(canvas, x, y, &A_Loading_24);
+#endif
 
     canvas_draw_icon_animation(canvas, x, y, model->icon);
 }
@@ -48,7 +50,9 @@ static void loading_enter_callback(void* context) {
      * Update callback, as it can be rewritten
      */
     view_tie_icon_animation(instance->view, model->icon);
+#ifndef FURI_RAM_EXEC
     icon_animation_start(model->icon);
+#endif
     view_commit_model(instance->view, false);
 }
 
@@ -56,7 +60,10 @@ static void loading_exit_callback(void* context) {
     furi_assert(context);
     Loading* instance = context;
     LoadingModel* model = view_get_model(instance->view);
+    UNUSED(model);
+#ifndef FURI_RAM_EXEC
     icon_animation_stop(model->icon);
+#endif
     view_commit_model(instance->view, false);
 }
 
@@ -65,7 +72,11 @@ Loading* loading_alloc(void) {
     instance->view = view_alloc();
     view_allocate_model(instance->view, ViewModelTypeLocking, sizeof(LoadingModel));
     LoadingModel* model = view_get_model(instance->view);
+#ifndef FURI_RAM_EXEC
     model->icon = icon_animation_alloc(&A_Loading_24);
+#else
+    model->icon = NULL;
+#endif
     view_tie_icon_animation(instance->view, model->icon);
     view_commit_model(instance->view, false);
 
@@ -82,7 +93,10 @@ void loading_free(Loading* instance) {
     furi_check(instance);
 
     LoadingModel* model = view_get_model(instance->view);
+    UNUSED(model);
+#ifndef FURI_RAM_EXEC
     icon_animation_free(model->icon);
+#endif
     view_commit_model(instance->view, false);
 
     furi_assert(instance);

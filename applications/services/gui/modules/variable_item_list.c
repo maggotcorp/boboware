@@ -2,7 +2,7 @@
 #include <gui/elements.h>
 #include <gui/canvas.h>
 #include <furi.h>
-#include <assets_icons.h>
+#include <build/icons/assets_icons.h>
 #include <m-array.h>
 #include <stdint.h>
 #include <momentum/settings.h>

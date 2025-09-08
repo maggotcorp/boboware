@@ -45,7 +45,7 @@
 
 #define SUBGHZ_MAX_LEN_NAME    64
 #define SUBGHZ_EXT_PRESET_NAME true
-#define SUBGHZ_MEASURE_LOADING false
+#define SUBGHZ_MEASURE_LOADING true // Enabled for performance profiling
 
 struct SubGhz {
     Gui* gui;

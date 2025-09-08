@@ -5,7 +5,7 @@
 #include <input/input.h>
 
 #include <furi.h>
-#include <assets_icons.h>
+#include <build/icons/assets_icons.h>
 
 #include <stdint.h>
 #include <m-array.h>
@@ -50,6 +50,7 @@ static void button_menu_draw_text(
     FuriString* disp_str;
     disp_str = furi_string_alloc_set(text);
     bool draw_static = true;
+
     if(selected) {
         size_t text_width = canvas_string_width(canvas, furi_string_get_cstr(disp_str));
         if(text_width >= ITEM_WIDTH - 8) {
@@ -121,6 +122,7 @@ static void button_menu_draw_common_button(
     } else {
         canvas_draw_rframe(canvas, item_x, item_y, ITEM_WIDTH, ITEM_HEIGHT, 5);
     }
+
     button_menu_draw_text(canvas, item_x, item_y, text, selected, model);
 }
 
@@ -136,17 +138,22 @@ static void button_menu_view_draw_callback(Canvas* canvas, void* _model) {
     const size_t max_screen = items_size ? (items_size - 1) / BUTTONS_PER_SCREEN : 0;
 
     if(active_screen > 0) {
+#ifndef FURI_RAM_EXEC
         canvas_draw_icon(canvas, 28, 1, &I_InfraredArrowUp_4x8);
+#endif
     }
 
     if(max_screen > active_screen) {
+#ifndef FURI_RAM_EXEC
         canvas_draw_icon(canvas, 28, 123, &I_InfraredArrowDown_4x8);
+#endif
     }
-    
+
     if(model->header) {
         FuriString* disp_str;
         disp_str = furi_string_alloc_set(model->header);
         size_t header_width = canvas_string_width(canvas, furi_string_get_cstr(disp_str));
+
         if(header_width >= ITEM_WIDTH - 8) {
             elements_scrollable_text_line(
                 canvas, 3, 13, ITEM_WIDTH - 8, disp_str, model->scroll_counter, false);
@@ -433,7 +440,7 @@ void button_menu_free(ButtonMenu* button_menu) {
     with_view_model(
         button_menu->view,
         ButtonMenuModel * model,
-        { 
+        {
             ButtonMenuItemArray_clear(model->items);
             furi_timer_stop(model->scroll_timer);
             furi_timer_free(model->scroll_timer);
